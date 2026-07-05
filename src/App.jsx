@@ -957,14 +957,7 @@ export default function Volt() {
             </span>
           </div>
 
-          <button
-            className="icon-btn"
-            onClick={() => {
-              const next = !voiceEnabled;
-              setVoiceEnabled(next);
-              if (next) setVoiceStatus("");
-            }}
-            disabled={!voiceSupported}
+          <div
             style={{
               display: "flex",
               alignItems: "center",
@@ -973,9 +966,8 @@ export default function Volt() {
               border: "1px solid #262920",
               borderRadius: 999,
               padding: "8px 14px 8px 10px",
-              cursor: voiceSupported ? "pointer" : "not-allowed",
-              opacity: voiceSupported ? 1 : 0.4,
               width: "fit-content",
+              opacity: voiceSupported && !micBlocked ? 1 : 0.4,
             }}
           >
             <div
@@ -983,28 +975,32 @@ export default function Volt() {
                 width: 22,
                 height: 22,
                 borderRadius: "50%",
-                background: speaking ? "color-mix(in srgb, var(--accent) 30%, transparent)" : listening ? "color-mix(in srgb, var(--accent) 15%, transparent)" : "transparent",
+                background: speaking
+                  ? "color-mix(in srgb, var(--accent) 30%, transparent)"
+                  : listening
+                  ? "color-mix(in srgb, var(--accent) 15%, transparent)"
+                  : "transparent",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
               }}
             >
-              {voiceEnabled ? (
+              {voiceSupported && !micBlocked ? (
                 <Mic size={13} color={speaking || listening ? "var(--accent)" : "#8A8F7C"} />
               ) : (
                 <MicOff size={13} color="#8A8F7C" />
               )}
             </div>
             <span style={{ fontSize: 11.5, color: "#EDEFE6", fontWeight: 600, whiteSpace: "nowrap" }}>
-              {voiceEnabled ? (speaking ? t.speaking : listening ? t.listening : t.voiceOn) : t.voiceOff}
+              {speaking ? t.speaking : listening ? t.listening : t.voiceOn}
             </span>
             {(listening || speaking) && (
               <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--accent)" }} />
             )}
-          </button>
+          </div>
 
           <div style={{ fontSize: 10.5, color: "#6B7268", maxWidth: 160, lineHeight: 1.4 }}>
-            {!voiceSupported ? t.micNotSupported : voiceStatus || t.hint}
+            {!voiceSupported || micBlocked ? t.micNotSupported : voiceStatus || t.hint}
           </div>
 
           {gaugeOn && (

@@ -207,10 +207,11 @@ export default function Volt() {
         // ignore
       }
       window.speechSynthesis.cancel();
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.lang = "tr-TR";
-      utter.rate = 1;
-      utter.onend = () => {
+
+      let settled = false;
+      const finish = () => {
+        if (settled) return;
+        settled = true;
         isSpeakingRef.current = false;
         setSpeaking(false);
         if (voiceEnabled && recognitionRef.current) {
@@ -221,7 +222,19 @@ export default function Volt() {
           }
         }
       };
+
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = "tr-TR";
+      utter.rate = 1;
+      utter.onend = finish;
+      utter.onerror = finish;
       window.speechSynthesis.speak(utter);
+
+      // Safety net: some Android Chrome versions never fire onend/onerror.
+      // Force-finish after a generous timeout so we don't get stuck listening
+      // to nothing while the UI says "Konuşuyor".
+      const timeoutMs = Math.max(3500, text.length * 110);
+      setTimeout(finish, timeoutMs);
     },
     [voiceEnabled]
   );
@@ -284,6 +297,17 @@ export default function Volt() {
       }
     };
   }, [gaugeOn, resetSession]);
+
+  const greetedRef = useRef(false);
+  useEffect(() => {
+    const greet = () => {
+      if (greetedRef.current) return;
+      greetedRef.current = true;
+      speak("Merhaba, ben Volt, akıllı sürüş asistanınızım. Size nasıl yardımcı olabilirim?");
+    };
+    document.addEventListener("pointerdown", greet, { once: true });
+    return () => document.removeEventListener("pointerdown", greet);
+  }, [speak]);
 
   const askAI = useCallback(
     async (question) => {
@@ -513,7 +537,6 @@ export default function Volt() {
               setVoiceEnabled(next);
               if (next) {
                 setVoiceStatus("");
-                setTimeout(() => speak("Sesli komut hazır."), 400);
               }
             }}
             disabled={!voiceSupported}

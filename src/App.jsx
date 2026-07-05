@@ -52,6 +52,10 @@ const T = {
     dist_kw: ["mesafe", "yol gittim", "kilometre gittim", "kaç km", "kac km"],
     speed_kw: ["hız", "hiz"],
     query_kw: ["kaç", "kac", "ne kadar", "nedir"],
+    weatherChecking: "Hava durumuna bakıyorum…",
+    weatherError: "Hava durumu bilgisini alamadım.",
+    weatherIs: (temp, cond) => `Şu anda hava ${temp} derece ve ${cond}.`,
+    weather_kw: ["hava durumu", "hava nasıl", "hava"],
   },
   en: {
     langName: "English",
@@ -87,6 +91,10 @@ const T = {
     dist_kw: ["distance", "how far", "how many kilometers", "how many kilometres"],
     speed_kw: ["speed", "how fast"],
     query_kw: ["what", "how"],
+    weatherChecking: "Checking the weather…",
+    weatherError: "I couldn't get the weather.",
+    weatherIs: (temp, cond) => `It's currently ${temp} degrees and ${cond}.`,
+    weather_kw: ["weather"],
   },
   ru: {
     langName: "Русский",
@@ -122,6 +130,10 @@ const T = {
     dist_kw: ["расстояние", "сколько проехал", "сколько километров"],
     speed_kw: ["скорость"],
     query_kw: ["какая", "сколько"],
+    weatherChecking: "Проверяю погоду…",
+    weatherError: "Не удалось получить погоду.",
+    weatherIs: (temp, cond) => `Сейчас ${temp} градусов и ${cond}.`,
+    weather_kw: ["погода", "какая погода"],
   },
   de: {
     langName: "Deutsch",
@@ -157,6 +169,10 @@ const T = {
     dist_kw: ["entfernung", "wie weit", "wie viele kilometer"],
     speed_kw: ["geschwindigkeit", "wie schnell"],
     query_kw: ["was", "wie"],
+    weatherChecking: "Ich prüfe das Wetter…",
+    weatherError: "Ich konnte das Wetter nicht abrufen.",
+    weatherIs: (temp, cond) => `Es sind gerade ${temp} Grad und ${cond}.`,
+    weather_kw: ["wetter"],
   },
   zh: {
     langName: "中文",
@@ -192,6 +208,10 @@ const T = {
     dist_kw: ["距离", "骑了多远", "多少公里"],
     speed_kw: ["速度", "多快"],
     query_kw: ["多少", "什么"],
+    weatherChecking: "正在查看天气…",
+    weatherError: "无法获取天气信息。",
+    weatherIs: (temp, cond) => `现在气温${temp}度,天气${cond}。`,
+    weather_kw: ["天气"],
   },
   ko: {
     langName: "한국어",
@@ -227,8 +247,34 @@ const T = {
     dist_kw: ["거리", "얼마나 갔", "몇 킬로"],
     speed_kw: ["속도", "얼마나 빨리"],
     query_kw: ["뭐", "얼마"],
+    weatherChecking: "날씨를 확인 중…",
+    weatherError: "날씨 정보를 가져올 수 없습니다.",
+    weatherIs: (temp, cond) => `현재 기온은 ${temp}도이고 날씨는 ${cond}입니다.`,
+    weather_kw: ["날씨"],
   },
 };
+
+const WEATHER_WORDS = {
+  tr: { clear: "açık", cloudy: "bulutlu", fog: "sisli", drizzle: "çisenti yağıyor", rain: "yağmurlu", snow: "karlı", showers: "sağanak yağışlı", thunderstorm: "gök gürültülü fırtınalı" },
+  en: { clear: "clear", cloudy: "cloudy", fog: "foggy", drizzle: "drizzling", rain: "rainy", snow: "snowy", showers: "showery", thunderstorm: "stormy" },
+  ru: { clear: "ясно", cloudy: "облачно", fog: "туманно", drizzle: "морось", rain: "дождливо", snow: "снежно", showers: "ливень", thunderstorm: "гроза" },
+  de: { clear: "klar", cloudy: "bewölkt", fog: "neblig", drizzle: "nieselt", rain: "regnerisch", snow: "schneit", showers: "schauerartig", thunderstorm: "gewittrig" },
+  zh: { clear: "晴朗", cloudy: "多云", fog: "有雾", drizzle: "毛毛雨", rain: "下雨", snow: "下雪", showers: "阵雨", thunderstorm: "雷暴" },
+  ko: { clear: "맑음", cloudy: "흐림", fog: "안개", drizzle: "이슬비", rain: "비", snow: "눈", showers: "소나기", thunderstorm: "뇌우" },
+};
+
+function describeWeatherCode(code, lang) {
+  const w = WEATHER_WORDS[lang] || WEATHER_WORDS.en;
+  if (code === 0) return w.clear;
+  if ([1, 2, 3].includes(code)) return w.cloudy;
+  if ([45, 48].includes(code)) return w.fog;
+  if ([51, 53, 55, 56, 57].includes(code)) return w.drizzle;
+  if ([61, 63, 65, 66, 67].includes(code)) return w.rain;
+  if ([71, 73, 75, 77, 85, 86].includes(code)) return w.snow;
+  if ([80, 81, 82].includes(code)) return w.showers;
+  if ([95, 96, 99].includes(code)) return w.thunderstorm;
+  return w.cloudy;
+}
 
 function haversineKm(lat1, lon1, lat2, lon2) {
   const R = 6371;
@@ -484,12 +530,12 @@ export default function Volt() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gaugeOn]);
 
-  // Voice control
-  const [voiceEnabled, setVoiceEnabled] = useState(false);
+  // Voice control — always listening for the wake word, no manual toggle
   const [listening, setListening] = useState(false);
   const [speaking, setSpeaking] = useState(false);
   const [voiceStatus, setVoiceStatus] = useState("");
   const [voiceSupported, setVoiceSupported] = useState(true);
+  const [micBlocked, setMicBlocked] = useState(false);
   const recognitionRef = useRef(null);
   const isSpeakingRef = useRef(false);
 
@@ -508,7 +554,7 @@ export default function Volt() {
         settled = true;
         isSpeakingRef.current = false;
         setSpeaking(false);
-        if (voiceEnabled && recognitionRef.current) {
+        if (!micBlocked && recognitionRef.current) {
           try {
             recognitionRef.current.start();
           } catch (e) {}
@@ -530,7 +576,7 @@ export default function Volt() {
       const timeoutMs = Math.max(3500, text.length * 110);
       setTimeout(finish, timeoutMs);
     },
-    [voiceEnabled, soundEnabled, language]
+    [soundEnabled, language, micBlocked]
   );
 
   const greetedRef = useRef(false);
@@ -544,6 +590,39 @@ export default function Volt() {
     return () => document.removeEventListener("pointerdown", greet);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const getWeather = useCallback(async () => {
+    setVoiceStatus(t.weatherChecking);
+    try {
+      const getPos = () =>
+        new Promise((resolve, reject) => {
+          if (lastPosRef.current) {
+            resolve({ coords: { latitude: lastPosRef.current.lat, longitude: lastPosRef.current.lon } });
+          } else if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(resolve, reject, {
+              enableHighAccuracy: true,
+              timeout: 10000,
+            });
+          } else {
+            reject(new Error("no geolocation"));
+          }
+        });
+      const pos = await getPos();
+      const { latitude, longitude } = pos.coords;
+      const res = await fetch(
+        `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weather_code&timezone=auto`
+      );
+      const data = await res.json();
+      const temp = Math.round(data.current.temperature_2m);
+      const cond = describeWeatherCode(data.current.weather_code, language);
+      const msg = t.weatherIs(temp, cond);
+      setVoiceStatus(msg);
+      speak(msg);
+    } catch (e) {
+      setVoiceStatus(t.weatherError);
+      speak(t.weatherError);
+    }
+  }, [t, language, speak]);
 
   const processTranscript = useCallback(
     (raw) => {
@@ -565,6 +644,8 @@ export default function Volt() {
         setGaugeOn(true);
         setVoiceStatus(t.gaugeOpened);
         speak(t.gaugeOpened);
+      } else if (has(t.weather_kw)) {
+        getWeather();
       } else if (has(t.max_kw)) {
         const v = Math.round(sessionMaxRef.current);
         setVoiceStatus(t.maxIs(v));
@@ -591,7 +672,7 @@ export default function Volt() {
         speak(t.notUnderstood);
       }
     },
-    [t, speak, resetSession]
+    [t, speak, resetSession, getWeather]
   );
 
   useEffect(() => {
@@ -600,14 +681,7 @@ export default function Volt() {
       setVoiceSupported(false);
       return;
     }
-    if (!voiceEnabled) {
-      if (recognitionRef.current) {
-        recognitionRef.current.stop();
-        recognitionRef.current = null;
-      }
-      setListening(false);
-      return;
-    }
+    if (micBlocked) return;
 
     const recognition = new SpeechRecognition();
     recognition.continuous = true;
@@ -619,7 +693,7 @@ export default function Volt() {
       setListening(false);
       if (e.error === "not-allowed" || e.error === "service-not-allowed") {
         setVoiceStatus(t.micNotSupported);
-        setVoiceEnabled(false);
+        setMicBlocked(true);
       }
     };
     recognition.onresult = (event) => {
@@ -628,7 +702,7 @@ export default function Volt() {
     };
     recognition.onend = () => {
       setListening(false);
-      if (voiceEnabled && !isSpeakingRef.current && recognitionRef.current === recognition) {
+      if (!isSpeakingRef.current && recognitionRef.current === recognition) {
         try {
           recognition.start();
         } catch (e) {}
@@ -644,7 +718,7 @@ export default function Volt() {
       recognition.onend = null;
       recognition.stop();
     };
-  }, [voiceEnabled, language, processTranscript, t]);
+  }, [language, processTranscript, t, micBlocked]);
 
   return (
     <div
@@ -986,27 +1060,8 @@ export default function Volt() {
           </div>
         </div>
 
-        {/* Right: manual toggle */}
-        <div className="enter-right" style={{ flexShrink: 0 }}>
-          <button
-            className="icon-btn"
-            onClick={() => setGaugeOn((v) => !v)}
-            style={{
-              width: 56,
-              height: 56,
-              borderRadius: "50%",
-              border: gaugeOn ? "1px solid #262920" : "none",
-              cursor: "pointer",
-              background: gaugeOn ? "#1B1D16" : "var(--accent)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-            aria-label={gaugeOn ? t.turnOff : t.turnOn}
-          >
-            <Gauge size={22} color={gaugeOn ? "#8A8F7C" : "var(--on-accent)"} />
-          </button>
-        </div>
+        {/* Invisible spacer to keep the gauge visually centered */}
+        <div style={{ width: 38, flexShrink: 0 }} />
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Zap, Gauge, Mic, MicOff, Settings, X } from "lucide-react";
+import { Zap, Gauge, Mic, MicOff, Settings, X, AlertTriangle } from "lucide-react";
 
 const LANG_LOCALE = {
   tr: "tr-TR",
@@ -43,6 +43,7 @@ const T = {
     gaugeOpened: "Hız göstergesini açıyorum.",
     gaugeClosed: "Hız göstergesini kapatıyorum.",
     sessionReset: "Oturumu sıfırladım.",
+    roadWarning: "Dikkat, yol bozuk! Yavaşla.",
     wake: ["hey volt", "volt", "vılt", "hey wolt"],
     open: ["aç", "ac"],
     close: ["kapat"],
@@ -82,6 +83,7 @@ const T = {
     gaugeOpened: "Turning the speed gauge on.",
     gaugeClosed: "Turning the speed gauge off.",
     sessionReset: "Session reset.",
+    roadWarning: "Watch out, rough road! Slow down.",
     wake: ["hey volt", "volt"],
     open: ["turn on", "open", "show"],
     close: ["turn off", "close", "hide"],
@@ -121,6 +123,7 @@ const T = {
     gaugeOpened: "Включаю спидометр.",
     gaugeClosed: "Выключаю спидометр.",
     sessionReset: "Сессия сброшена.",
+    roadWarning: "Осторожно, плохая дорога! Сбавь скорость.",
     wake: ["хэй волт", "хей волт", "волт"],
     open: ["включи", "открой", "покажи"],
     close: ["выключи", "закрой", "скрой"],
@@ -160,6 +163,7 @@ const T = {
     gaugeOpened: "Ich schalte den Tacho ein.",
     gaugeClosed: "Ich schalte den Tacho aus.",
     sessionReset: "Sitzung zurückgesetzt.",
+    roadWarning: "Achtung, holprige Straße! Langsamer fahren.",
     wake: ["hey volt", "volt"],
     open: ["schalte ein", "öffne", "zeig"],
     close: ["schalte aus", "schließe", "verstecke"],
@@ -199,6 +203,7 @@ const T = {
     gaugeOpened: "正在打开速度表。",
     gaugeClosed: "正在关闭速度表。",
     sessionReset: "已重置本次记录。",
+    roadWarning: "注意,路面颠簸!减速慢行。",
     wake: ["嘿volt", "嘿 volt", "volt"],
     open: ["打开", "开启"],
     close: ["关闭", "关掉"],
@@ -238,6 +243,7 @@ const T = {
     gaugeOpened: "속도계를 켭니다.",
     gaugeClosed: "속도계를 끕니다.",
     sessionReset: "세션을 초기화했습니다.",
+    roadWarning: "주의, 도로가 울퉁불퉁해요! 속도를 줄이세요.",
     wake: ["헤이 볼트", "볼트"],
     open: ["켜", "열어", "보여"],
     close: ["꺼", "닫아", "숨겨"],
@@ -585,11 +591,77 @@ export default function Volt() {
       if (greetedRef.current) return;
       greetedRef.current = true;
       speak(t.greeting);
+      if (typeof DeviceMotionEvent !== "undefined" && typeof DeviceMotionEvent.requestPermission === "function") {
+        DeviceMotionEvent.requestPermission().catch(() => {});
+      }
     };
     document.addEventListener("pointerdown", greet, { once: true });
     return () => document.removeEventListener("pointerdown", greet);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Rough road / pothole detection via the device's motion sensor
+  const [roadWarning, setRoadWarning] = useState(false);
+  const motionBaselineRef = useRef(9.8);
+  const motionInitRef = useRef(false);
+  const lastRoadAlertRef = useRef(0);
+
+  const beep = useCallback(() => {
+    if (!soundEnabled) return;
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      const ctx = new AudioCtx();
+      [880, 660].forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "square";
+        osc.frequency.value = freq;
+        gain.gain.value = 0.12;
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        const startAt = ctx.currentTime + i * 0.16;
+        osc.start(startAt);
+        osc.stop(startAt + 0.14);
+      });
+      setTimeout(() => ctx.close(), 500);
+    } catch (e) {}
+  }, [soundEnabled]);
+
+  const triggerRoadAlert = useCallback(() => {
+    setRoadWarning(true);
+    beep();
+    speak(t.roadWarning);
+    setTimeout(() => setRoadWarning(false), 2500);
+  }, [beep, speak, t]);
+
+  useEffect(() => {
+    if (typeof window.DeviceMotionEvent === "undefined") return;
+    const handleMotion = (e) => {
+      const acc = e.accelerationIncludingGravity || e.acceleration;
+      if (!acc || acc.x === null || acc.x === undefined) return;
+      const mag = Math.sqrt((acc.x || 0) ** 2 + (acc.y || 0) ** 2 + (acc.z || 0) ** 2);
+      if (!motionInitRef.current) {
+        motionBaselineRef.current = mag;
+        motionInitRef.current = true;
+        return;
+      }
+      const deviation = Math.abs(mag - motionBaselineRef.current);
+      motionBaselineRef.current = motionBaselineRef.current * 0.92 + mag * 0.08;
+
+      const now = Date.now();
+      if (
+        deviation > 7 &&
+        gaugeOn &&
+        currentSpeedRef.current > 8 &&
+        now - lastRoadAlertRef.current > 4000
+      ) {
+        lastRoadAlertRef.current = now;
+        triggerRoadAlert();
+      }
+    };
+    window.addEventListener("devicemotion", handleMotion);
+    return () => window.removeEventListener("devicemotion", handleMotion);
+  }, [gaugeOn, triggerRoadAlert]);
 
   const getWeather = useCallback(async () => {
     setVoiceStatus(t.weatherChecking);
@@ -833,6 +905,32 @@ export default function Volt() {
           width: 34px; height: 34px; border-radius: 50%; cursor: pointer; border: 2px solid transparent;
         }
         .swatch.active { border-color: #EDEFE6; }
+
+        .road-alert {
+          position: fixed;
+          top: 14px;
+          left: 50%;
+          background: #FFD23B;
+          color: #12140F;
+          padding: 10px 20px;
+          border-radius: 999px;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 13px;
+          font-weight: 700;
+          z-index: 95;
+          box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+          animation: alertIn 0.25s ease, alertPulse 0.6s ease-in-out 0.25s infinite alternate;
+        }
+        @keyframes alertIn {
+          from { opacity: 0; transform: translateX(-50%) translateY(-14px); }
+          to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        @keyframes alertPulse {
+          from { transform: translateX(-50%) scale(1); }
+          to { transform: translateX(-50%) scale(1.04); }
+        }
       `}</style>
 
       {showSplash && (
@@ -846,6 +944,13 @@ export default function Volt() {
             </span>
           </div>
           <div className="splash-tagline">{t.tagline}</div>
+        </div>
+      )}
+
+      {roadWarning && (
+        <div className="road-alert">
+          <AlertTriangle size={18} color="#12140F" />
+          <span>{t.roadWarning}</span>
         </div>
       )}
 

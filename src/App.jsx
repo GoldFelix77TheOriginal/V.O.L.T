@@ -316,8 +316,16 @@ export default function Volt() {
   const processTranscript = useCallback(
     (raw) => {
       const t = raw.toLowerCase();
-      const heardWake = t.includes("hey volt") || t.includes("hey volta");
-      if (!heardWake) return;
+      const heardWake =
+        t.includes("volt") ||
+        t.includes("volta") ||
+        t.includes("vılt") ||
+        t.includes("volta,") ||
+        t.includes("hey volt");
+      if (!heardWake) {
+        setVoiceStatus(`Duydum ama "volt" geçmiyordu: "${raw}"`);
+        return;
+      }
 
       const mentionsSpeed = t.includes("hız") || t.includes("hiz");
       const mentionsOpen = t.includes("aç") || t.includes("ac");

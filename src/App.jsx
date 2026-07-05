@@ -10,6 +10,19 @@ const LANG_LOCALE = {
   ko: "ko-KR",
 };
 
+const UNIT_WORDS = {
+  tr: { km: "kilometre", mi: "mil" },
+  en: { km: "kilometers", mi: "miles" },
+  ru: { km: "километров", mi: "миль" },
+  de: { km: "Kilometer", mi: "Meilen" },
+  zh: { km: "公里", mi: "英里" },
+  ko: { km: "킬로미터", mi: "마일" },
+};
+
+const KM_TO_MI = 0.621371;
+
+const SENSITIVITY_THRESHOLD = { low: 10, medium: 7, high: 4 };
+
 const THEMES = {
   green: { hex: "#D7FF3D", on: "#12140F" },
   red: { hex: "#FF5A5A", on: "#12140F" },
@@ -35,15 +48,44 @@ const T = {
     notUnderstood: "Seni duydum ama anlayamadım.",
     greeting: "Merhaba, ben Volt, akıllı sürüş asistanınızım. Size nasıl yardımcı olabilirim?",
     micNotSupported: "Bu tarayıcı ses tanımayı desteklemiyor",
-    speedIs: (v) => `Şu anda saatte ${v} kilometre hızla gidiyorsun.`,
+    speedIs: (v, u) => `Şu anda saatte ${v} ${u} hızla gidiyorsun.`,
     stopped: "Şu anda durmuş durumdasın.",
-    maxIs: (v) => `En yüksek hızın saatte ${v} kilometre.`,
-    avgIs: (v) => `Ortalama hızın saatte ${v} kilometre.`,
-    distIs: (v) => `Şu ana kadar ${v} kilometre yol gittin.`,
+    maxIs: (v, u) => `En yüksek hızın saatte ${v} ${u}.`,
+    avgIs: (v, u) => `Ortalama hızın saatte ${v} ${u}.`,
+    distIs: (v, u) => `Şu ana kadar ${v} ${u} yol gittin.`,
     gaugeOpened: "Hız göstergesini açıyorum.",
     gaugeClosed: "Hız göstergesini kapatıyorum.",
     sessionReset: "Oturumu sıfırladım.",
     roadWarning: "Dikkat, yol bozuk! Yavaşla.",
+    unitLabel: "Hız birimi",
+    sensitivityLabel: "Çukur uyarı hassasiyeti",
+    voiceControlLabel: "Sesli komut",
+    on: "Açık", off: "Kapalı",
+    sensLow: "Düşük", sensMedium: "Orta", sensHigh: "Yüksek",
+    compassOpened: "나침반을 켭니다.",
+    compassClosed: "나침반을 끕니다.",
+    compassLabel: "나침반",
+    compass_kw: ["나침반"],
+    compassOpened: "正在打开指南针。",
+    compassClosed: "正在关闭指南针。",
+    compassLabel: "指南针",
+    compass_kw: ["指南针"],
+    compassOpened: "Ich schalte den Kompass ein.",
+    compassClosed: "Ich schalte den Kompass aus.",
+    compassLabel: "KOMPASS",
+    compass_kw: ["kompass"],
+    compassOpened: "Включаю компас.",
+    compassClosed: "Выключаю компас.",
+    compassLabel: "КОМПАС",
+    compass_kw: ["компас"],
+    compassOpened: "Turning the compass on.",
+    compassClosed: "Turning the compass off.",
+    compassLabel: "COMPASS",
+    compass_kw: ["compass"],
+    compassOpened: "Pusulayı açıyorum.",
+    compassClosed: "Pusulayı kapatıyorum.",
+    compassLabel: "PUSULA",
+    compass_kw: ["pusula"],
     wake: ["hey volt", "volt", "vılt", "hey wolt"],
     open: ["aç", "ac"],
     close: ["kapat"],
@@ -75,15 +117,20 @@ const T = {
     notUnderstood: "I heard you but didn't understand.",
     greeting: "Hi, I'm Volt, your smart ride assistant. How can I help?",
     micNotSupported: "This browser doesn't support speech recognition",
-    speedIs: (v) => `You're currently going ${v} kilometers per hour.`,
+    speedIs: (v, u) => `You're currently going ${v} ${u} per hour.`,
     stopped: "You're currently stopped.",
-    maxIs: (v) => `Your top speed is ${v} kilometers per hour.`,
-    avgIs: (v) => `Your average speed is ${v} kilometers per hour.`,
-    distIs: (v) => `You've covered ${v} kilometers so far.`,
+    maxIs: (v, u) => `Your top speed is ${v} ${u} per hour.`,
+    avgIs: (v, u) => `Your average speed is ${v} ${u} per hour.`,
+    distIs: (v, u) => `You've covered ${v} ${u} so far.`,
     gaugeOpened: "Turning the speed gauge on.",
     gaugeClosed: "Turning the speed gauge off.",
     sessionReset: "Session reset.",
     roadWarning: "Watch out, rough road! Slow down.",
+    unitLabel: "Speed unit",
+    sensitivityLabel: "Road alert sensitivity",
+    voiceControlLabel: "Voice control",
+    on: "On", off: "Off",
+    sensLow: "Low", sensMedium: "Medium", sensHigh: "High",
     wake: ["hey volt", "volt"],
     open: ["turn on", "open", "show"],
     close: ["turn off", "close", "hide"],
@@ -115,15 +162,20 @@ const T = {
     notUnderstood: "Я услышал, но не понял.",
     greeting: "Привет, я Вольт, твой умный ассистент для езды. Чем могу помочь?",
     micNotSupported: "Этот браузер не поддерживает распознавание речи",
-    speedIs: (v) => `Сейчас ты едешь со скоростью ${v} километров в час.`,
+    speedIs: (v, u) => `Сейчас ты едешь со скоростью ${v} ${u} в час.`,
     stopped: "Сейчас ты стоишь на месте.",
-    maxIs: (v) => `Твоя максимальная скорость — ${v} километров в час.`,
-    avgIs: (v) => `Твоя средняя скорость — ${v} километров в час.`,
-    distIs: (v) => `Ты проехал ${v} километров.`,
+    maxIs: (v, u) => `Твоя максимальная скорость — ${v} ${u} в час.`,
+    avgIs: (v, u) => `Твоя средняя скорость — ${v} ${u} в час.`,
+    distIs: (v, u) => `Ты проехал ${v} ${u}.`,
     gaugeOpened: "Включаю спидометр.",
     gaugeClosed: "Выключаю спидометр.",
     sessionReset: "Сессия сброшена.",
     roadWarning: "Осторожно, плохая дорога! Сбавь скорость.",
+    unitLabel: "Единица скорости",
+    sensitivityLabel: "Чувствительность оповещения о дороге",
+    voiceControlLabel: "Голосовое управление",
+    on: "Вкл", off: "Выкл",
+    sensLow: "Низкая", sensMedium: "Средняя", sensHigh: "Высокая",
     wake: ["хэй волт", "хей волт", "волт"],
     open: ["включи", "открой", "покажи"],
     close: ["выключи", "закрой", "скрой"],
@@ -155,15 +207,20 @@ const T = {
     notUnderstood: "Ich habe dich gehört, aber nicht verstanden.",
     greeting: "Hallo, ich bin Volt, dein intelligenter Fahrassistent. Wie kann ich helfen?",
     micNotSupported: "Dieser Browser unterstützt keine Spracherkennung",
-    speedIs: (v) => `Du fährst gerade ${v} Kilometer pro Stunde.`,
+    speedIs: (v, u) => `Du fährst gerade ${v} ${u} pro Stunde.`,
     stopped: "Du stehst gerade still.",
-    maxIs: (v) => `Deine Höchstgeschwindigkeit ist ${v} Kilometer pro Stunde.`,
-    avgIs: (v) => `Deine Durchschnittsgeschwindigkeit ist ${v} Kilometer pro Stunde.`,
-    distIs: (v) => `Du bist bisher ${v} Kilometer gefahren.`,
+    maxIs: (v, u) => `Deine Höchstgeschwindigkeit ist ${v} ${u} pro Stunde.`,
+    avgIs: (v, u) => `Deine Durchschnittsgeschwindigkeit ist ${v} ${u} pro Stunde.`,
+    distIs: (v, u) => `Du bist bisher ${v} ${u} gefahren.`,
     gaugeOpened: "Ich schalte den Tacho ein.",
     gaugeClosed: "Ich schalte den Tacho aus.",
     sessionReset: "Sitzung zurückgesetzt.",
     roadWarning: "Achtung, holprige Straße! Langsamer fahren.",
+    unitLabel: "Geschwindigkeitseinheit",
+    sensitivityLabel: "Empfindlichkeit der Straßenwarnung",
+    voiceControlLabel: "Sprachsteuerung",
+    on: "An", off: "Aus",
+    sensLow: "Niedrig", sensMedium: "Mittel", sensHigh: "Hoch",
     wake: ["hey volt", "volt"],
     open: ["schalte ein", "öffne", "zeig"],
     close: ["schalte aus", "schließe", "verstecke"],
@@ -195,15 +252,20 @@ const T = {
     notUnderstood: "我听到了,但没听懂。",
     greeting: "你好,我是Volt,你的智能骑行助手。有什么可以帮你的吗?",
     micNotSupported: "此浏览器不支持语音识别",
-    speedIs: (v) => `你现在的速度是每小时${v}公里。`,
+    speedIs: (v, u) => `你现在的速度是每小时${v}${u}。`,
     stopped: "你现在处于静止状态。",
-    maxIs: (v) => `你的最高速度是每小时${v}公里。`,
-    avgIs: (v) => `你的平均速度是每小时${v}公里。`,
-    distIs: (v) => `你目前已经骑了${v}公里。`,
+    maxIs: (v, u) => `你的最高速度是每小时${v}${u}。`,
+    avgIs: (v, u) => `你的平均速度是每小时${v}${u}。`,
+    distIs: (v, u) => `你目前已经骑了${v}${u}。`,
     gaugeOpened: "正在打开速度表。",
     gaugeClosed: "正在关闭速度表。",
     sessionReset: "已重置本次记录。",
     roadWarning: "注意,路面颠簸!减速慢行。",
+    unitLabel: "速度单位",
+    sensitivityLabel: "路面警报灵敏度",
+    voiceControlLabel: "语音控制",
+    on: "开", off: "关",
+    sensLow: "低", sensMedium: "中", sensHigh: "高",
     wake: ["嘿volt", "嘿 volt", "volt"],
     open: ["打开", "开启"],
     close: ["关闭", "关掉"],
@@ -235,15 +297,20 @@ const T = {
     notUnderstood: "들었지만 이해하지 못했어요.",
     greeting: "안녕하세요, 저는 당신의 스마트 라이딩 어시스턴트 볼트입니다. 무엇을 도와드릴까요?",
     micNotSupported: "이 브라우저는 음성 인식을 지원하지 않습니다",
-    speedIs: (v) => `현재 시속 ${v}킬로미터로 이동 중입니다.`,
+    speedIs: (v, u) => `현재 시속 ${v}${u}로 이동 중입니다.`,
     stopped: "현재 정지해 있습니다.",
-    maxIs: (v) => `최고 속도는 시속 ${v}킬로미터입니다.`,
-    avgIs: (v) => `평균 속도는 시속 ${v}킬로미터입니다.`,
-    distIs: (v) => `지금까지 ${v}킬로미터를 이동했습니다.`,
+    maxIs: (v, u) => `최고 속도는 시속 ${v}${u}입니다.`,
+    avgIs: (v, u) => `평균 속도는 시속 ${v}${u}입니다.`,
+    distIs: (v, u) => `지금까지 ${v}${u}를 이동했습니다.`,
     gaugeOpened: "속도계를 켭니다.",
     gaugeClosed: "속도계를 끕니다.",
     sessionReset: "세션을 초기화했습니다.",
     roadWarning: "주의, 도로가 울퉁불퉁해요! 속도를 줄이세요.",
+    unitLabel: "속도 단위",
+    sensitivityLabel: "도로 경고 민감도",
+    voiceControlLabel: "음성 제어",
+    on: "켜짐", off: "꺼짐",
+    sensLow: "낮음", sensMedium: "보통", sensHigh: "높음",
     wake: ["헤이 볼트", "볼트"],
     open: ["켜", "열어", "보여"],
     close: ["꺼", "닫아", "숨겨"],
@@ -294,8 +361,7 @@ function haversineKm(lat1, lon1, lat2, lon2) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-function SpeedArc({ speed, flash, unit }) {
-  const max = 60;
+function SpeedArc({ speed, flash, unit, max = 60 }) {
   const clamped = Math.max(0, Math.min(speed, max));
   const pct = clamped / max;
   const startAngle = -120;
@@ -371,9 +437,16 @@ export default function Volt() {
   const [language, setLanguage] = useState("en");
   const [themeColor, setThemeColor] = useState("green");
   const [soundEnabled, setSoundEnabled] = useState(true);
+  const [speedUnit, setSpeedUnit] = useState("kmh");
+  const [roadSensitivity, setRoadSensitivity] = useState("medium");
+  const [micEnabled, setMicEnabled] = useState(true);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const t = T[language];
   const accent = THEMES[themeColor];
+  const unitWord = UNIT_WORDS[language][speedUnit === "mph" ? "mi" : "km"];
+  const displayUnit = speedUnit === "mph" ? "mph" : t.unit;
+  const displayDistUnit = speedUnit === "mph" ? "mi" : "km";
+  const toDisplay = (kmhOrKm) => (speedUnit === "mph" ? kmhOrKm * KM_TO_MI : kmhOrKm);
 
   // Splash screen
   const [showSplash, setShowSplash] = useState(true);
@@ -395,7 +468,7 @@ export default function Volt() {
     let raf;
     let start = null;
     const duration = 900;
-    const peak = 55;
+    const peak = (speedUnit === "mph" ? 40 : 60) * 0.92;
     const step = (ts) => {
       if (!start) start = ts;
       const elapsed = ts - start;
@@ -560,7 +633,7 @@ export default function Volt() {
         settled = true;
         isSpeakingRef.current = false;
         setSpeaking(false);
-        if (!micBlocked && recognitionRef.current) {
+        if (!micBlocked && micEnabled && recognitionRef.current) {
           try {
             recognitionRef.current.start();
           } catch (e) {}
@@ -582,7 +655,7 @@ export default function Volt() {
       const timeoutMs = Math.max(3500, text.length * 110);
       setTimeout(finish, timeoutMs);
     },
-    [soundEnabled, language, micBlocked]
+    [soundEnabled, language, micBlocked, micEnabled]
   );
 
   const greetedRef = useRef(false);
@@ -650,7 +723,8 @@ export default function Volt() {
 
       const now = Date.now();
       if (
-        deviation > 7 &&
+        roadSensitivity !== "off" &&
+        deviation > SENSITIVITY_THRESHOLD[roadSensitivity] &&
         gaugeOn &&
         currentSpeedRef.current > 8 &&
         now - lastRoadAlertRef.current > 4000
@@ -661,7 +735,7 @@ export default function Volt() {
     };
     window.addEventListener("devicemotion", handleMotion);
     return () => window.removeEventListener("devicemotion", handleMotion);
-  }, [gaugeOn, triggerRoadAlert]);
+  }, [gaugeOn, roadSensitivity, triggerRoadAlert]);
 
   const getWeather = useCallback(async () => {
     setVoiceStatus(t.weatherChecking);
@@ -719,32 +793,38 @@ export default function Volt() {
       } else if (has(t.weather_kw)) {
         getWeather();
       } else if (has(t.max_kw)) {
-        const v = Math.round(sessionMaxRef.current);
-        setVoiceStatus(t.maxIs(v));
-        speak(t.maxIs(v));
+        const v = Math.round(toDisplay(sessionMaxRef.current));
+        const msg = t.maxIs(v, unitWord);
+        setVoiceStatus(msg);
+        speak(msg);
       } else if (has(t.avg_kw)) {
-        const v = Math.round(sessionAvgRef.current);
-        setVoiceStatus(t.avgIs(v));
-        speak(t.avgIs(v));
+        const v = Math.round(toDisplay(sessionAvgRef.current));
+        const msg = t.avgIs(v, unitWord);
+        setVoiceStatus(msg);
+        speak(msg);
       } else if (has(t.dist_kw)) {
-        const v = sessionDistanceRef.current.toFixed(1);
-        setVoiceStatus(t.distIs(v));
-        speak(t.distIs(v));
+        const v = toDisplay(sessionDistanceRef.current).toFixed(1);
+        const distWord = UNIT_WORDS[language][speedUnit === "mph" ? "mi" : "km"];
+        const msg = t.distIs(v, distWord);
+        setVoiceStatus(msg);
+        speak(msg);
       } else if (has(t.speed_kw)) {
-        const v = Math.round(currentSpeedRef.current);
-        if (v <= 1) {
+        const raw = currentSpeedRef.current;
+        const v = Math.round(toDisplay(raw));
+        if (raw <= 1) {
           setVoiceStatus(t.stopped);
           speak(t.stopped);
         } else {
-          setVoiceStatus(t.speedIs(v));
-          speak(t.speedIs(v));
+          const msg = t.speedIs(v, unitWord);
+          setVoiceStatus(msg);
+          speak(msg);
         }
       } else {
         setVoiceStatus(t.notUnderstood);
         speak(t.notUnderstood);
       }
     },
-    [t, speak, resetSession, getWeather]
+    [t, speak, resetSession, getWeather, toDisplay, unitWord, speedUnit, language]
   );
 
   useEffect(() => {
@@ -753,7 +833,16 @@ export default function Volt() {
       setVoiceSupported(false);
       return;
     }
-    if (micBlocked) return;
+    if (micBlocked || !micEnabled) {
+      if (recognitionRef.current) {
+        try {
+          recognitionRef.current.stop();
+        } catch (e) {}
+        recognitionRef.current = null;
+      }
+      setListening(false);
+      return;
+    }
 
     const recognition = new SpeechRecognition();
     recognition.continuous = true;
@@ -790,7 +879,7 @@ export default function Volt() {
       recognition.onend = null;
       recognition.stop();
     };
-  }, [language, processTranscript, t, micBlocked]);
+  }, [language, processTranscript, t, micBlocked, micEnabled]);
 
   return (
     <div
@@ -1008,12 +1097,60 @@ export default function Volt() {
             </div>
 
             <div style={{ marginBottom: 18 }}>
+              <div style={{ fontSize: 11, color: "#8A8F7C", marginBottom: 8, letterSpacing: 0.5 }}>{t.unitLabel}</div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <button
+                  className={`pill ${speedUnit === "kmh" ? "active" : ""}`}
+                  onClick={() => setSpeedUnit("kmh")}
+                >
+                  {t.unit}
+                </button>
+                <button
+                  className={`pill ${speedUnit === "mph" ? "active" : ""}`}
+                  onClick={() => setSpeedUnit("mph")}
+                >
+                  mph
+                </button>
+              </div>
+            </div>
+
+            <div style={{ marginBottom: 18 }}>
+              <div style={{ fontSize: 11, color: "#8A8F7C", marginBottom: 8, letterSpacing: 0.5 }}>{t.sensitivityLabel}</div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                {[
+                  { key: "off", label: t.off },
+                  { key: "low", label: t.sensLow },
+                  { key: "medium", label: t.sensMedium },
+                  { key: "high", label: t.sensHigh },
+                ].map((s) => (
+                  <button
+                    key={s.key}
+                    className={`pill ${roadSensitivity === s.key ? "active" : ""}`}
+                    onClick={() => setRoadSensitivity(s.key)}
+                  >
+                    {s.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div style={{ marginBottom: 18 }}>
+              <div style={{ fontSize: 11, color: "#8A8F7C", marginBottom: 8, letterSpacing: 0.5 }}>{t.voiceControlLabel}</div>
+              <button
+                className={`pill ${micEnabled ? "active" : ""}`}
+                onClick={() => setMicEnabled((v) => !v)}
+              >
+                {micEnabled ? t.on : t.off}
+              </button>
+            </div>
+
+            <div style={{ marginBottom: 18 }}>
               <div style={{ fontSize: 11, color: "#8A8F7C", marginBottom: 8, letterSpacing: 0.5 }}>{t.sound}</div>
               <button
                 className={`pill ${soundEnabled ? "active" : ""}`}
                 onClick={() => setSoundEnabled((v) => !v)}
               >
-                {soundEnabled ? "On" : "Off"}
+                {soundEnabled ? t.on : t.off}
               </button>
             </div>
 
@@ -1090,14 +1227,14 @@ export default function Volt() {
                 justifyContent: "center",
               }}
             >
-              {voiceSupported && !micBlocked ? (
+              {voiceSupported && !micBlocked && micEnabled ? (
                 <Mic size={13} color={speaking || listening ? "var(--accent)" : "#8A8F7C"} />
               ) : (
                 <MicOff size={13} color="#8A8F7C" />
               )}
             </div>
             <span style={{ fontSize: 11.5, color: "#EDEFE6", fontWeight: 600, whiteSpace: "nowrap" }}>
-              {speaking ? t.speaking : listening ? t.listening : t.voiceOn}
+              {!micEnabled ? t.voiceOff : speaking ? t.speaking : listening ? t.listening : t.voiceOn}
             </span>
             {(listening || speaking) && (
               <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--accent)" }} />
@@ -1105,15 +1242,15 @@ export default function Volt() {
           </div>
 
           <div style={{ fontSize: 10.5, color: "#6B7268", maxWidth: 160, lineHeight: 1.4 }}>
-            {!voiceSupported || micBlocked ? t.micNotSupported : voiceStatus || t.hint}
+            {!voiceSupported || micBlocked ? t.micNotSupported : !micEnabled ? "" : voiceStatus || t.hint}
           </div>
 
           {gaugeOn && (
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               {[
-                { label: t.max, value: `${sessionMax.toFixed(0)} ${t.unit}` },
-                { label: t.avg, value: `${sessionAvg.toFixed(0)} ${t.unit}` },
-                { label: t.dist, value: `${sessionDistance.toFixed(1)} km` },
+                { label: t.max, value: `${toDisplay(sessionMax).toFixed(0)} ${displayUnit}` },
+                { label: t.avg, value: `${toDisplay(sessionAvg).toFixed(0)} ${displayUnit}` },
+                { label: t.dist, value: `${toDisplay(sessionDistance).toFixed(1)} ${displayDistUnit}` },
               ].map((s, i) => (
                 <div key={s.label} className="stat-item" style={{ animationDelay: `${0.35 + i * 0.1}s` }}>
                   <div className="digit" style={{ fontSize: 15, fontWeight: 700, color: "#EDEFE6" }}>
@@ -1129,7 +1266,12 @@ export default function Volt() {
         {/* Center: speed gauge */}
         <div className="enter-center" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
           {gaugeOn ? (
-            <SpeedArc speed={bootDone ? currentSpeed : bootValue} flash={splashExiting && !bootDone} unit={t.unit} />
+            <SpeedArc
+              speed={toDisplay(bootDone ? currentSpeed : bootValue)}
+              max={speedUnit === "mph" ? 40 : 60}
+              flash={splashExiting && !bootDone}
+              unit={displayUnit}
+            />
           ) : (
             <div
               style={{

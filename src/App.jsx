@@ -60,13 +60,19 @@ const T = {
     unitLabel: "Hız birimi",
     sensitivityLabel: "Çukur uyarı hassasiyeti",
     voiceControlLabel: "Sesli komut",
+    fullscreenLabel: "Tam ekran",
     on: "Açık", off: "Kapalı",
     sensLow: "Düşük", sensMedium: "Orta", sensHigh: "Yüksek",
     compassOpened: "Pusulayı açıyorum.",
     compassClosed: "Pusulayı kapatıyorum.",
     compassLabel: "PUSULA",
     compass_kw: ["pusula"],
-    wake: ["hey volt", "volt", "vılt", "hey wolt", "hey bolt", "hey colt", " hey wolf" ],
+    mapOpened: "Haritayı açıyorum.",
+    mapClosed: "Haritayı kapatıyorum.",
+    mapLabel: "HARİTA",
+    mapLoading: "Konum bekleniyor…",
+    map_kw: ["harita"],
+    wake: ["hey volt", "volt", "vılt", "hey wolt"],
     open: ["aç", "ac"],
     close: ["kapat"],
     reset: ["sıfırla", "sifirla"],
@@ -109,13 +115,26 @@ const T = {
     unitLabel: "Speed unit",
     sensitivityLabel: "Road alert sensitivity",
     voiceControlLabel: "Voice control",
+    fullscreenLabel: "Fullscreen",
     on: "On", off: "Off",
     sensLow: "Low", sensMedium: "Medium", sensHigh: "High",
     compassOpened: "Turning the compass on.",
     compassClosed: "Turning the compass off.",
     compassLabel: "COMPASS",
     compass_kw: ["compass"],
-    wake: ["hey volt", "volt", "vılt", "hey wolt", "hey bolt", "hey colt", " hey wolf"],
+    mapOpened: "Opening the map.",
+    mapClosed: "Closing the map.",
+    mapLabel: "MAP",
+    mapLoading: "Waiting for location…",
+    map_kw: ["map"],
+    wake: [
+      "hey volt", "volt",
+      "hey bolt", "bolt",
+      "hey bot", " bot", "bot,",
+      "hey jolt", "jolt",
+      "hey colt", "colt",
+      "hey wolf", "wolf",
+    ],
     open: ["turn on", "open", "show"],
     close: ["turn off", "close", "hide"],
     reset: ["reset"],
@@ -158,12 +177,18 @@ const T = {
     unitLabel: "Единица скорости",
     sensitivityLabel: "Чувствительность оповещения о дороге",
     voiceControlLabel: "Голосовое управление",
+    fullscreenLabel: "Полноэкранный режим",
     on: "Вкл", off: "Выкл",
     sensLow: "Низкая", sensMedium: "Средняя", sensHigh: "Высокая",
     compassOpened: "Включаю компас.",
     compassClosed: "Выключаю компас.",
     compassLabel: "КОМПАС",
     compass_kw: ["компас"],
+    mapOpened: "Открываю карту.",
+    mapClosed: "Закрываю карту.",
+    mapLabel: "КАРТА",
+    mapLoading: "Ожидание местоположения…",
+    map_kw: ["карта", "карту"],
     wake: ["хэй волт", "хей волт", "волт"],
     open: ["включи", "открой", "покажи"],
     close: ["выключи", "закрой", "скрой"],
@@ -207,13 +232,19 @@ const T = {
     unitLabel: "Geschwindigkeitseinheit",
     sensitivityLabel: "Empfindlichkeit der Straßenwarnung",
     voiceControlLabel: "Sprachsteuerung",
+    fullscreenLabel: "Vollbild",
     on: "An", off: "Aus",
     sensLow: "Niedrig", sensMedium: "Mittel", sensHigh: "Hoch",
     compassOpened: "Ich schalte den Kompass ein.",
     compassClosed: "Ich schalte den Kompass aus.",
     compassLabel: "KOMPASS",
     compass_kw: ["kompass"],
-    wake: ["hey volt", "volt", "vılt", "hey wolt", "hey bolt", "hey colt", " hey wolf"],
+    mapOpened: "Ich öffne die Karte.",
+    mapClosed: "Ich schließe die Karte.",
+    mapLabel: "KARTE",
+    mapLoading: "Warte auf Standort…",
+    map_kw: ["karte"],
+    wake: ["hey volt", "volt"],
     open: ["schalte ein", "öffne", "zeig"],
     close: ["schalte aus", "schließe", "verstecke"],
     reset: ["zurücksetzen", "reset"],
@@ -256,12 +287,18 @@ const T = {
     unitLabel: "速度单位",
     sensitivityLabel: "路面警报灵敏度",
     voiceControlLabel: "语音控制",
+    fullscreenLabel: "全屏",
     on: "开", off: "关",
     sensLow: "低", sensMedium: "中", sensHigh: "高",
     compassOpened: "正在打开指南针。",
     compassClosed: "正在关闭指南针。",
     compassLabel: "指南针",
     compass_kw: ["指南针"],
+    mapOpened: "正在打开地图。",
+    mapClosed: "正在关闭地图。",
+    mapLabel: "地图",
+    mapLoading: "正在等待定位…",
+    map_kw: ["地图"],
     wake: ["嘿volt", "嘿 volt", "volt"],
     open: ["打开", "开启"],
     close: ["关闭", "关掉"],
@@ -305,12 +342,18 @@ const T = {
     unitLabel: "속도 단위",
     sensitivityLabel: "도로 경고 민감도",
     voiceControlLabel: "음성 제어",
+    fullscreenLabel: "전체 화면",
     on: "켜짐", off: "꺼짐",
     sensLow: "낮음", sensMedium: "보통", sensHigh: "높음",
     compassOpened: "나침반을 켭니다.",
     compassClosed: "나침반을 끕니다.",
     compassLabel: "나침반",
     compass_kw: ["나침반"],
+    mapOpened: "지도를 엽니다.",
+    mapClosed: "지도를 닫습니다.",
+    mapLabel: "지도",
+    mapLoading: "위치를 기다리는 중…",
+    map_kw: ["지도"],
     wake: ["헤이 볼트", "볼트"],
     open: ["켜", "열어", "보여"],
     close: ["꺼", "닫아", "숨겨"],
@@ -846,6 +889,43 @@ export default function Volt() {
     return () => window.removeEventListener(eventName, handler, true);
   }, [compassOn]);
 
+  // In-app map
+  const [mapOn, setMapOn] = useState(false);
+  const [mapCoords, setMapCoords] = useState(null);
+  useEffect(() => {
+    if (!mapOn) return;
+    if (lastPosRef.current) {
+      setMapCoords({ lat: lastPosRef.current.lat, lon: lastPosRef.current.lon });
+      return;
+    }
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => setMapCoords({ lat: pos.coords.latitude, lon: pos.coords.longitude }),
+        () => setMapCoords(null)
+      );
+    }
+  }, [mapOn]);
+
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  useEffect(() => {
+    const handler = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener("fullscreenchange", handler);
+    return () => document.removeEventListener("fullscreenchange", handler);
+  }, []);
+
+  const toggleFullscreen = useCallback(() => {
+    if (!document.fullscreenElement) {
+      const el = document.documentElement;
+      const request =
+        el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+      if (request) request.call(el).catch(() => {});
+    } else {
+      const exit =
+        document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
+      if (exit) exit.call(document).catch(() => {});
+    }
+  }, []);
+
   const getWeather = useCallback(async () => {
     setVoiceStatus(t.weatherChecking);
     try {
@@ -897,8 +977,18 @@ export default function Volt() {
         speak(t.compassClosed);
       } else if (has(t.compass_kw) && has(t.open)) {
         setCompassOn(true);
+        setMapOn(false);
         setVoiceStatus(t.compassOpened);
         speak(t.compassOpened);
+      } else if (has(t.map_kw) && has(t.close)) {
+        setMapOn(false);
+        setVoiceStatus(t.mapClosed);
+        speak(t.mapClosed);
+      } else if (has(t.map_kw) && has(t.open)) {
+        setMapOn(true);
+        setCompassOn(false);
+        setVoiceStatus(t.mapOpened);
+        speak(t.mapOpened);
       } else if (has(t.close)) {
         setGaugeOn(false);
         setVoiceStatus(t.gaugeClosed);
@@ -1268,6 +1358,16 @@ export default function Volt() {
             </div>
 
             <div style={{ marginBottom: 18 }}>
+              <div style={{ fontSize: 11, color: "#8A8F7C", marginBottom: 8, letterSpacing: 0.5 }}>{t.fullscreenLabel}</div>
+              <button
+                className={`pill ${isFullscreen ? "active" : ""}`}
+                onClick={toggleFullscreen}
+              >
+                {isFullscreen ? t.on : t.off}
+              </button>
+            </div>
+
+            <div style={{ marginBottom: 18 }}>
               <div style={{ fontSize: 11, color: "#8A8F7C", marginBottom: 8, letterSpacing: 0.5 }}>{t.sound}</div>
               <button
                 className={`pill ${soundEnabled ? "active" : ""}`}
@@ -1388,7 +1488,34 @@ export default function Volt() {
 
         {/* Center: speed gauge */}
         <div className="enter-center" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
-          {compassOn ? (
+          {mapOn ? (
+            mapCoords ? (
+              <iframe
+                title="map"
+                width="320"
+                height="240"
+                style={{ border: 0, borderRadius: 16 }}
+                src={`https://maps.google.com/maps?q=${mapCoords.lat},${mapCoords.lon}&z=15&output=embed`}
+              />
+            ) : (
+              <div
+                style={{
+                  width: 320,
+                  height: 240,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 10,
+                  background: "#1B1D16",
+                  borderRadius: 16,
+                }}
+              >
+                <Gauge size={26} color="#4A5040" />
+                <span style={{ fontSize: 12.5, color: "#6B7268" }}>{t.mapLoading}</span>
+              </div>
+            )
+          ) : compassOn ? (
             <>
               <Compass heading={compassHeading} />
               <span style={{ fontSize: 10.5, color: "#6B7268", letterSpacing: 0.5 }}>{t.compassLabel}</span>
@@ -1416,7 +1543,7 @@ export default function Volt() {
               <span style={{ fontSize: 12.5, color: "#6B7268" }}>{t.gaugeOff}</span>
             </div>
           )}
-          {!compassOn && (
+          {!compassOn && !mapOn && (
             <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
               <div
                 style={{

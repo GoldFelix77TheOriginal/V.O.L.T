@@ -62,26 +62,6 @@ const T = {
     voiceControlLabel: "Sesli komut",
     on: "Açık", off: "Kapalı",
     sensLow: "Düşük", sensMedium: "Orta", sensHigh: "Yüksek",
-    compassOpened: "나침반을 켭니다.",
-    compassClosed: "나침반을 끕니다.",
-    compassLabel: "나침반",
-    compass_kw: ["나침반"],
-    compassOpened: "正在打开指南针。",
-    compassClosed: "正在关闭指南针。",
-    compassLabel: "指南针",
-    compass_kw: ["指南针"],
-    compassOpened: "Ich schalte den Kompass ein.",
-    compassClosed: "Ich schalte den Kompass aus.",
-    compassLabel: "KOMPASS",
-    compass_kw: ["kompass"],
-    compassOpened: "Включаю компас.",
-    compassClosed: "Выключаю компас.",
-    compassLabel: "КОМПАС",
-    compass_kw: ["компас"],
-    compassOpened: "Turning the compass on.",
-    compassClosed: "Turning the compass off.",
-    compassLabel: "COMPASS",
-    compass_kw: ["compass"],
     compassOpened: "Pusulayı açıyorum.",
     compassClosed: "Pusulayı kapatıyorum.",
     compassLabel: "PUSULA",
@@ -131,6 +111,10 @@ const T = {
     voiceControlLabel: "Voice control",
     on: "On", off: "Off",
     sensLow: "Low", sensMedium: "Medium", sensHigh: "High",
+    compassOpened: "Turning the compass on.",
+    compassClosed: "Turning the compass off.",
+    compassLabel: "COMPASS",
+    compass_kw: ["compass"],
     wake: ["hey volt", "volt"],
     open: ["turn on", "open", "show"],
     close: ["turn off", "close", "hide"],
@@ -176,6 +160,10 @@ const T = {
     voiceControlLabel: "Голосовое управление",
     on: "Вкл", off: "Выкл",
     sensLow: "Низкая", sensMedium: "Средняя", sensHigh: "Высокая",
+    compassOpened: "Включаю компас.",
+    compassClosed: "Выключаю компас.",
+    compassLabel: "КОМПАС",
+    compass_kw: ["компас"],
     wake: ["хэй волт", "хей волт", "волт"],
     open: ["включи", "открой", "покажи"],
     close: ["выключи", "закрой", "скрой"],
@@ -221,6 +209,10 @@ const T = {
     voiceControlLabel: "Sprachsteuerung",
     on: "An", off: "Aus",
     sensLow: "Niedrig", sensMedium: "Mittel", sensHigh: "Hoch",
+    compassOpened: "Ich schalte den Kompass ein.",
+    compassClosed: "Ich schalte den Kompass aus.",
+    compassLabel: "KOMPASS",
+    compass_kw: ["kompass"],
     wake: ["hey volt", "volt"],
     open: ["schalte ein", "öffne", "zeig"],
     close: ["schalte aus", "schließe", "verstecke"],
@@ -266,6 +258,10 @@ const T = {
     voiceControlLabel: "语音控制",
     on: "开", off: "关",
     sensLow: "低", sensMedium: "中", sensHigh: "高",
+    compassOpened: "正在打开指南针。",
+    compassClosed: "正在关闭指南针。",
+    compassLabel: "指南针",
+    compass_kw: ["指南针"],
     wake: ["嘿volt", "嘿 volt", "volt"],
     open: ["打开", "开启"],
     close: ["关闭", "关掉"],
@@ -311,6 +307,10 @@ const T = {
     voiceControlLabel: "음성 제어",
     on: "켜짐", off: "꺼짐",
     sensLow: "낮음", sensMedium: "보통", sensHigh: "높음",
+    compassOpened: "나침반을 켭니다.",
+    compassClosed: "나침반을 끕니다.",
+    compassLabel: "나침반",
+    compass_kw: ["나침반"],
     wake: ["헤이 볼트", "볼트"],
     open: ["켜", "열어", "보여"],
     close: ["꺼", "닫아", "숨겨"],
@@ -430,6 +430,91 @@ function SpeedArc({ speed, flash, unit, max = 60 }) {
         {unit.toUpperCase()}
       </text>
     </svg>
+  );
+}
+
+function Compass({ heading }) {
+  const dirLabels = [
+    { deg: 0, label: "N" },
+    { deg: 45, label: "NE" },
+    { deg: 90, label: "E" },
+    { deg: 135, label: "SE" },
+    { deg: 180, label: "S" },
+    { deg: 225, label: "SW" },
+    { deg: 270, label: "W" },
+    { deg: 315, label: "NW" },
+  ];
+  const cardinalOf = (h) => {
+    const dirs = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+    return dirs[Math.round(h / 45) % 8];
+  };
+
+  return (
+    <div style={{ position: "relative", width: 220, height: 220 }}>
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          borderRadius: "50%",
+          background: "#1B1D16",
+          border: "1px solid #262920",
+          transform: `rotate(${-heading}deg)`,
+          transition: "transform 0.15s linear",
+        }}
+      >
+        {dirLabels.map((d) => {
+          const rad = ((d.deg - 90) * Math.PI) / 180;
+          const r = 92;
+          const x = 110 + r * Math.cos(rad);
+          const y = 110 + r * Math.sin(rad);
+          return (
+            <div
+              key={d.label}
+              className="digit"
+              style={{
+                position: "absolute",
+                left: x,
+                top: y,
+                transform: "translate(-50%, -50%)",
+                fontSize: d.label.length === 1 ? 15 : 11,
+                fontWeight: 700,
+                color: d.label === "N" ? "var(--accent)" : "#6B7268",
+              }}
+            >
+              {d.label}
+            </div>
+          );
+        })}
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          top: -2,
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: 0,
+          height: 0,
+          borderLeft: "7px solid transparent",
+          borderRight: "7px solid transparent",
+          borderBottom: "14px solid var(--accent)",
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <div className="digit" style={{ fontSize: 34, fontWeight: 700, color: "#EDEFE6" }}>
+          {Math.round(heading)}°
+        </div>
+        <div style={{ fontSize: 13, color: "#8A8F7C", letterSpacing: 2 }}>{cardinalOf(heading)}</div>
+      </div>
+    </div>
   );
 }
 
@@ -667,6 +752,9 @@ export default function Volt() {
       if (typeof DeviceMotionEvent !== "undefined" && typeof DeviceMotionEvent.requestPermission === "function") {
         DeviceMotionEvent.requestPermission().catch(() => {});
       }
+      if (typeof DeviceOrientationEvent !== "undefined" && typeof DeviceOrientationEvent.requestPermission === "function") {
+        DeviceOrientationEvent.requestPermission().catch(() => {});
+      }
     };
     document.addEventListener("pointerdown", greet, { once: true });
     return () => document.removeEventListener("pointerdown", greet);
@@ -737,6 +825,27 @@ export default function Volt() {
     return () => window.removeEventListener("devicemotion", handleMotion);
   }, [gaugeOn, roadSensitivity, triggerRoadAlert]);
 
+  // Compass
+  const [compassOn, setCompassOn] = useState(false);
+  const [compassHeading, setCompassHeading] = useState(0);
+  useEffect(() => {
+    if (!compassOn) return;
+    const handler = (e) => {
+      let heading = null;
+      if (typeof e.webkitCompassHeading === "number") {
+        heading = e.webkitCompassHeading;
+      } else if (e.alpha !== null && e.alpha !== undefined) {
+        heading = 360 - e.alpha;
+      }
+      if (heading !== null) {
+        setCompassHeading((heading + 360) % 360);
+      }
+    };
+    const eventName = "ondeviceorientationabsolute" in window ? "deviceorientationabsolute" : "deviceorientation";
+    window.addEventListener(eventName, handler, true);
+    return () => window.removeEventListener(eventName, handler, true);
+  }, [compassOn]);
+
   const getWeather = useCallback(async () => {
     setVoiceStatus(t.weatherChecking);
     try {
@@ -782,6 +891,14 @@ export default function Volt() {
         resetSession();
         setVoiceStatus(t.sessionReset);
         speak(t.sessionReset);
+      } else if (has(t.compass_kw) && has(t.close)) {
+        setCompassOn(false);
+        setVoiceStatus(t.compassClosed);
+        speak(t.compassClosed);
+      } else if (has(t.compass_kw) && has(t.open)) {
+        setCompassOn(true);
+        setVoiceStatus(t.compassOpened);
+        speak(t.compassOpened);
       } else if (has(t.close)) {
         setGaugeOn(false);
         setVoiceStatus(t.gaugeClosed);
@@ -1265,7 +1382,12 @@ export default function Volt() {
 
         {/* Center: speed gauge */}
         <div className="enter-center" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
-          {gaugeOn ? (
+          {compassOn ? (
+            <>
+              <Compass heading={compassHeading} />
+              <span style={{ fontSize: 10.5, color: "#6B7268", letterSpacing: 0.5 }}>{t.compassLabel}</span>
+            </>
+          ) : gaugeOn ? (
             <SpeedArc
               speed={toDisplay(bootDone ? currentSpeed : bootValue)}
               max={speedUnit === "mph" ? 40 : 60}
@@ -1288,19 +1410,21 @@ export default function Volt() {
               <span style={{ fontSize: 12.5, color: "#6B7268" }}>{t.gaugeOff}</span>
             </div>
           )}
-          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            <div
-              style={{
-                width: 6,
-                height: 6,
-                borderRadius: "50%",
-                background: gpsError ? "#E3574B" : gaugeOn ? "var(--accent)" : "#4A5040",
-              }}
-            />
-            <span style={{ fontSize: 10.5, color: "#6B7268", letterSpacing: 0.5 }}>
-              {gpsError || (gaugeOn ? t.gpsActive : t.gpsOff)}
-            </span>
-          </div>
+          {!compassOn && (
+            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <div
+                style={{
+                  width: 6,
+                  height: 6,
+                  borderRadius: "50%",
+                  background: gpsError ? "#E3574B" : gaugeOn ? "var(--accent)" : "#4A5040",
+                }}
+              />
+              <span style={{ fontSize: 10.5, color: "#6B7268", letterSpacing: 0.5 }}>
+                {gpsError || (gaugeOn ? t.gpsActive : t.gpsOff)}
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Invisible spacer to keep the gauge visually centered */}

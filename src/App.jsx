@@ -531,7 +531,7 @@ export default function Volt() {
   const unitWord = UNIT_WORDS[language][speedUnit === "mph" ? "mi" : "km"];
   const displayUnit = speedUnit === "mph" ? "mph" : t.unit;
   const displayDistUnit = speedUnit === "mph" ? "mi" : "km";
-  const toDisplay = (kmhOrKm) => (speedUnit === "mph" ? kmhOrKm * KM_TO_MI : kmhOrKm);
+  const toDisplay = useCallback((kmhOrKm) => (speedUnit === "mph" ? kmhOrKm * KM_TO_MI : kmhOrKm), [speedUnit]);
 
   // Splash screen
   const [showSplash, setShowSplash] = useState(true);

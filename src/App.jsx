@@ -71,6 +71,16 @@ const T = {
     mapClosed: "Haritayı kapatıyorum.",
     mapLabel: "HARİTA",
     mapLoading: "Konum bekleniyor…",
+    timeIs: (s) => `Şu an saat ${s}.`,
+    dateIs: (s) => `Bugün ${s}.`,
+    time_kw: ["saat kaç", "saat ne"],
+    date_kw: ["tarih", "ayın kaçı", "hangi gün", "bugün günlerden"],
+    resultIs: (a, b, op, r) => `${a} ${op} ${b} eşittir ${r}.`,
+    divideByZero: "Sıfıra bölemem.",
+    sunsetChecking: "Gün batımına bakıyorum…",
+    sunsetError: "Gün batımı bilgisini alamadım.",
+    sunsetIn: (h, m) => (h > 0 ? `Karanlık olmadan ${h} saat ${m} dakikan var.` : `Karanlık olmadan ${m} dakikan var.`),
+    sunset_kw: ["karanlık", "gün batımı", "güneş ne zaman batar"],
     map_kw: ["harita"],
     wake: ["hey volt", "volt", "vılt", "hey wolt"],
     open: ["aç", "ac"],
@@ -126,6 +136,16 @@ const T = {
     mapClosed: "Closing the map.",
     mapLabel: "MAP",
     mapLoading: "Waiting for location…",
+    timeIs: (s) => `It's currently ${s}.`,
+    dateIs: (s) => `Today is ${s}.`,
+    time_kw: ["what time", "what's the time", "time is it"],
+    date_kw: ["what day", "today's date", "what's the date"],
+    resultIs: (a, b, op, r) => `${a} ${op} ${b} equals ${r}.`,
+    divideByZero: "I can't divide by zero.",
+    sunsetChecking: "Checking sunset time…",
+    sunsetError: "I couldn't get the sunset time.",
+    sunsetIn: (h, m) => (h > 0 ? `You have ${h} hours and ${m} minutes before it gets dark.` : `You have ${m} minutes before it gets dark.`),
+    sunset_kw: ["sunset", "get dark", "before dark"],
     map_kw: ["map"],
     wake: [
       "hey volt", "volt",
@@ -188,6 +208,16 @@ const T = {
     mapClosed: "Закрываю карту.",
     mapLabel: "КАРТА",
     mapLoading: "Ожидание местоположения…",
+    timeIs: (s) => `Сейчас ${s}.`,
+    dateIs: (s) => `Сегодня ${s}.`,
+    time_kw: ["который час", "сколько времени"],
+    date_kw: ["какое сегодня число", "какой сегодня день"],
+    resultIs: (a, b, op, r) => `${a} ${op} ${b} равно ${r}.`,
+    divideByZero: "Я не могу делить на ноль.",
+    sunsetChecking: "Проверяю время заката…",
+    sunsetError: "Не удалось узнать время заката.",
+    sunsetIn: (h, m) => (h > 0 ? `У тебя есть ${h} часов и ${m} минут до темноты.` : `У тебя есть ${m} минут до темноты.`),
+    sunset_kw: ["закат", "стемнеет"],
     map_kw: ["карта", "карту"],
     wake: ["хэй волт", "хей волт", "волт"],
     open: ["включи", "открой", "покажи"],
@@ -243,6 +273,16 @@ const T = {
     mapClosed: "Ich schließe die Karte.",
     mapLabel: "KARTE",
     mapLoading: "Warte auf Standort…",
+    timeIs: (s) => `Es ist jetzt ${s} Uhr.`,
+    dateIs: (s) => `Heute ist ${s}.`,
+    time_kw: ["wie spät", "wieviel uhr"],
+    date_kw: ["welcher tag", "das datum", "den wievielten"],
+    resultIs: (a, b, op, r) => `${a} ${op} ${b} ist gleich ${r}.`,
+    divideByZero: "Ich kann nicht durch null teilen.",
+    sunsetChecking: "Ich prüfe den Sonnenuntergang…",
+    sunsetError: "Ich konnte den Sonnenuntergang nicht ermitteln.",
+    sunsetIn: (h, m) => (h > 0 ? `Du hast noch ${h} Stunden und ${m} Minuten bis es dunkel wird.` : `Du hast noch ${m} Minuten bis es dunkel wird.`),
+    sunset_kw: ["sonnenuntergang", "dunkel wird"],
     map_kw: ["karte"],
     wake: ["hey volt", "volt"],
     open: ["schalte ein", "öffne", "zeig"],
@@ -298,6 +338,16 @@ const T = {
     mapClosed: "正在关闭地图。",
     mapLabel: "地图",
     mapLoading: "正在等待定位…",
+    timeIs: (s) => `现在是${s}。`,
+    dateIs: (s) => `今天是${s}。`,
+    time_kw: ["几点", "现在几点"],
+    date_kw: ["今天几号", "星期几", "今天日期"],
+    resultIs: (a, b, op, r) => `${a}${op}${b}等于${r}。`,
+    divideByZero: "不能除以零。",
+    sunsetChecking: "正在查看日落时间…",
+    sunsetError: "无法获取日落时间。",
+    sunsetIn: (h, m) => (h > 0 ? `距离天黑还有${h}小时${m}分钟。` : `距离天黑还有${m}分钟。`),
+    sunset_kw: ["天黑", "日落"],
     map_kw: ["地图"],
     wake: ["嘿volt", "嘿 volt", "volt"],
     open: ["打开", "开启"],
@@ -353,6 +403,16 @@ const T = {
     mapClosed: "지도를 닫습니다.",
     mapLabel: "지도",
     mapLoading: "위치를 기다리는 중…",
+    timeIs: (s) => `지금은 ${s}입니다.`,
+    dateIs: (s) => `오늘은 ${s}입니다.`,
+    time_kw: ["몇 시", "지금 몇시"],
+    date_kw: ["오늘 며칠", "무슨 요일", "오늘 날짜"],
+    resultIs: (a, b, op, r) => `${a} ${op} ${b}는 ${r}입니다.`,
+    divideByZero: "0으로 나눌 수 없어요.",
+    sunsetChecking: "일몰 시간을 확인 중…",
+    sunsetError: "일몰 시간을 가져올 수 없습니다.",
+    sunsetIn: (h, m) => (h > 0 ? `어두워지기까지 ${h}시간 ${m}분 남았습니다.` : `어두워지기까지 ${m}분 남았습니다.`),
+    sunset_kw: ["일몰", "어두워지"],
     map_kw: ["지도"],
     wake: ["헤이 볼트", "볼트"],
     open: ["켜", "열어", "보여"],
@@ -390,6 +450,80 @@ function describeWeatherCode(code, lang) {
   if ([80, 81, 82].includes(code)) return w.showers;
   if ([95, 96, 99].includes(code)) return w.thunderstorm;
   return w.cloudy;
+}
+
+const CALC_OPS = {
+  tr: { multiply: ["çarpı", "kere"], plus: ["artı"], minus: ["eksi"], divide: ["bölü"] },
+  en: { multiply: ["times", "multiplied by"], plus: ["plus"], minus: ["minus"], divide: ["divided by"] },
+  ru: { multiply: ["умножить на"], plus: ["плюс"], minus: ["минус"], divide: ["разделить на"] },
+  de: { multiply: ["mal"], plus: ["plus"], minus: ["minus"], divide: ["geteilt durch"] },
+  zh: { multiply: ["乘以"], plus: ["加"], minus: ["减"], divide: ["除以"] },
+  ko: { multiply: ["곱하기"], plus: ["더하기"], minus: ["빼기"], divide: ["나누기"] },
+};
+
+const OP_WORDS = {
+  tr: { multiply: "çarpı", plus: "artı", minus: "eksi", divide: "bölü" },
+  en: { multiply: "times", plus: "plus", minus: "minus", divide: "divided by" },
+  ru: { multiply: "умножить на", plus: "плюс", minus: "минус", divide: "разделить на" },
+  de: { multiply: "mal", plus: "plus", minus: "minus", divide: "geteilt durch" },
+  zh: { multiply: "乘以", plus: "加", minus: "减", divide: "除以" },
+  ko: { multiply: "곱하기", plus: "더하기", minus: "빼기", divide: "나누기" },
+};
+
+function parseCalculation(raw, lang) {
+  const t = raw.toLowerCase();
+  const ops = CALC_OPS[lang] || CALC_OPS.en;
+  for (const opKey of Object.keys(ops)) {
+    for (const phrase of ops[opKey]) {
+      const idx = t.indexOf(phrase);
+      if (idx === -1) continue;
+      const before = t.slice(0, idx);
+      const after = t.slice(idx + phrase.length);
+      const beforeMatches = before.match(/\d+(\.\d+)?/g);
+      const afterMatch = after.match(/\d+(\.\d+)?/);
+      if (beforeMatches && beforeMatches.length && afterMatch) {
+        const a = parseFloat(beforeMatches[beforeMatches.length - 1]);
+        const b = parseFloat(afterMatch[0]);
+        let result;
+        if (opKey === "multiply") result = a * b;
+        else if (opKey === "plus") result = a + b;
+        else if (opKey === "minus") result = a - b;
+        else if (opKey === "divide") result = b !== 0 ? a / b : null;
+        return { a, b, opKey, result };
+      }
+    }
+  }
+  return null;
+}
+
+// Local sunset calculation (NOAA/Almanac simplified algorithm) — no external API needed
+function calculateSunset(lat, lon, date) {
+  const rad = Math.PI / 180;
+  const deg = 180 / Math.PI;
+  const start = new Date(Date.UTC(date.getUTCFullYear(), 0, 0));
+  const dayOfYear = Math.floor((date - start) / 86400000);
+  const lngHour = lon / 15;
+  const tCalc = dayOfYear + (18 - lngHour) / 24;
+  const M = 0.9856 * tCalc - 3.289;
+  let L = M + 1.916 * Math.sin(M * rad) + 0.02 * Math.sin(2 * M * rad) + 282.634;
+  L = ((L % 360) + 360) % 360;
+  let RA = deg * Math.atan(0.91764 * Math.tan(L * rad));
+  RA = ((RA % 360) + 360) % 360;
+  const Lquadrant = Math.floor(L / 90) * 90;
+  const RAquadrant = Math.floor(RA / 90) * 90;
+  RA = (RA + (Lquadrant - RAquadrant)) / 15;
+  const sinDec = 0.39782 * Math.sin(L * rad);
+  const cosDec = Math.cos(Math.asin(sinDec));
+  const zenith = 90.833;
+  const cosH = (Math.cos(zenith * rad) - sinDec * Math.sin(lat * rad)) / (cosDec * Math.cos(lat * rad));
+  if (cosH > 1 || cosH < -1) return null;
+  const H = (deg * Math.acos(cosH)) / 15;
+  const T = H + RA - 0.06571 * tCalc - 6.622;
+  let UT = T - lngHour;
+  UT = ((UT % 24) + 24) % 24;
+  const hours = Math.floor(UT);
+  const minutes = Math.floor((UT - hours) * 60);
+  return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), hours, minutes));
 }
 
 function haversineKm(lat1, lon1, lat2, lon2) {
@@ -926,6 +1060,44 @@ export default function Volt() {
     }
   }, []);
 
+  const getSunsetInfo = useCallback(() => {
+    setVoiceStatus(t.sunsetChecking);
+    const getPos = () =>
+      new Promise((resolve, reject) => {
+        if (lastPosRef.current) {
+          resolve({ coords: { latitude: lastPosRef.current.lat, longitude: lastPosRef.current.lon } });
+        } else if ("geolocation" in navigator) {
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            enableHighAccuracy: true,
+            timeout: 10000,
+          });
+        } else {
+          reject(new Error("no geolocation"));
+        }
+      });
+    getPos()
+      .then((pos) => {
+        const { latitude, longitude } = pos.coords;
+        const now = new Date();
+        let sunset = calculateSunset(latitude, longitude, now);
+        if (sunset && sunset < now) {
+          const tomorrow = new Date(now.getTime() + 86400000);
+          sunset = calculateSunset(latitude, longitude, tomorrow);
+        }
+        if (!sunset) throw new Error("no sunset");
+        const diffMs = sunset - now;
+        const hours = Math.floor(diffMs / 3600000);
+        const minutes = Math.max(0, Math.round((diffMs % 3600000) / 60000));
+        const msg = t.sunsetIn(hours, minutes);
+        setVoiceStatus(msg);
+        speak(msg);
+      })
+      .catch(() => {
+        setVoiceStatus(t.sunsetError);
+        speak(t.sunsetError);
+      });
+  }, [t, speak]);
+
   const getWeather = useCallback(async () => {
     setVoiceStatus(t.weatherChecking);
     try {
@@ -967,7 +1139,39 @@ export default function Volt() {
         setVoiceStatus(`"${raw}"`);
         return;
       }
-      if (has(t.reset)) {
+
+      const calc = parseCalculation(raw_l, language);
+      if (calc) {
+        if (calc.result === null) {
+          setVoiceStatus(t.divideByZero);
+          speak(t.divideByZero);
+        } else {
+          const opWord = OP_WORDS[language][calc.opKey];
+          const r = Number.isInteger(calc.result) ? calc.result : Math.round(calc.result * 100) / 100;
+          const msg = t.resultIs(calc.a, calc.b, opWord, r);
+          setVoiceStatus(msg);
+          speak(msg);
+        }
+        return;
+      }
+
+      if (has(t.time_kw)) {
+        const s = new Date().toLocaleTimeString(LANG_LOCALE[language], { hour: "2-digit", minute: "2-digit" });
+        const msg = t.timeIs(s);
+        setVoiceStatus(msg);
+        speak(msg);
+      } else if (has(t.date_kw)) {
+        const s = new Date().toLocaleDateString(LANG_LOCALE[language], {
+          weekday: "long",
+          day: "numeric",
+          month: "long",
+        });
+        const msg = t.dateIs(s);
+        setVoiceStatus(msg);
+        speak(msg);
+      } else if (has(t.sunset_kw)) {
+        getSunsetInfo();
+      } else if (has(t.reset)) {
         resetSession();
         setVoiceStatus(t.sessionReset);
         speak(t.sessionReset);
@@ -1031,7 +1235,7 @@ export default function Volt() {
         speak(t.notUnderstood);
       }
     },
-    [t, speak, resetSession, getWeather, toDisplay, unitWord, speedUnit, language]
+    [t, speak, resetSession, getWeather, getSunsetInfo, toDisplay, unitWord, speedUnit, language]
   );
 
   useEffect(() => {

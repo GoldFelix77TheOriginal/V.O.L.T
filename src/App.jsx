@@ -66,7 +66,7 @@ const T = {
     compassClosed: "Pusulayı kapatıyorum.",
     compassLabel: "PUSULA",
     compass_kw: ["pusula"],
-    wake: ["hey volt", "volt", "vılt", "hey wolt"],
+    wake: ["hey volt", "volt", "vılt", "hey wolt", "hey bolt", "hey colt", " hey wolf" ],
     open: ["aç", "ac"],
     close: ["kapat"],
     reset: ["sıfırla", "sifirla"],
@@ -115,7 +115,7 @@ const T = {
     compassClosed: "Turning the compass off.",
     compassLabel: "COMPASS",
     compass_kw: ["compass"],
-    wake: ["hey volt", "volt"],
+    wake: ["hey volt", "volt", "vılt", "hey wolt", "hey bolt", "hey colt", " hey wolf"],
     open: ["turn on", "open", "show"],
     close: ["turn off", "close", "hide"],
     reset: ["reset"],
@@ -213,7 +213,7 @@ const T = {
     compassClosed: "Ich schalte den Kompass aus.",
     compassLabel: "KOMPASS",
     compass_kw: ["kompass"],
-    wake: ["hey volt", "volt"],
+    wake: ["hey volt", "volt", "vılt", "hey wolt", "hey bolt", "hey colt", " hey wolf"],
     open: ["schalte ein", "öffne", "zeig"],
     close: ["schalte aus", "schließe", "verstecke"],
     reset: ["zurücksetzen", "reset"],
@@ -968,22 +968,28 @@ export default function Volt() {
 
     recognition.onstart = () => setListening(true);
     recognition.onerror = (e) => {
-      setListening(false);
       if (e.error === "not-allowed" || e.error === "service-not-allowed") {
+        setListening(false);
         setVoiceStatus(t.micNotSupported);
         setMicBlocked(true);
       }
+      // Other errors (no-speech, aborted, network, audio-capture) are transient —
+      // 'onend' fires right after and silently restarts the engine without
+      // flickering the "Listening" indicator.
     };
     recognition.onresult = (event) => {
       const last = event.results[event.results.length - 1];
       processTranscript(last[0].transcript);
     };
     recognition.onend = () => {
-      setListening(false);
       if (!isSpeakingRef.current && recognitionRef.current === recognition) {
         try {
           recognition.start();
-        } catch (e) {}
+        } catch (e) {
+          setListening(false);
+        }
+      } else {
+        setListening(false);
       }
     };
 

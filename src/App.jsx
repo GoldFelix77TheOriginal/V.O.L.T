@@ -24,10 +24,10 @@ const KM_TO_MI = 0.621371;
 const SENSITIVITY_THRESHOLD = { low: 10, medium: 7, high: 4 };
 
 const THEMES = {
-  green: { hex: "#D7FF3D", on: "#12140F" },
-  red: { hex: "#FF5A5A", on: "#12140F" },
-  blue: { hex: "#5AC8FA", on: "#12140F" },
-  white: { hex: "#F5F5F0", on: "#12140F" },
+  green: { hex: "#D7FF3D", on: "#12140F", light: false },
+  red: { hex: "#FF5A5A", on: "#12140F", light: false },
+  blue: { hex: "#5AC8FA", on: "#12140F", light: false },
+  white: { hex: "#2B2E24", on: "#F5F5F0", light: true },
 };
 
 const T = {
@@ -82,7 +82,7 @@ const T = {
     sunsetIn: (h, m) => (h > 0 ? `Karanlık olmadan ${h} saat ${m} dakikan var.` : `Karanlık olmadan ${m} dakikan var.`),
     sunset_kw: ["karanlık", "gün batımı", "güneş ne zaman batar"],
     map_kw: ["harita"],
-    wake: ["hey volt", "volt", "vılt", "hey wolt"],
+    wake: ["hey volt", "volt", "vılt", "hey wolt", "hey bolt", "bolt", "hey bot", " bot", "bot,", "hey jolt", "jolt", "hey colt", "colt", "hey wolf", "wolf"],
     open: ["aç", "ac"],
     close: ["kapat"],
     reset: ["sıfırla", "sifirla"],
@@ -219,7 +219,7 @@ const T = {
     sunsetIn: (h, m) => (h > 0 ? `У тебя есть ${h} часов и ${m} минут до темноты.` : `У тебя есть ${m} минут до темноты.`),
     sunset_kw: ["закат", "стемнеет"],
     map_kw: ["карта", "карту"],
-    wake: ["хэй волт", "хей волт", "волт"],
+    wake: ["хэй волт", "хей волт", "волт", "hey bolt", "bolt", "hey bot", " bot", "bot,", "hey jolt", "jolt", "hey colt", "colt", "hey wolf", "wolf"],
     open: ["включи", "открой", "покажи"],
     close: ["выключи", "закрой", "скрой"],
     reset: ["сбрось", "сброс"],
@@ -284,7 +284,7 @@ const T = {
     sunsetIn: (h, m) => (h > 0 ? `Du hast noch ${h} Stunden und ${m} Minuten bis es dunkel wird.` : `Du hast noch ${m} Minuten bis es dunkel wird.`),
     sunset_kw: ["sonnenuntergang", "dunkel wird"],
     map_kw: ["karte"],
-    wake: ["hey volt", "volt"],
+    wake: ["hey volt", "volt", "hey bolt", "bolt", "hey bot", " bot", "bot,", "hey jolt", "jolt", "hey colt", "colt", "hey wolf", "wolf"],
     open: ["schalte ein", "öffne", "zeig"],
     close: ["schalte aus", "schließe", "verstecke"],
     reset: ["zurücksetzen", "reset"],
@@ -349,7 +349,7 @@ const T = {
     sunsetIn: (h, m) => (h > 0 ? `距离天黑还有${h}小时${m}分钟。` : `距离天黑还有${m}分钟。`),
     sunset_kw: ["天黑", "日落"],
     map_kw: ["地图"],
-    wake: ["嘿volt", "嘿 volt", "volt"],
+    wake: ["嘿volt", "嘿 volt", "volt", "hey bolt", "bolt", "hey bot", " bot", "bot,", "hey jolt", "jolt", "hey colt", "colt", "hey wolf", "wolf"],
     open: ["打开", "开启"],
     close: ["关闭", "关掉"],
     reset: ["重置"],
@@ -414,7 +414,7 @@ const T = {
     sunsetIn: (h, m) => (h > 0 ? `어두워지기까지 ${h}시간 ${m}분 남았습니다.` : `어두워지기까지 ${m}분 남았습니다.`),
     sunset_kw: ["일몰", "어두워지"],
     map_kw: ["지도"],
-    wake: ["헤이 볼트", "볼트"],
+    wake: ["헤이 볼트", "볼트", "hey bolt", "bolt", "hey bot", " bot", "bot,", "hey jolt", "jolt", "hey colt", "colt", "hey wolf", "wolf"],
     open: ["켜", "열어", "보여"],
     close: ["꺼", "닫아", "숨겨"],
     reset: ["초기화", "리셋"],
@@ -564,14 +564,14 @@ function SpeedArc({ speed, flash, unit, max = 60 }) {
     const label = polar(150, 150, 98, a);
     ticks.push(
       <g key={v}>
-        <line x1={outer.x} y1={outer.y} x2={inner.x} y2={inner.y} stroke="#4A5040" strokeWidth="2" />
+        <line x1={outer.x} y1={outer.y} x2={inner.x} y2={inner.y} stroke="var(--tick)" strokeWidth="2" />
         <text
           x={label.x}
           y={label.y}
           textAnchor="middle"
           dominantBaseline="middle"
           fontSize="11"
-          fill="#6B7268"
+          fill="var(--dim)"
           fontFamily="'Roboto Mono', 'SF Mono', ui-monospace, monospace"
         >
           {v}
@@ -582,7 +582,7 @@ function SpeedArc({ speed, flash, unit, max = 60 }) {
 
   return (
     <svg width="300" height="230" viewBox="0 0 300 230">
-      <path d={arcPath(128, startAngle, endAngle)} fill="none" stroke="#1B1D16" strokeWidth="18" strokeLinecap="round" />
+      <path d={arcPath(128, startAngle, endAngle)} fill="none" stroke="var(--panel)" strokeWidth="18" strokeLinecap="round" />
       <path
         d={arcPath(128, startAngle, angle)}
         fill="none"
@@ -598,12 +598,12 @@ function SpeedArc({ speed, flash, unit, max = 60 }) {
         textAnchor="middle"
         fontSize="64"
         fontWeight="700"
-        fill="#EDEFE6"
+        fill="var(--text)"
         fontFamily="'Roboto Mono', 'SF Mono', ui-monospace, monospace"
       >
         {clamped.toFixed(0)}
       </text>
-      <text x="150" y="175" textAnchor="middle" fontSize="13" fill="#8A8F7C" letterSpacing="2">
+      <text x="150" y="175" textAnchor="middle" fontSize="13" fill="var(--dim2)" letterSpacing="2">
         {unit.toUpperCase()}
       </text>
     </svg>
@@ -633,8 +633,8 @@ function Compass({ heading }) {
           position: "absolute",
           inset: 0,
           borderRadius: "50%",
-          background: "#1B1D16",
-          border: "1px solid #262920",
+          background: "var(--panel)",
+          border: "1px solid var(--border)",
           transform: `rotate(${-heading}deg)`,
           transition: "transform 0.15s linear",
         }}
@@ -655,7 +655,7 @@ function Compass({ heading }) {
                 transform: "translate(-50%, -50%)",
                 fontSize: d.label.length === 1 ? 15 : 11,
                 fontWeight: 700,
-                color: d.label === "N" ? "var(--accent)" : "#6B7268",
+                color: d.label === "N" ? "var(--accent)" : "var(--dim)",
               }}
             >
               {d.label}
@@ -686,10 +686,10 @@ function Compass({ heading }) {
           justifyContent: "center",
         }}
       >
-        <div className="digit" style={{ fontSize: 34, fontWeight: 700, color: "#EDEFE6" }}>
+        <div className="digit" style={{ fontSize: 34, fontWeight: 700, color: "var(--text)" }}>
           {Math.round(heading)}°
         </div>
-        <div style={{ fontSize: 13, color: "#8A8F7C", letterSpacing: 2 }}>{cardinalOf(heading)}</div>
+        <div style={{ fontSize: 13, color: "var(--dim2)", letterSpacing: 2 }}>{cardinalOf(heading)}</div>
       </div>
     </div>
   );
@@ -705,6 +705,26 @@ export default function Volt() {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const t = T[language];
   const accent = THEMES[themeColor];
+  const isLight = accent.light;
+  const surface = isLight
+    ? {
+        bg: "#F5F5F0",
+        panel: "#E7E7E1",
+        border: "#D6D6D0",
+        text: "#12140F",
+        dim: "#6E7260",
+        dim2: "#5A5D52",
+        tick: "#9A9D92",
+      }
+    : {
+        bg: "#12140F",
+        panel: "#1B1D16",
+        border: "#262920",
+        text: "#EDEFE6",
+        dim: "#6B7268",
+        dim2: "#8A8F7C",
+        tick: "#4A5040",
+      };
   const unitWord = UNIT_WORDS[language][speedUnit === "mph" ? "mi" : "km"];
   const displayUnit = speedUnit === "mph" ? "mph" : t.unit;
   const displayDistUnit = speedUnit === "mph" ? "mi" : "km";
@@ -1303,10 +1323,17 @@ export default function Volt() {
       style={{
         width: "100vw",
         height: "100vh",
-        background: "#12140F",
+        background: "var(--bg)",
         overflow: "hidden",
         "--accent": accent.hex,
         "--on-accent": accent.on,
+        "--bg": surface.bg,
+        "--panel": surface.panel,
+        "--border": surface.border,
+        "--text": surface.text,
+        "--dim": surface.dim,
+        "--dim2": surface.dim2,
+        "--tick": surface.tick,
       }}
     >
       <style>{`
@@ -1339,7 +1366,7 @@ export default function Volt() {
         .icon-btn:active { transform: scale(0.92); }
 
         .volt-splash {
-          position: fixed; inset: 0; z-index: 100; background: #12140F;
+          position: fixed; inset: 0; z-index: 100; background: var(--bg);
           display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
         }
         .splash-exit { animation: splashOut 0.5s ease forwards; }
@@ -1362,7 +1389,7 @@ export default function Volt() {
           50% { box-shadow: 0 0 30px var(--accent); }
         }
         .splash-tagline {
-          font-size: 12px; color: #6B7268; letter-spacing: 1.5px; opacity: 0;
+          font-size: 12px; color: var(--dim); letter-spacing: 1.5px; opacity: 0;
           animation: fadeIn 0.5s 0.5s ease forwards;
         }
         @keyframes fadeIn { to { opacity: 1; } }
@@ -1399,18 +1426,18 @@ export default function Volt() {
           display: flex; align-items: center; justify-content: center; z-index: 90; padding: 16px;
         }
         .settings-card {
-          background: #1B1D16; border: 1px solid #2B2E24; border-radius: 16px;
+          background: var(--panel); border: 1px solid var(--border); border-radius: 16px;
           padding: 20px; width: 100%; max-width: 460px; max-height: 85vh; overflow-y: auto;
         }
         .pill {
-          padding: 7px 12px; border-radius: 999px; border: 1px solid #2B2E24; background: #12140F;
-          color: #EDEFE6; font-size: 12px; cursor: pointer;
+          padding: 7px 12px; border-radius: 999px; border: 1px solid var(--border); background: var(--bg);
+          color: var(--text); font-size: 12px; cursor: pointer;
         }
         .pill.active { background: var(--accent); color: var(--on-accent); border-color: transparent; font-weight: 700; }
         .swatch {
           width: 34px; height: 34px; border-radius: 50%; cursor: pointer; border: 2px solid transparent;
         }
-        .swatch.active { border-color: #EDEFE6; }
+        .swatch.active { border-color: var(--text); }
 
         .road-alert {
           position: fixed;
@@ -1445,7 +1472,7 @@ export default function Volt() {
             <div className="splash-bolt">
               <Zap size={28} color="var(--on-accent)" strokeWidth={2.6} fill="var(--on-accent)" />
             </div>
-            <span className="digit" style={{ fontSize: 34, fontWeight: 800, letterSpacing: 4, color: "#EDEFE6" }}>
+            <span className="digit" style={{ fontSize: 34, fontWeight: 800, letterSpacing: 4, color: "var(--text)" }}>
               VOLT
             </span>
           </div>
@@ -1472,8 +1499,8 @@ export default function Volt() {
           width: 38,
           height: 38,
           borderRadius: "50%",
-          border: "1px solid #262920",
-          background: "#1B1D16",
+          border: "1px solid var(--border)",
+          background: "var(--panel)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -1481,25 +1508,25 @@ export default function Volt() {
         }}
         aria-label={t.settings}
       >
-        <Settings size={17} color="#8A8F7C" />
+        <Settings size={17} color="var(--dim2)" />
       </button>
 
       {settingsOpen && (
         <div className="settings-overlay" onClick={() => setSettingsOpen(false)}>
           <div className="settings-card" onClick={(e) => e.stopPropagation()}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-              <span style={{ fontSize: 16, fontWeight: 700, color: "#EDEFE6" }}>{t.settings}</span>
+              <span style={{ fontSize: 16, fontWeight: 700, color: "var(--text)" }}>{t.settings}</span>
               <button
                 onClick={() => setSettingsOpen(false)}
                 style={{ background: "none", border: "none", cursor: "pointer" }}
                 aria-label="Close"
               >
-                <X size={18} color="#8A8F7C" />
+                <X size={18} color="var(--dim2)" />
               </button>
             </div>
 
             <div style={{ marginBottom: 18 }}>
-              <div style={{ fontSize: 11, color: "#8A8F7C", marginBottom: 8, letterSpacing: 0.5 }}>{t.language}</div>
+              <div style={{ fontSize: 11, color: "var(--dim2)", marginBottom: 8, letterSpacing: 0.5 }}>{t.language}</div>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                 {Object.keys(T).map((code) => (
                   <button
@@ -1514,7 +1541,7 @@ export default function Volt() {
             </div>
 
             <div style={{ marginBottom: 18 }}>
-              <div style={{ fontSize: 11, color: "#8A8F7C", marginBottom: 8, letterSpacing: 0.5 }}>{t.unitLabel}</div>
+              <div style={{ fontSize: 11, color: "var(--dim2)", marginBottom: 8, letterSpacing: 0.5 }}>{t.unitLabel}</div>
               <div style={{ display: "flex", gap: 8 }}>
                 <button
                   className={`pill ${speedUnit === "kmh" ? "active" : ""}`}
@@ -1532,7 +1559,7 @@ export default function Volt() {
             </div>
 
             <div style={{ marginBottom: 18 }}>
-              <div style={{ fontSize: 11, color: "#8A8F7C", marginBottom: 8, letterSpacing: 0.5 }}>{t.sensitivityLabel}</div>
+              <div style={{ fontSize: 11, color: "var(--dim2)", marginBottom: 8, letterSpacing: 0.5 }}>{t.sensitivityLabel}</div>
               <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                 {[
                   { key: "off", label: t.off },
@@ -1552,7 +1579,7 @@ export default function Volt() {
             </div>
 
             <div style={{ marginBottom: 18 }}>
-              <div style={{ fontSize: 11, color: "#8A8F7C", marginBottom: 8, letterSpacing: 0.5 }}>{t.voiceControlLabel}</div>
+              <div style={{ fontSize: 11, color: "var(--dim2)", marginBottom: 8, letterSpacing: 0.5 }}>{t.voiceControlLabel}</div>
               <button
                 className={`pill ${micEnabled ? "active" : ""}`}
                 onClick={() => setMicEnabled((v) => !v)}
@@ -1562,7 +1589,7 @@ export default function Volt() {
             </div>
 
             <div style={{ marginBottom: 18 }}>
-              <div style={{ fontSize: 11, color: "#8A8F7C", marginBottom: 8, letterSpacing: 0.5 }}>{t.fullscreenLabel}</div>
+              <div style={{ fontSize: 11, color: "var(--dim2)", marginBottom: 8, letterSpacing: 0.5 }}>{t.fullscreenLabel}</div>
               <button
                 className={`pill ${isFullscreen ? "active" : ""}`}
                 onClick={toggleFullscreen}
@@ -1572,7 +1599,7 @@ export default function Volt() {
             </div>
 
             <div style={{ marginBottom: 18 }}>
-              <div style={{ fontSize: 11, color: "#8A8F7C", marginBottom: 8, letterSpacing: 0.5 }}>{t.sound}</div>
+              <div style={{ fontSize: 11, color: "var(--dim2)", marginBottom: 8, letterSpacing: 0.5 }}>{t.sound}</div>
               <button
                 className={`pill ${soundEnabled ? "active" : ""}`}
                 onClick={() => setSoundEnabled((v) => !v)}
@@ -1582,7 +1609,7 @@ export default function Volt() {
             </div>
 
             <div>
-              <div style={{ fontSize: 11, color: "#8A8F7C", marginBottom: 8, letterSpacing: 0.5 }}>{t.theme}</div>
+              <div style={{ fontSize: 11, color: "var(--dim2)", marginBottom: 8, letterSpacing: 0.5 }}>{t.theme}</div>
               <div style={{ display: "flex", gap: 12 }}>
                 {[
                   { key: "red", label: t.colorRed },
@@ -1621,7 +1648,7 @@ export default function Volt() {
             >
               <Zap size={15} color="var(--on-accent)" strokeWidth={2.6} fill="var(--on-accent)" />
             </div>
-            <span className="digit" style={{ fontSize: 16, fontWeight: 700, letterSpacing: 1.5, color: "#EDEFE6" }}>
+            <span className="digit" style={{ fontSize: 16, fontWeight: 700, letterSpacing: 1.5, color: "var(--text)" }}>
               VOLT
             </span>
           </div>
@@ -1631,8 +1658,8 @@ export default function Volt() {
               display: "flex",
               alignItems: "center",
               gap: 8,
-              background: "#1B1D16",
-              border: "1px solid #262920",
+              background: "var(--panel)",
+              border: "1px solid var(--border)",
               borderRadius: 999,
               padding: "8px 14px 8px 10px",
               width: "fit-content",
@@ -1655,12 +1682,12 @@ export default function Volt() {
               }}
             >
               {voiceSupported && !micBlocked && micEnabled ? (
-                <Mic size={13} color={speaking || listening ? "var(--accent)" : "#8A8F7C"} />
+                <Mic size={13} color={speaking || listening ? "var(--accent)" : "var(--dim2)"} />
               ) : (
-                <MicOff size={13} color="#8A8F7C" />
+                <MicOff size={13} color="var(--dim2)" />
               )}
             </div>
-            <span style={{ fontSize: 11.5, color: "#EDEFE6", fontWeight: 600, whiteSpace: "nowrap" }}>
+            <span style={{ fontSize: 11.5, color: "var(--text)", fontWeight: 600, whiteSpace: "nowrap" }}>
               {!micEnabled ? t.voiceOff : speaking ? t.speaking : listening ? t.listening : t.voiceOn}
             </span>
             {(listening || speaking) && (
@@ -1668,7 +1695,7 @@ export default function Volt() {
             )}
           </div>
 
-          <div style={{ fontSize: 10.5, color: "#6B7268", maxWidth: 160, lineHeight: 1.4 }}>
+          <div style={{ fontSize: 10.5, color: "var(--dim)", maxWidth: 160, lineHeight: 1.4 }}>
             {!voiceSupported || micBlocked ? t.micNotSupported : !micEnabled ? "" : voiceStatus || t.hint}
           </div>
 
@@ -1680,10 +1707,10 @@ export default function Volt() {
                 { label: t.dist, value: `${toDisplay(sessionDistance).toFixed(1)} ${displayDistUnit}` },
               ].map((s, i) => (
                 <div key={s.label} className="stat-item" style={{ animationDelay: `${0.35 + i * 0.1}s` }}>
-                  <div className="digit" style={{ fontSize: 15, fontWeight: 700, color: "#EDEFE6" }}>
+                  <div className="digit" style={{ fontSize: 15, fontWeight: 700, color: "var(--text)" }}>
                     {s.value}
                   </div>
-                  <div style={{ fontSize: 9, color: "#6B7268", letterSpacing: 0.8, marginTop: 1 }}>{s.label}</div>
+                  <div style={{ fontSize: 9, color: "var(--dim)", letterSpacing: 0.8, marginTop: 1 }}>{s.label}</div>
                 </div>
               ))}
             </div>
@@ -1711,18 +1738,18 @@ export default function Volt() {
                   alignItems: "center",
                   justifyContent: "center",
                   gap: 10,
-                  background: "#1B1D16",
+                  background: "var(--panel)",
                   borderRadius: 16,
                 }}
               >
-                <Gauge size={26} color="#4A5040" />
-                <span style={{ fontSize: 12.5, color: "#6B7268" }}>{t.mapLoading}</span>
+                <Gauge size={26} color="var(--tick)" />
+                <span style={{ fontSize: 12.5, color: "var(--dim)" }}>{t.mapLoading}</span>
               </div>
             )
           ) : compassOn ? (
             <>
               <Compass heading={compassHeading} />
-              <span style={{ fontSize: 10.5, color: "#6B7268", letterSpacing: 0.5 }}>{t.compassLabel}</span>
+              <span style={{ fontSize: 10.5, color: "var(--dim)", letterSpacing: 0.5 }}>{t.compassLabel}</span>
             </>
           ) : gaugeOn ? (
             <SpeedArc
@@ -1743,8 +1770,8 @@ export default function Volt() {
                 gap: 10,
               }}
             >
-              <Gauge size={30} color="#4A5040" />
-              <span style={{ fontSize: 12.5, color: "#6B7268" }}>{t.gaugeOff}</span>
+              <Gauge size={30} color="var(--tick)" />
+              <span style={{ fontSize: 12.5, color: "var(--dim)" }}>{t.gaugeOff}</span>
             </div>
           )}
           {!compassOn && !mapOn && (
@@ -1754,10 +1781,10 @@ export default function Volt() {
                   width: 6,
                   height: 6,
                   borderRadius: "50%",
-                  background: gpsError ? "#E3574B" : gaugeOn ? "var(--accent)" : "#4A5040",
+                  background: gpsError ? "#E3574B" : gaugeOn ? "var(--accent)" : "var(--tick)",
                 }}
               />
-              <span style={{ fontSize: 10.5, color: "#6B7268", letterSpacing: 0.5 }}>
+              <span style={{ fontSize: 10.5, color: "var(--dim)", letterSpacing: 0.5 }}>
                 {gpsError || (gaugeOn ? t.gpsActive : t.gpsOff)}
               </span>
             </div>

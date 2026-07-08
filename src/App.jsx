@@ -81,6 +81,23 @@ const T = {
     sunsetError: "Gün batımı bilgisini alamadım.",
     sunsetIn: (h, m) => (h > 0 ? `Karanlık olmadan ${h} saat ${m} dakikan var.` : `Karanlık olmadan ${m} dakikan var.`),
     sunset_kw: ["karanlık", "gün batımı", "güneş ne zaman batar"],
+    radioOpened: (name) => `${name} çalıyor.`,
+    radioClosed: "Radyoyu kapatıyorum.",
+    radioNext: (name) => `Şimdi ${name} çalıyor.`,
+    radio_kw: ["radyo"],
+    radioNext_kw: ["sonraki istasyon", "istasyon değiştir", "başka istasyon"],
+    reminderSet: (n, unit) => `Tamam, ${n} ${unit} sonra hatırlatacağım.`,
+    reminderFired: "Hatırlatma zamanı geldi!",
+    reminder_kw: ["hatırlat"],
+    minuteWord: "dakika", secondWord: "saniye",
+    emergencyLabel: "Acil durum numarası",
+    emergencyPlaceholder: "Telefon numarası",
+    emergencyCalling: "Yardım çağırıyorum.",
+    emergencyNotSet: "Önce ayarlardan bir acil durum numarası kaydetmen lazım.",
+    emergency_kw: ["yardım çağır", "acil durum"],
+    historyLabel: "Sürüş geçmişi",
+    historyEmpty: "Henüz kayıtlı sürüş yok.",
+    historyClear: "Geçmişi temizle",
     map_kw: ["harita"],
     wake: ["hey volt", "volt", "vılt", "hey wolt", "hey bolt", "bolt", "hey bot", " bot", "bot,", "hey jolt", "jolt", "hey colt", "colt", "hey wolf", "wolf"],
     open: ["aç", "ac"],
@@ -146,6 +163,23 @@ const T = {
     sunsetError: "I couldn't get the sunset time.",
     sunsetIn: (h, m) => (h > 0 ? `You have ${h} hours and ${m} minutes before it gets dark.` : `You have ${m} minutes before it gets dark.`),
     sunset_kw: ["sunset", "get dark", "before dark"],
+    radioOpened: (name) => `${name} is now playing.`,
+    radioClosed: "Turning the radio off.",
+    radioNext: (name) => `Now playing ${name}.`,
+    radio_kw: ["radio"],
+    radioNext_kw: ["next station", "change station", "another station"],
+    reminderSet: (n, unit) => `Okay, I'll remind you in ${n} ${unit}.`,
+    reminderFired: "Time's up for your reminder!",
+    reminder_kw: ["remind"],
+    minuteWord: "minutes", secondWord: "seconds",
+    emergencyLabel: "Emergency number",
+    emergencyPlaceholder: "Phone number",
+    emergencyCalling: "Calling for help.",
+    emergencyNotSet: "Set an emergency number in settings first.",
+    emergency_kw: ["call for help", "emergency"],
+    historyLabel: "Ride history",
+    historyEmpty: "No rides saved yet.",
+    historyClear: "Clear history",
     map_kw: ["map"],
     wake: [
       "hey volt", "volt",
@@ -218,6 +252,23 @@ const T = {
     sunsetError: "Не удалось узнать время заката.",
     sunsetIn: (h, m) => (h > 0 ? `У тебя есть ${h} часов и ${m} минут до темноты.` : `У тебя есть ${m} минут до темноты.`),
     sunset_kw: ["закат", "стемнеет"],
+    radioOpened: (name) => `Сейчас играет ${name}.`,
+    radioClosed: "Выключаю радио.",
+    radioNext: (name) => `Теперь играет ${name}.`,
+    radio_kw: ["радио"],
+    radioNext_kw: ["следующая станция", "смени станцию", "другая станция"],
+    reminderSet: (n, unit) => `Хорошо, напомню через ${n} ${unit}.`,
+    reminderFired: "Время напоминания!",
+    reminder_kw: ["напомни"],
+    minuteWord: "минут", secondWord: "секунд",
+    emergencyLabel: "Номер экстренной связи",
+    emergencyPlaceholder: "Номер телефона",
+    emergencyCalling: "Вызываю помощь.",
+    emergencyNotSet: "Сначала сохрани номер экстренной связи в настройках.",
+    emergency_kw: ["вызови помощь", "экстренный вызов"],
+    historyLabel: "История поездок",
+    historyEmpty: "Пока нет сохранённых поездок.",
+    historyClear: "Очистить историю",
     map_kw: ["карта", "карту"],
     wake: ["хэй волт", "хей волт", "волт", "hey bolt", "bolt", "hey bot", " bot", "bot,", "hey jolt", "jolt", "hey colt", "colt", "hey wolf", "wolf"],
     open: ["включи", "открой", "покажи"],
@@ -283,6 +334,23 @@ const T = {
     sunsetError: "Ich konnte den Sonnenuntergang nicht ermitteln.",
     sunsetIn: (h, m) => (h > 0 ? `Du hast noch ${h} Stunden und ${m} Minuten bis es dunkel wird.` : `Du hast noch ${m} Minuten bis es dunkel wird.`),
     sunset_kw: ["sonnenuntergang", "dunkel wird"],
+    radioOpened: (name) => `${name} läuft jetzt.`,
+    radioClosed: "Ich schalte das Radio aus.",
+    radioNext: (name) => `Jetzt läuft ${name}.`,
+    radio_kw: ["radio"],
+    radioNext_kw: ["nächster sender", "sender wechseln", "anderer sender"],
+    reminderSet: (n, unit) => `Okay, ich erinnere dich in ${n} ${unit}.`,
+    reminderFired: "Zeit für deine Erinnerung!",
+    reminder_kw: ["erinnere"],
+    minuteWord: "Minuten", secondWord: "Sekunden",
+    emergencyLabel: "Notfallnummer",
+    emergencyPlaceholder: "Telefonnummer",
+    emergencyCalling: "Ich rufe Hilfe.",
+    emergencyNotSet: "Lege zuerst eine Notfallnummer in den Einstellungen fest.",
+    emergency_kw: ["hilfe rufen", "notfall"],
+    historyLabel: "Fahrtverlauf",
+    historyEmpty: "Noch keine Fahrten gespeichert.",
+    historyClear: "Verlauf löschen",
     map_kw: ["karte"],
     wake: ["hey volt", "volt", "hey bolt", "bolt", "hey bot", " bot", "bot,", "hey jolt", "jolt", "hey colt", "colt", "hey wolf", "wolf"],
     open: ["schalte ein", "öffne", "zeig"],
@@ -348,6 +416,23 @@ const T = {
     sunsetError: "无法获取日落时间。",
     sunsetIn: (h, m) => (h > 0 ? `距离天黑还有${h}小时${m}分钟。` : `距离天黑还有${m}分钟。`),
     sunset_kw: ["天黑", "日落"],
+    radioOpened: (name) => `正在播放${name}。`,
+    radioClosed: "正在关闭电台。",
+    radioNext: (name) => `现在播放${name}。`,
+    radio_kw: ["电台", "广播"],
+    radioNext_kw: ["下一个电台", "换一个电台", "换台"],
+    reminderSet: (n, unit) => `好的,${n}${unit}后提醒你。`,
+    reminderFired: "提醒时间到!",
+    reminder_kw: ["提醒"],
+    minuteWord: "分钟", secondWord: "秒",
+    emergencyLabel: "紧急联系号码",
+    emergencyPlaceholder: "电话号码",
+    emergencyCalling: "正在呼叫救援。",
+    emergencyNotSet: "请先在设置中保存紧急联系号码。",
+    emergency_kw: ["呼叫救援", "紧急情况"],
+    historyLabel: "骑行记录",
+    historyEmpty: "还没有保存的骑行记录。",
+    historyClear: "清除记录",
     map_kw: ["地图"],
     wake: ["嘿volt", "嘿 volt", "volt", "hey bolt", "bolt", "hey bot", " bot", "bot,", "hey jolt", "jolt", "hey colt", "colt", "hey wolf", "wolf"],
     open: ["打开", "开启"],
@@ -413,6 +498,23 @@ const T = {
     sunsetError: "일몰 시간을 가져올 수 없습니다.",
     sunsetIn: (h, m) => (h > 0 ? `어두워지기까지 ${h}시간 ${m}분 남았습니다.` : `어두워지기까지 ${m}분 남았습니다.`),
     sunset_kw: ["일몰", "어두워지"],
+    radioOpened: (name) => `${name} 재생 중입니다.`,
+    radioClosed: "라디오를 끕니다.",
+    radioNext: (name) => `이제 ${name}이(가) 재생됩니다.`,
+    radio_kw: ["라디오"],
+    radioNext_kw: ["다음 방송국", "방송국 바꿔", "다른 방송국"],
+    reminderSet: (n, unit) => `알겠습니다, ${n}${unit} 후에 알려드릴게요.`,
+    reminderFired: "알림 시간이 되었습니다!",
+    reminder_kw: ["알려줘", "알림"],
+    minuteWord: "분", secondWord: "초",
+    emergencyLabel: "긴급 연락처",
+    emergencyPlaceholder: "전화번호",
+    emergencyCalling: "도움을 요청합니다.",
+    emergencyNotSet: "먼저 설정에서 긴급 연락처를 저장하세요.",
+    emergency_kw: ["도움 요청", "긴급 상황"],
+    historyLabel: "라이딩 기록",
+    historyEmpty: "저장된 라이딩이 아직 없습니다.",
+    historyClear: "기록 삭제",
     map_kw: ["지도"],
     wake: ["헤이 볼트", "볼트", "hey bolt", "bolt", "hey bot", " bot", "bot,", "hey jolt", "jolt", "hey colt", "colt", "hey wolf", "wolf"],
     open: ["켜", "열어", "보여"],
@@ -525,6 +627,14 @@ function calculateSunset(lat, lon, date) {
   const minutes = Math.floor((UT - hours) * 60);
   return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), hours, minutes));
 }
+
+const RADIO_STATIONS = [
+  { name: "Power FM", url: "https://listen.powerapp.com.tr/powerfm/mpeg/icecast.audio" },
+  { name: "Joy FM", url: "https://playerservices.streamtheworld.com/api/livestream-redirect/JOY_FM.mp3" },
+  { name: "Joy Türk", url: "https://playerservices.streamtheworld.com/api/livestream-redirect/JOY_TURK.mp3" },
+  { name: "Metro FM", url: "https://playerservices.streamtheworld.com/api/livestream-redirect/METRO_FM.mp3" },
+  { name: "Virgin Radio", url: "https://playerservices.streamtheworld.com/api/livestream-redirect/VIRGIN_RADIO_SC.mp3" },
+];
 
 function haversineKm(lat1, lon1, lat2, lon2) {
   const R = 6371;
@@ -1080,6 +1190,36 @@ export default function Volt() {
     }
   }, []);
 
+  // Internet radio
+  const [radioOn, setRadioOn] = useState(false);
+  const [radioIndex, setRadioIndex] = useState(0);
+  const audioRef = useRef(null);
+
+  const playStation = useCallback((index) => {
+    const station = RADIO_STATIONS[index];
+    if (!audioRef.current) {
+      audioRef.current = new Audio();
+    }
+    audioRef.current.src = station.url;
+    audioRef.current.play().catch(() => {});
+    setRadioIndex(index);
+    setRadioOn(true);
+    return station;
+  }, []);
+
+  const stopRadio = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+    }
+    setRadioOn(false);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) audioRef.current.pause();
+    };
+  }, []);
+
   const getSunsetInfo = useCallback(() => {
     setVoiceStatus(t.sunsetChecking);
     const getPos = () =>
@@ -1195,6 +1335,21 @@ export default function Volt() {
         resetSession();
         setVoiceStatus(t.sessionReset);
         speak(t.sessionReset);
+      } else if (has(t.radio_kw) && has(t.radioNext_kw)) {
+        const nextIndex = (radioIndex + 1) % RADIO_STATIONS.length;
+        const station = playStation(nextIndex);
+        const msg = t.radioNext(station.name);
+        setVoiceStatus(msg);
+        speak(msg);
+      } else if (has(t.radio_kw) && has(t.close)) {
+        stopRadio();
+        setVoiceStatus(t.radioClosed);
+        speak(t.radioClosed);
+      } else if (has(t.radio_kw) && has(t.open)) {
+        const station = playStation(radioIndex);
+        const msg = t.radioOpened(station.name);
+        setVoiceStatus(msg);
+        speak(msg);
       } else if (has(t.compass_kw) && has(t.close)) {
         setCompassOn(false);
         setVoiceStatus(t.compassClosed);
@@ -1255,7 +1410,7 @@ export default function Volt() {
         speak(t.notUnderstood);
       }
     },
-    [t, speak, resetSession, getWeather, getSunsetInfo, toDisplay, unitWord, speedUnit, language]
+    [t, speak, resetSession, getWeather, getSunsetInfo, playStation, stopRadio, radioIndex, toDisplay, unitWord, speedUnit, language]
   );
 
   useEffect(() => {
@@ -1698,6 +1853,12 @@ export default function Volt() {
           <div style={{ fontSize: 10.5, color: "var(--dim)", maxWidth: 160, lineHeight: 1.4 }}>
             {!voiceSupported || micBlocked ? t.micNotSupported : !micEnabled ? "" : voiceStatus || t.hint}
           </div>
+
+          {radioOn && (
+            <div style={{ fontSize: 11, color: "var(--accent)", fontWeight: 600 }}>
+              ♪ {RADIO_STATIONS[radioIndex].name}
+            </div>
+          )}
 
           {gaugeOn && (
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>

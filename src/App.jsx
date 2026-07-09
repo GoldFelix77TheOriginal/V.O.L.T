@@ -43,6 +43,7 @@ const T = {
     settings: "Ayarlar", language: "Dil", sound: "Uygulama sesi", theme: "Tema rengi",
     colorRed: "Kırmızı", colorBlue: "Mavi", colorGreen: "Yeşil", colorWhite: "Beyaz",
     voiceOn: "Sesli komut açık", voiceOff: "Sesli komutu aç",
+    tapToTalk: "Konuşmak için dokun",
     listening: "Dinliyor", speaking: "Konuşuyor…",
     hint: '"Hey Volt" de, sonra istediğini sor',
     notUnderstood: "Seni duydum ama anlayamadım.",
@@ -125,6 +126,7 @@ const T = {
     settings: "Settings", language: "Language", sound: "App sound", theme: "Theme color",
     colorRed: "Red", colorBlue: "Blue", colorGreen: "Green", colorWhite: "White",
     voiceOn: "Voice control on", voiceOff: "Enable voice control",
+    tapToTalk: "Tap to talk",
     listening: "Listening", speaking: "Speaking…",
     hint: 'Say "Hey Volt" then ask anything',
     notUnderstood: "I heard you but didn't understand.",
@@ -214,6 +216,7 @@ const T = {
     settings: "Настройки", language: "Язык", sound: "Звук приложения", theme: "Цвет темы",
     colorRed: "Красный", colorBlue: "Синий", colorGreen: "Зелёный", colorWhite: "Белый",
     voiceOn: "Голосовое управление включено", voiceOff: "Включить голосовое управление",
+    tapToTalk: "Нажми, чтобы говорить",
     listening: "Слушаю", speaking: "Говорю…",
     hint: 'Скажи «Хэй Волт», затем спроси что угодно',
     notUnderstood: "Я услышал, но не понял.",
@@ -296,6 +299,7 @@ const T = {
     settings: "Einstellungen", language: "Sprache", sound: "App-Ton", theme: "Themenfarbe",
     colorRed: "Rot", colorBlue: "Blau", colorGreen: "Grün", colorWhite: "Weiß",
     voiceOn: "Sprachsteuerung an", voiceOff: "Sprachsteuerung aktivieren",
+    tapToTalk: "Zum Sprechen tippen",
     listening: "Hört zu", speaking: "Spricht…",
     hint: 'Sag "Hey Volt" und frag mich alles',
     notUnderstood: "Ich habe dich gehört, aber nicht verstanden.",
@@ -378,6 +382,7 @@ const T = {
     settings: "设置", language: "语言", sound: "应用声音", theme: "主题颜色",
     colorRed: "红色", colorBlue: "蓝色", colorGreen: "绿色", colorWhite: "白色",
     voiceOn: "语音已开启", voiceOff: "开启语音控制",
+    tapToTalk: "点击说话",
     listening: "正在聆听", speaking: "正在说话…",
     hint: '说"嘿 Volt",然后随便问',
     notUnderstood: "我听到了,但没听懂。",
@@ -460,6 +465,7 @@ const T = {
     settings: "설정", language: "언어", sound: "앱 소리", theme: "테마 색상",
     colorRed: "빨강", colorBlue: "파랑", colorGreen: "초록", colorWhite: "흰색",
     voiceOn: "음성 제어 켜짐", voiceOff: "음성 제어 켜기",
+    tapToTalk: "탭하여 말하기",
     listening: "듣는 중", speaking: "말하는 중…",
     hint: '"헤이 볼트"라고 말한 후 무엇이든 물어보세요',
     notUnderstood: "들었지만 이해하지 못했어요.",
@@ -1216,6 +1222,7 @@ export default function Volt() {
 
   // Internet radio
   const [radioOn, setRadioOn] = useState(false);
+  const [radioActivated, setRadioActivated] = useState(false);
   const [radioIndex, setRadioIndex] = useState(0);
   const audioRef = useRef(null);
 
@@ -1395,10 +1402,12 @@ export default function Volt() {
         speak(msg);
       } else if (has(t.radio_kw) && has(t.close)) {
         stopRadio();
+        setRadioActivated(false);
         setVoiceStatus(t.radioClosed);
         speak(t.radioClosed);
       } else if (has(t.radio_kw) && has(t.open)) {
         const station = playStation(0);
+        setRadioActivated(true);
         const msg = t.radioOpened(station.name);
         setVoiceStatus(msg);
         speak(msg);
@@ -1471,7 +1480,10 @@ export default function Volt() {
       setVoiceSupported(false);
       return;
     }
-    if (micBlocked || !micEnabled) {
+    if (micBlocked || !micEnabled || radioOn) {
+      // While the radio is playing, continuous listening fights the OS for
+      // audio focus and cuts the broadcast — switch to push-to-talk instead
+      // (see pushToTalk()), and don't auto-listen here.
       if (recognitionRef.current) {
         try {
           recognitionRef.current.stop();
@@ -1523,7 +1535,34 @@ export default function Volt() {
       recognition.onend = null;
       recognition.stop();
     };
-  }, [language, processTranscript, t, micBlocked, micEnabled]);
+  }, [language, processTranscript, t, micBlocked, micEnabled, radioOn]);
+
+  // Push-to-talk: used instead of continuous listening while the radio plays
+  const pushToTalk = useCallback(() => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition || micBlocked || !micEnabled || listening) return;
+    const recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = LANG_LOCALE[language];
+    recognition.onstart = () => setListening(true);
+    recognition.onresult = (event) => {
+      const last = event.results[event.results.length - 1];
+      processTranscript(last[0].transcript);
+    };
+    recognition.onerror = (e) => {
+      setListening(false);
+      if (e.error === "not-allowed" || e.error === "service-not-allowed") {
+        setVoiceStatus(t.micNotSupported);
+        setMicBlocked(true);
+      }
+    };
+    recognition.onend = () => setListening(false);
+    recognitionRef.current = recognition;
+    try {
+      recognition.start();
+    } catch (e) {}
+  }, [micBlocked, micEnabled, listening, language, processTranscript, t]);
 
   return (
     <div
@@ -1860,7 +1899,9 @@ export default function Volt() {
             </span>
           </div>
 
-          <div
+          <button
+            onClick={radioOn ? pushToTalk : undefined}
+            disabled={!radioOn}
             style={{
               display: "flex",
               alignItems: "center",
@@ -1871,6 +1912,7 @@ export default function Volt() {
               padding: "8px 14px 8px 10px",
               width: "fit-content",
               opacity: voiceSupported && !micBlocked ? 1 : 0.4,
+              cursor: radioOn ? "pointer" : "default",
             }}
           >
             <div
@@ -1895,12 +1937,12 @@ export default function Volt() {
               )}
             </div>
             <span style={{ fontSize: 11.5, color: "var(--text)", fontWeight: 600, whiteSpace: "nowrap" }}>
-              {!micEnabled ? t.voiceOff : speaking ? t.speaking : listening ? t.listening : t.voiceOn}
+              {!micEnabled ? t.voiceOff : speaking ? t.speaking : listening ? t.listening : radioOn ? t.tapToTalk : t.voiceOn}
             </span>
             {(listening || speaking) && (
               <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--accent)" }} />
             )}
-          </div>
+          </button>
 
           <div style={{ fontSize: 10.5, color: "var(--dim)", maxWidth: 160, lineHeight: 1.4 }}>
             {!voiceSupported || micBlocked ? t.micNotSupported : !micEnabled ? "" : voiceStatus || t.hint}
@@ -1912,6 +1954,7 @@ export default function Volt() {
             </div>
           )}
 
+          {radioActivated && (
           <div style={{ display: "flex", gap: 8 }}>
             <button
               className="icon-btn"
@@ -1972,6 +2015,7 @@ export default function Volt() {
               <SkipForward size={13} color="var(--dim2)" />
             </button>
           </div>
+          )}
 
           {gaugeOn && (
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>

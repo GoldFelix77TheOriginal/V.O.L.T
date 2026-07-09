@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Zap, Gauge, Mic, MicOff, Settings, X, AlertTriangle } from "lucide-react";
+import { Zap, Gauge, Mic, MicOff, Settings, X, AlertTriangle, SkipBack, SkipForward, Play, Pause } from "lucide-react";
 
 const LANG_LOCALE = {
   tr: "tr-TR",
@@ -628,13 +628,37 @@ function calculateSunset(lat, lon, date) {
   return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), hours, minutes));
 }
 
-const RADIO_STATIONS = [
-  { name: "Power FM", url: "https://listen.powerapp.com.tr/powerfm/mpeg/icecast.audio" },
-  { name: "Joy FM", url: "https://playerservices.streamtheworld.com/api/livestream-redirect/JOY_FM.mp3" },
-  { name: "Joy Türk", url: "https://playerservices.streamtheworld.com/api/livestream-redirect/JOY_TURK.mp3" },
-  { name: "Metro FM", url: "https://playerservices.streamtheworld.com/api/livestream-redirect/METRO_FM.mp3" },
-  { name: "Virgin Radio", url: "https://playerservices.streamtheworld.com/api/livestream-redirect/VIRGIN_RADIO_SC.mp3" },
-];
+const RADIO_STATIONS = {
+  tr: [
+    { name: "Power FM", url: "https://listen.powerapp.com.tr/powerfm/mpeg/icecast.audio" },
+    { name: "Joy FM", url: "https://playerservices.streamtheworld.com/api/livestream-redirect/JOY_FM.mp3" },
+    { name: "Joy Türk", url: "https://playerservices.streamtheworld.com/api/livestream-redirect/JOY_TURK.mp3" },
+    { name: "Metro FM", url: "https://playerservices.streamtheworld.com/api/livestream-redirect/METRO_FM.mp3" },
+    { name: "Virgin Radio Türkiye", url: "https://playerservices.streamtheworld.com/api/livestream-redirect/VIRGIN_RADIO_SC.mp3" },
+    { name: "Number 1 FM", url: "https://playerservices.streamtheworld.com/api/livestream-redirect/NUMBER1FM.mp3" },
+    { name: "Number 1 Türk FM", url: "https://playerservices.streamtheworld.com/api/livestream-redirect/NUMBER1TURK_FMAAC.aac" },
+    { name: "Radyo Mydonose", url: "https://playerservices.streamtheworld.com/api/livestream-redirect/RADIO_MYDONOSE.mp3" },
+    { name: "Kiss FM", url: "https://playerservices.streamtheworld.com/api/livestream-redirect/KISS_FM128AAC.aac" },
+    { name: "80'ler Gold", url: "https://playerservices.streamtheworld.com/api/livestream-redirect/FLASHBACK.mp3" },
+  ],
+  en: [
+    { name: "SomaFM Groove Salad", url: "https://ice1.somafm.com/groovesalad-128-mp3" },
+    { name: "SomaFM Indie Pop Rocks", url: "https://ice1.somafm.com/indiepop-128-mp3" },
+    { name: "SomaFM Beat Blender", url: "https://ice1.somafm.com/beatblender-128-mp3" },
+    { name: "Radio Paradise", url: "https://stream.radioparadise.com/mp3-192" },
+  ],
+  ru: [
+    { name: "Europa Plus", url: "http://ep128.hostingradio.ru:8030/ep128" },
+    { name: "Radio Record", url: "http://air.radiorecord.ru:805/rr_320" },
+  ],
+  de: [
+    { name: "Deutschlandfunk", url: "https://st01.sslstream.dlf.de/dlf/01/128/mp3/stream.mp3" },
+    { name: "SWR3", url: "https://liveradio.swr.de/sw282p3/swr3/play.mp3" },
+    { name: "WDR 1LIVE", url: "https://wdr-1live-live.icecastssl.wdr.de/wdr/1live/live/mp3/128/stream.mp3" },
+  ],
+  zh: [{ name: "Big B Radio CPOP", url: "http://cpop.bigbradio.net/s" }],
+  ko: [{ name: "Big B Radio KPOP", url: "http://kpop.bigbradio.net/s" }],
+};
 
 function haversineKm(lat1, lon1, lat2, lon2) {
   const R = 6371;
@@ -1195,17 +1219,21 @@ export default function Volt() {
   const [radioIndex, setRadioIndex] = useState(0);
   const audioRef = useRef(null);
 
-  const playStation = useCallback((index) => {
-    const station = RADIO_STATIONS[index];
-    if (!audioRef.current) {
-      audioRef.current = new Audio();
-    }
-    audioRef.current.src = station.url;
-    audioRef.current.play().catch(() => {});
-    setRadioIndex(index);
-    setRadioOn(true);
-    return station;
-  }, []);
+  const playStation = useCallback(
+    (index) => {
+      const stations = RADIO_STATIONS[language] || RADIO_STATIONS.en;
+      const station = stations[((index % stations.length) + stations.length) % stations.length];
+      if (!audioRef.current) {
+        audioRef.current = new Audio();
+      }
+      audioRef.current.src = station.url;
+      audioRef.current.play().catch(() => {});
+      setRadioIndex(index);
+      setRadioOn(true);
+      return station;
+    },
+    [language]
+  );
 
   const stopRadio = useCallback(() => {
     if (audioRef.current) {
@@ -1219,6 +1247,29 @@ export default function Volt() {
       if (audioRef.current) audioRef.current.pause();
     };
   }, []);
+
+  const toggleRadioPlayback = useCallback(() => {
+    if (!audioRef.current || !audioRef.current.src) {
+      playStation(0);
+      return;
+    }
+    if (radioOn) {
+      audioRef.current.pause();
+      setRadioOn(false);
+    } else {
+      audioRef.current.play().catch(() => {});
+      setRadioOn(true);
+    }
+  }, [radioOn, playStation]);
+
+  const stepStation = useCallback(
+    (delta) => {
+      const stations = RADIO_STATIONS[language] || RADIO_STATIONS.en;
+      const newIndex = ((radioIndex + delta) % stations.length + stations.length) % stations.length;
+      playStation(newIndex);
+    },
+    [radioIndex, language, playStation]
+  );
 
   const getSunsetInfo = useCallback(() => {
     setVoiceStatus(t.sunsetChecking);
@@ -1336,7 +1387,8 @@ export default function Volt() {
         setVoiceStatus(t.sessionReset);
         speak(t.sessionReset);
       } else if (has(t.radio_kw) && has(t.radioNext_kw)) {
-        const nextIndex = (radioIndex + 1) % RADIO_STATIONS.length;
+        const stations = RADIO_STATIONS[language] || RADIO_STATIONS.en;
+        const nextIndex = (radioIndex + 1) % stations.length;
         const station = playStation(nextIndex);
         const msg = t.radioNext(station.name);
         setVoiceStatus(msg);
@@ -1346,7 +1398,7 @@ export default function Volt() {
         setVoiceStatus(t.radioClosed);
         speak(t.radioClosed);
       } else if (has(t.radio_kw) && has(t.open)) {
-        const station = playStation(radioIndex);
+        const station = playStation(0);
         const msg = t.radioOpened(station.name);
         setVoiceStatus(msg);
         speak(msg);
@@ -1856,9 +1908,70 @@ export default function Volt() {
 
           {radioOn && (
             <div style={{ fontSize: 11, color: "var(--accent)", fontWeight: 600 }}>
-              ♪ {RADIO_STATIONS[radioIndex].name}
+              ♪ {(RADIO_STATIONS[language] || RADIO_STATIONS.en)[radioIndex]?.name}
             </div>
           )}
+
+          <div style={{ display: "flex", gap: 8 }}>
+            <button
+              className="icon-btn"
+              onClick={() => stepStation(-1)}
+              style={{
+                width: 30,
+                height: 30,
+                borderRadius: "50%",
+                border: "1px solid var(--border)",
+                background: "var(--panel)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+              }}
+              aria-label="Previous station"
+            >
+              <SkipBack size={13} color="var(--dim2)" />
+            </button>
+            <button
+              className="icon-btn"
+              onClick={toggleRadioPlayback}
+              style={{
+                width: 30,
+                height: 30,
+                borderRadius: "50%",
+                border: "none",
+                background: "var(--accent)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+              }}
+              aria-label={radioOn ? "Pause" : "Play"}
+            >
+              {radioOn ? (
+                <Pause size={13} color="var(--on-accent)" />
+              ) : (
+                <Play size={13} color="var(--on-accent)" />
+              )}
+            </button>
+            <button
+              className="icon-btn"
+              onClick={() => stepStation(1)}
+              style={{
+                width: 30,
+                height: 30,
+                borderRadius: "50%",
+                border: "1px solid var(--border)",
+                background: "var(--panel)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                cursor: "pointer",
+              }}
+              aria-label="Next station"
+            >
+              <SkipForward size={13} color="var(--dim2)" />
+            </button>
+          </div>
 
           {gaugeOn && (
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>

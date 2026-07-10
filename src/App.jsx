@@ -1584,7 +1584,7 @@ export default function Volt() {
     >
       <style>{`
         html, body { margin: 0; padding: 0; }
-        .volt-landscape {
+        .volt-layout {
           width: 100vw;
           height: 100vh;
           display: flex;
@@ -1594,15 +1594,17 @@ export default function Volt() {
           box-sizing: border-box;
         }
         @media screen and (orientation: portrait) {
-          .volt-landscape {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vh;
-            height: 100vw;
-            transform-origin: top left;
-            transform: rotate(90deg) translateY(-100%);
+          .volt-layout {
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 64px 20px 32px;
+            gap: 18px;
+            overflow-y: auto;
+            text-align: center;
           }
+          .volt-layout .portrait-spacer { display: none; }
+          .volt-layout .portrait-left-align { align-items: center !important; }
         }
         .digit {
           font-family: 'Roboto Mono', 'SF Mono', ui-monospace, monospace;
@@ -1877,9 +1879,9 @@ export default function Volt() {
         </div>
       )}
 
-      <div className="volt-landscape">
+      <div className="volt-layout">
         {/* Left: wordmark + voice + stats */}
-        <div className="enter-left" style={{ display: "flex", flexDirection: "column", gap: 14, flexShrink: 0 }}>
+        <div className="enter-left portrait-left-align" style={{ display: "flex", flexDirection: "column", gap: 14, flexShrink: 0 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
             <div
               style={{
@@ -2109,8 +2111,8 @@ export default function Volt() {
           )}
         </div>
 
-        {/* Invisible spacer to keep the gauge visually centered */}
-        <div style={{ width: 38, flexShrink: 0 }} />
+        {/* Invisible spacer to keep the gauge visually centered (landscape only) */}
+        <div className="portrait-spacer" style={{ width: 38, flexShrink: 0 }} />
       </div>
     </div>
   );

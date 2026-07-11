@@ -82,6 +82,11 @@ const T = {
     sunsetError: "Gün batımı bilgisini alamadım.",
     sunsetIn: (h, m) => (h > 0 ? `Karanlık olmadan ${h} saat ${m} dakikan var.` : `Karanlık olmadan ${m} dakikan var.`),
     sunset_kw: ["karanlık", "gün batımı", "güneş ne zaman batar"],
+    locationChecking: "Konumuna bakıyorum…",
+    locationError: "Konumunu bulamadım.",
+    locationIntro: "Şu anki konumun: ",
+    locLabels: { province: "İl", district: "İlçe", neighborhood: "Mahalle", street: "Sokak" },
+    whereAmI_kw: ["neredeyim", "nerede", "konumum ne"],
     radioOpened: (name) => `${name} çalıyor.`,
     radioClosed: "Radyoyu kapatıyorum.",
     radioNext: (name) => `Şimdi ${name} çalıyor.`,
@@ -165,6 +170,11 @@ const T = {
     sunsetError: "I couldn't get the sunset time.",
     sunsetIn: (h, m) => (h > 0 ? `You have ${h} hours and ${m} minutes before it gets dark.` : `You have ${m} minutes before it gets dark.`),
     sunset_kw: ["sunset", "get dark", "before dark"],
+    locationChecking: "Checking your location…",
+    locationError: "I couldn't find your location.",
+    locationIntro: "Your current location: ",
+    locLabels: { province: "Province", district: "District", neighborhood: "Neighborhood", street: "Street" },
+    whereAmI_kw: ["where am i", "my location", "where are we"],
     radioOpened: (name) => `${name} is now playing.`,
     radioClosed: "Turning the radio off.",
     radioNext: (name) => `Now playing ${name}.`,
@@ -255,6 +265,11 @@ const T = {
     sunsetError: "Не удалось узнать время заката.",
     sunsetIn: (h, m) => (h > 0 ? `У тебя есть ${h} часов и ${m} минут до темноты.` : `У тебя есть ${m} минут до темноты.`),
     sunset_kw: ["закат", "стемнеет"],
+    locationChecking: "Проверяю твоё местоположение…",
+    locationError: "Не удалось определить твоё местоположение.",
+    locationIntro: "Твоё текущее местоположение: ",
+    locLabels: { province: "Область", district: "Район", neighborhood: "Микрорайон", street: "Улица" },
+    whereAmI_kw: ["где я", "моё местоположение"],
     radioOpened: (name) => `Сейчас играет ${name}.`,
     radioClosed: "Выключаю радио.",
     radioNext: (name) => `Теперь играет ${name}.`,
@@ -338,6 +353,11 @@ const T = {
     sunsetError: "Ich konnte den Sonnenuntergang nicht ermitteln.",
     sunsetIn: (h, m) => (h > 0 ? `Du hast noch ${h} Stunden und ${m} Minuten bis es dunkel wird.` : `Du hast noch ${m} Minuten bis es dunkel wird.`),
     sunset_kw: ["sonnenuntergang", "dunkel wird"],
+    locationChecking: "Ich prüfe deinen Standort…",
+    locationError: "Ich konnte deinen Standort nicht finden.",
+    locationIntro: "Dein aktueller Standort: ",
+    locLabels: { province: "Provinz", district: "Bezirk", neighborhood: "Stadtteil", street: "Straße" },
+    whereAmI_kw: ["wo bin ich", "mein standort"],
     radioOpened: (name) => `${name} läuft jetzt.`,
     radioClosed: "Ich schalte das Radio aus.",
     radioNext: (name) => `Jetzt läuft ${name}.`,
@@ -421,6 +441,11 @@ const T = {
     sunsetError: "无法获取日落时间。",
     sunsetIn: (h, m) => (h > 0 ? `距离天黑还有${h}小时${m}分钟。` : `距离天黑还有${m}分钟。`),
     sunset_kw: ["天黑", "日落"],
+    locationChecking: "正在查看你的位置…",
+    locationError: "无法获取你的位置。",
+    locationIntro: "你现在的位置:",
+    locLabels: { province: "省", district: "区", neighborhood: "社区", street: "街道" },
+    whereAmI_kw: ["我在哪", "我的位置"],
     radioOpened: (name) => `正在播放${name}。`,
     radioClosed: "正在关闭电台。",
     radioNext: (name) => `现在播放${name}。`,
@@ -504,6 +529,11 @@ const T = {
     sunsetError: "일몰 시간을 가져올 수 없습니다.",
     sunsetIn: (h, m) => (h > 0 ? `어두워지기까지 ${h}시간 ${m}분 남았습니다.` : `어두워지기까지 ${m}분 남았습니다.`),
     sunset_kw: ["일몰", "어두워지"],
+    locationChecking: "위치를 확인 중…",
+    locationError: "위치를 찾을 수 없습니다.",
+    locationIntro: "현재 위치: ",
+    locLabels: { province: "도", district: "구", neighborhood: "동네", street: "거리" },
+    whereAmI_kw: ["나 어디", "내 위치"],
     radioOpened: (name) => `${name} 재생 중입니다.`,
     radioClosed: "라디오를 끕니다.",
     radioNext: (name) => `이제 ${name}이(가) 재생됩니다.`,
@@ -1278,6 +1308,53 @@ export default function Volt() {
     [radioIndex, language, playStation]
   );
 
+  const getMyLocation = useCallback(() => {
+    setVoiceStatus(t.locationChecking);
+    const getPos = () =>
+      new Promise((resolve, reject) => {
+        if (lastPosRef.current) {
+          resolve({ coords: { latitude: lastPosRef.current.lat, longitude: lastPosRef.current.lon } });
+        } else if ("geolocation" in navigator) {
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            enableHighAccuracy: true,
+            timeout: 10000,
+          });
+        } else {
+          reject(new Error("no geolocation"));
+        }
+      });
+    getPos()
+      .then((pos) => {
+        const { latitude, longitude } = pos.coords;
+        return fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1&accept-language=${language}`
+        );
+      })
+      .then((res) => res.json())
+      .then((data) => {
+        const a = data.address || {};
+        const province = a.province || a.state;
+        const district = a.county || a.city_district || a.town || a.district;
+        const neighborhood = a.suburb || a.neighbourhood || a.quarter;
+        const street = a.road;
+        const L = t.locLabels;
+        const parts = [
+          province && `${L.province}: ${province}`,
+          district && `${L.district}: ${district}`,
+          neighborhood && `${L.neighborhood}: ${neighborhood}`,
+          street && `${L.street}: ${street}`,
+        ].filter(Boolean);
+        if (parts.length === 0) throw new Error("no address parts");
+        const msg = t.locationIntro + parts.join(", ") + ".";
+        setVoiceStatus(msg);
+        speak(msg);
+      })
+      .catch(() => {
+        setVoiceStatus(t.locationError);
+        speak(t.locationError);
+      });
+  }, [t, language, speak]);
+
   const getSunsetInfo = useCallback(() => {
     setVoiceStatus(t.sunsetChecking);
     const getPos = () =>
@@ -1389,6 +1466,8 @@ export default function Volt() {
         speak(msg);
       } else if (has(t.sunset_kw)) {
         getSunsetInfo();
+      } else if (has(t.whereAmI_kw)) {
+        getMyLocation();
       } else if (has(t.reset)) {
         resetSession();
         setVoiceStatus(t.sessionReset);
@@ -1471,7 +1550,7 @@ export default function Volt() {
         speak(t.notUnderstood);
       }
     },
-    [t, speak, resetSession, getWeather, getSunsetInfo, playStation, stopRadio, radioIndex, toDisplay, unitWord, speedUnit, language]
+    [t, speak, resetSession, getWeather, getSunsetInfo, getMyLocation, playStation, stopRadio, radioIndex, toDisplay, unitWord, speedUnit, language]
   );
 
   useEffect(() => {

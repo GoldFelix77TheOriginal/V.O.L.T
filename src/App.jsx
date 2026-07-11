@@ -1337,12 +1337,11 @@ export default function Volt() {
         const district = a.county || a.city_district || a.town || a.district;
         const neighborhood = a.suburb || a.neighbourhood || a.quarter;
         const street = a.road;
-        const L = t.locLabels;
         const parts = [
-          province && `${L.province}: ${province}`,
-          district && `${L.district}: ${district}`,
-          neighborhood && `${L.neighborhood}: ${neighborhood}`,
-          street && `${L.street}: ${street}`,
+          province,
+          district,
+          neighborhood,
+          street,
         ].filter(Boolean);
         if (parts.length === 0) throw new Error("no address parts");
         const msg = t.locationIntro + parts.join(", ") + ".";

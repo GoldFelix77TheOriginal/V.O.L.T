@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Zap, Gauge, Mic, MicOff, Settings, X, AlertTriangle, SkipBack, SkipForward, Play, Pause } from "lucide-react";
+import { Zap, Gauge, Mic, MicOff, Settings, X, AlertTriangle, SkipBack, SkipForward, Play, Pause, BatteryWarning } from "lucide-react";
 
 const LANG_LOCALE = {
   tr: "tr-TR",
@@ -87,6 +87,18 @@ const T = {
     locationIntro: "Şu anki konumun: ",
     locLabels: { province: "İl", district: "İlçe", neighborhood: "Mahalle", street: "Sokak" },
     whereAmI_kw: ["neredeyim", "nerede", "konumum ne"],
+    batteryLow: (pct) => `Telefonunun bataryası yüzde ${pct}'e düştü.`,
+    batteryCritical: (pct) => `Dikkat, bataryan çok düşük, yüzde ${pct}. Şarj etmen gerekebilir.`,
+    batteryLowLabel: "DÜŞÜK PİL",
+    batteryCriticalLabel: "KRİTİK PİL",
+    navApproaching: (d) => `${d} metre sonra `,
+    navStarting: (dist, dur) => `Navigasyon başladı. Mesafe ${dist} kilometre, tahmini süre ${dur} dakika.`,
+    navNotFound: "Bu adresi bulamadım.",
+    navRouteError: "Rota hesaplayamadım.",
+    navStopped: "Navigasyonu durduruyorum.",
+    navNoActive: "Şu an aktif bir navigasyon yok.",
+    nav_close_kw: ["navigasyonu kapat", "navigasyonu durdur", "yol tarifini durdur"],
+    next_direction_kw: ["sıradaki yön", "sonraki tarif", "ne yapmalıyım", "sıradaki talimat"],
     radioOpened: (name) => `${name} çalıyor.`,
     radioClosed: "Radyoyu kapatıyorum.",
     radioNext: (name) => `Şimdi ${name} çalıyor.`,
@@ -175,6 +187,18 @@ const T = {
     locationIntro: "Your current location: ",
     locLabels: { province: "Province", district: "District", neighborhood: "Neighborhood", street: "Street" },
     whereAmI_kw: ["where am i", "my location", "where are we"],
+    batteryLow: (pct) => `Your phone battery has dropped to ${pct} percent.`,
+    batteryCritical: (pct) => `Warning, your battery is very low, ${pct} percent. You may need to charge soon.`,
+    batteryLowLabel: "LOW BATTERY",
+    batteryCriticalLabel: "CRITICAL BATTERY",
+    navApproaching: (d) => `In ${d} meters, `,
+    navStarting: (dist, dur) => `Navigation started. Distance ${dist} kilometers, estimated time ${dur} minutes.`,
+    navNotFound: "I couldn't find that place.",
+    navRouteError: "I couldn't calculate a route.",
+    navStopped: "Stopping navigation.",
+    navNoActive: "There's no active navigation right now.",
+    nav_close_kw: ["stop navigation", "cancel navigation", "end navigation"],
+    next_direction_kw: ["next direction", "next instruction", "what's next"],
     radioOpened: (name) => `${name} is now playing.`,
     radioClosed: "Turning the radio off.",
     radioNext: (name) => `Now playing ${name}.`,
@@ -270,6 +294,18 @@ const T = {
     locationIntro: "Твоё текущее местоположение: ",
     locLabels: { province: "Область", district: "Район", neighborhood: "Микрорайон", street: "Улица" },
     whereAmI_kw: ["где я", "моё местоположение"],
+    batteryLow: (pct) => `Заряд твоего телефона упал до ${pct} процентов.`,
+    batteryCritical: (pct) => `Внимание, заряд батареи очень низкий, ${pct} процентов. Возможно, пора зарядить телефон.`,
+    batteryLowLabel: "НИЗКИЙ ЗАРЯД",
+    batteryCriticalLabel: "КРИТИЧЕСКИЙ ЗАРЯД",
+    navApproaching: (d) => `Через ${d} метров `,
+    navStarting: (dist, dur) => `Навигация началась. Расстояние ${dist} километров, примерное время ${dur} минут.`,
+    navNotFound: "Я не смог найти это место.",
+    navRouteError: "Не удалось рассчитать маршрут.",
+    navStopped: "Останавливаю навигацию.",
+    navNoActive: "Сейчас нет активной навигации.",
+    nav_close_kw: ["останови навигацию", "отмени навигацию", "заверши навигацию"],
+    next_direction_kw: ["следующее направление", "следующая инструкция", "что дальше"],
     radioOpened: (name) => `Сейчас играет ${name}.`,
     radioClosed: "Выключаю радио.",
     radioNext: (name) => `Теперь играет ${name}.`,
@@ -358,6 +394,18 @@ const T = {
     locationIntro: "Dein aktueller Standort: ",
     locLabels: { province: "Provinz", district: "Bezirk", neighborhood: "Stadtteil", street: "Straße" },
     whereAmI_kw: ["wo bin ich", "mein standort"],
+    batteryLow: (pct) => `Dein Akku ist auf ${pct} Prozent gesunken.`,
+    batteryCritical: (pct) => `Achtung, dein Akku ist sehr niedrig, ${pct} Prozent. Du solltest bald aufladen.`,
+    batteryLowLabel: "AKKU SCHWACH",
+    batteryCriticalLabel: "AKKU KRITISCH",
+    navApproaching: (d) => `In ${d} Metern `,
+    navStarting: (dist, dur) => `Navigation gestartet. Entfernung ${dist} Kilometer, geschätzte Zeit ${dur} Minuten.`,
+    navNotFound: "Ich konnte diesen Ort nicht finden.",
+    navRouteError: "Ich konnte keine Route berechnen.",
+    navStopped: "Ich stoppe die Navigation.",
+    navNoActive: "Gerade läuft keine Navigation.",
+    nav_close_kw: ["navigation stoppen", "navigation beenden", "navigation abbrechen"],
+    next_direction_kw: ["nächste richtung", "nächste anweisung", "was kommt jetzt"],
     radioOpened: (name) => `${name} läuft jetzt.`,
     radioClosed: "Ich schalte das Radio aus.",
     radioNext: (name) => `Jetzt läuft ${name}.`,
@@ -446,6 +494,18 @@ const T = {
     locationIntro: "你现在的位置:",
     locLabels: { province: "省", district: "区", neighborhood: "社区", street: "街道" },
     whereAmI_kw: ["我在哪", "我的位置"],
+    batteryLow: (pct) => `你的手机电量已降至百分之${pct}。`,
+    batteryCritical: (pct) => `注意,电量非常低,百分之${pct}。你可能需要尽快充电。`,
+    batteryLowLabel: "电量低",
+    batteryCriticalLabel: "电量严重不足",
+    navApproaching: (d) => `${d}米后,`,
+    navStarting: (dist, dur) => `导航已开始。距离${dist}公里,预计时间${dur}分钟。`,
+    navNotFound: "我找不到那个地方。",
+    navRouteError: "无法计算路线。",
+    navStopped: "正在停止导航。",
+    navNoActive: "目前没有正在进行的导航。",
+    nav_close_kw: ["停止导航", "取消导航", "结束导航"],
+    next_direction_kw: ["下一个方向", "下一个指示", "接下来做什么"],
     radioOpened: (name) => `正在播放${name}。`,
     radioClosed: "正在关闭电台。",
     radioNext: (name) => `现在播放${name}。`,
@@ -534,6 +594,18 @@ const T = {
     locationIntro: "현재 위치: ",
     locLabels: { province: "도", district: "구", neighborhood: "동네", street: "거리" },
     whereAmI_kw: ["나 어디", "내 위치"],
+    batteryLow: (pct) => `휴대폰 배터리가 ${pct}퍼센트로 떨어졌습니다.`,
+    batteryCritical: (pct) => `주의하세요, 배터리가 매우 부족합니다, ${pct}퍼센트. 곧 충전이 필요할 수 있습니다.`,
+    batteryLowLabel: "배터리 부족",
+    batteryCriticalLabel: "배터리 위험",
+    navApproaching: (d) => `${d}미터 후 `,
+    navStarting: (dist, dur) => `내비게이션을 시작합니다. 거리 ${dist}킬로미터, 예상 시간 ${dur}분.`,
+    navNotFound: "그 장소를 찾을 수 없습니다.",
+    navRouteError: "경로를 계산할 수 없습니다.",
+    navStopped: "내비게이션을 중지합니다.",
+    navNoActive: "현재 진행 중인 내비게이션이 없습니다.",
+    nav_close_kw: ["내비게이션 중지", "내비게이션 취소", "내비게이션 종료"],
+    next_direction_kw: ["다음 방향", "다음 안내", "다음에 뭐해"],
     radioOpened: (name) => `${name} 재생 중입니다.`,
     radioClosed: "라디오를 끕니다.",
     radioNext: (name) => `이제 ${name}이(가) 재생됩니다.`,
@@ -662,6 +734,118 @@ function calculateSunset(lat, lon, date) {
   const hours = Math.floor(UT);
   const minutes = Math.floor((UT - hours) * 60);
   return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), hours, minutes));
+}
+
+const NAV_TRIGGERS = {
+  tr: ["git", "götür", "gidelim"],
+  en: ["navigate to", "take me to", "go to"],
+  ru: ["поезжай в", "веди меня в", "навигация до"],
+  de: ["navigiere nach", "bring mich nach", "fahre nach"],
+  zh: ["导航到", "带我去", "去"],
+  ko: ["안내해줘", "데려다줘", "가자"],
+};
+
+const NAV_WORDS = {
+  tr: {
+    turnLeft: "sola dön", turnRight: "sağa dön",
+    turnSlightLeft: "hafif sola dön", turnSlightRight: "hafif sağa dön",
+    turnSharpLeft: "keskin sola dön", turnSharpRight: "keskin sağa dön",
+    uturn: "U dönüşü yap", straight: "düz devam et", continueWord: "devam et",
+    depart: "Yola çık.", arrive: "Hedefine ulaştın.",
+    roundabout: (exit) => `Dönel kavşakta ${exit}. çıkıştan çık.`,
+    continueOnto: (street) => `${street} üzerinde devam et.`,
+    continueStraight: "Düz devam et.",
+    turnOnto: (dir, street) => `${street} üzerine ${dir}.`,
+  },
+  en: {
+    turnLeft: "turn left", turnRight: "turn right",
+    turnSlightLeft: "turn slightly left", turnSlightRight: "turn slightly right",
+    turnSharpLeft: "turn sharply left", turnSharpRight: "turn sharply right",
+    uturn: "make a U-turn", straight: "go straight", continueWord: "continue",
+    depart: "Head out.", arrive: "You've arrived at your destination.",
+    roundabout: (exit) => `At the roundabout, take exit ${exit}.`,
+    continueOnto: (street) => `Continue on ${street}.`,
+    continueStraight: "Continue straight.",
+    turnOnto: (dir, street) => `${dir.charAt(0).toUpperCase() + dir.slice(1)} onto ${street}.`,
+  },
+  ru: {
+    turnLeft: "поверни налево", turnRight: "поверни направо",
+    turnSlightLeft: "плавно налево", turnSlightRight: "плавно направо",
+    turnSharpLeft: "резко налево", turnSharpRight: "резко направо",
+    uturn: "развернись", straight: "продолжай прямо", continueWord: "продолжай",
+    depart: "Начни движение.", arrive: "Ты прибыл в пункт назначения.",
+    roundabout: (exit) => `На круге съезжай на ${exit}-м съезде.`,
+    continueOnto: (street) => `Продолжай по ${street}.`,
+    continueStraight: "Продолжай прямо.",
+    turnOnto: (dir, street) => `${dir} на ${street}.`,
+  },
+  de: {
+    turnLeft: "links abbiegen", turnRight: "rechts abbiegen",
+    turnSlightLeft: "leicht links abbiegen", turnSlightRight: "leicht rechts abbiegen",
+    turnSharpLeft: "scharf links abbiegen", turnSharpRight: "scharf rechts abbiegen",
+    uturn: "wenden", straight: "geradeaus fahren", continueWord: "weiterfahren",
+    depart: "Los geht's.", arrive: "Du hast dein Ziel erreicht.",
+    roundabout: (exit) => `Nimm im Kreisverkehr die ${exit}. Ausfahrt.`,
+    continueOnto: (street) => `Weiter auf ${street}.`,
+    continueStraight: "Geradeaus weiterfahren.",
+    turnOnto: (dir, street) => `${dir} auf ${street}.`,
+  },
+  zh: {
+    turnLeft: "左转", turnRight: "右转",
+    turnSlightLeft: "稍微左转", turnSlightRight: "稍微右转",
+    turnSharpLeft: "急左转", turnSharpRight: "急右转",
+    uturn: "掉头", straight: "直行", continueWord: "继续前行",
+    depart: "出发吧。", arrive: "你已到达目的地。",
+    roundabout: (exit) => `在环岛走第${exit}个出口。`,
+    continueOnto: (street) => `继续沿${street}行驶。`,
+    continueStraight: "继续直行。",
+    turnOnto: (dir, street) => `${dir},进入${street}。`,
+  },
+  ko: {
+    turnLeft: "좌회전하세요", turnRight: "우회전하세요",
+    turnSlightLeft: "완만하게 좌회전하세요", turnSlightRight: "완만하게 우회전하세요",
+    turnSharpLeft: "급좌회전하세요", turnSharpRight: "급우회전하세요",
+    uturn: "유턴하세요", straight: "직진하세요", continueWord: "계속 가세요",
+    depart: "출발하세요.", arrive: "목적지에 도착했습니다.",
+    roundabout: (exit) => `로터리에서 ${exit}번째 출구로 나가세요.`,
+    continueOnto: (street) => `${street}을(를) 따라 계속 가세요.`,
+    continueStraight: "계속 직진하세요.",
+    turnOnto: (dir, street) => `${street}(으)로 ${dir}.`,
+  },
+};
+
+function phraseForStep(step, lang) {
+  const NW = NAV_WORDS[lang] || NAV_WORDS.en;
+  const { type, modifier, exit } = step.maneuver;
+  const street = step.name;
+  const dirWord =
+    {
+      uturn: NW.uturn,
+      "sharp right": NW.turnSharpRight,
+      right: NW.turnRight,
+      "slight right": NW.turnSlightRight,
+      straight: NW.straight,
+      "slight left": NW.turnSlightLeft,
+      left: NW.turnLeft,
+      "sharp left": NW.turnSharpLeft,
+    }[modifier] || NW.continueWord;
+
+  if (type === "depart") return NW.depart;
+  if (type === "arrive") return NW.arrive;
+  if (type === "roundabout" || type === "rotary") return NW.roundabout(exit || 1);
+  if (type === "continue" || type === "new name") return street ? NW.continueOnto(street) : NW.continueStraight;
+  return street ? NW.turnOnto(dirWord, street) : dirWord;
+}
+
+function extractDestination(raw, lang, wakeWords, triggerWords) {
+  let cleaned = raw.toLowerCase();
+  [...wakeWords, ...triggerWords].forEach((w) => {
+    cleaned = cleaned.split(w).join(" ");
+  });
+  return cleaned
+    .replace(/['’,]/g, " ")
+    .trim()
+    .replace(/\s+/g, " ");
 }
 
 const RADIO_STATIONS = {
@@ -1308,6 +1492,169 @@ export default function Volt() {
     [radioIndex, language, playStation]
   );
 
+  // Low battery warning (Android Chrome; not supported on iOS Safari or desktop browsers)
+  const [batteryWarning, setBatteryWarning] = useState(null);
+  const batteryWarnedRef = useRef({ low: false, critical: false });
+  useEffect(() => {
+    if (!navigator.getBattery) return;
+    let battery;
+    let handler;
+    let cancelled = false;
+    navigator.getBattery().then((b) => {
+      if (cancelled) return;
+      battery = b;
+      const check = () => {
+        if (battery.charging) {
+          batteryWarnedRef.current = { low: false, critical: false };
+          return;
+        }
+        const pct = Math.round(battery.level * 100);
+        if (pct <= 10 && !batteryWarnedRef.current.critical) {
+          batteryWarnedRef.current.critical = true;
+          setBatteryWarning("critical");
+          speak(t.batteryCritical(pct));
+          setTimeout(() => setBatteryWarning(null), 6000);
+        } else if (pct <= 20 && !batteryWarnedRef.current.low) {
+          batteryWarnedRef.current.low = true;
+          setBatteryWarning("low");
+          speak(t.batteryLow(pct));
+          setTimeout(() => setBatteryWarning(null), 6000);
+        }
+      };
+      handler = check;
+      battery.addEventListener("levelchange", handler);
+      battery.addEventListener("chargingchange", handler);
+      check();
+    });
+    return () => {
+      cancelled = true;
+      if (battery && handler) {
+        battery.removeEventListener("levelchange", handler);
+        battery.removeEventListener("chargingchange", handler);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [speak, t]);
+
+  // Turn-by-turn navigation (Nominatim geocoding + OSRM routing, both free/no key)
+  const [navActive, setNavActive] = useState(false);
+  const [routeSteps, setRouteSteps] = useState([]);
+  const [navStepIndex, setNavStepIndex] = useState(0);
+  const [destCoords, setDestCoords] = useState(null);
+  const navStepIndexRef = useRef(0);
+  const routeStepsRef = useRef([]);
+
+  const startNavigation = useCallback(
+    async (destinationQuery) => {
+      setVoiceStatus(t.sunsetChecking); // reuse a generic "checking..." style status briefly
+      try {
+        const getPos = () =>
+          new Promise((resolve, reject) => {
+            if (lastPosRef.current) {
+              resolve({ lat: lastPosRef.current.lat, lon: lastPosRef.current.lon });
+            } else if ("geolocation" in navigator) {
+              navigator.geolocation.getCurrentPosition(
+                (pos) => resolve({ lat: pos.coords.latitude, lon: pos.coords.longitude }),
+                reject,
+                { enableHighAccuracy: true, timeout: 10000 }
+              );
+            } else {
+              reject(new Error("no geolocation"));
+            }
+          });
+        const origin = await getPos();
+
+        const geoRes = await fetch(
+          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(destinationQuery)}&format=json&limit=1&accept-language=${language}`
+        );
+        const geoData = await geoRes.json();
+        if (!geoData || geoData.length === 0) {
+          setVoiceStatus(t.navNotFound);
+          speak(t.navNotFound);
+          return;
+        }
+        const dest = { lat: parseFloat(geoData[0].lat), lon: parseFloat(geoData[0].lon) };
+
+        const routeRes = await fetch(
+          `https://router.project-osrm.org/route/v1/driving/${origin.lon},${origin.lat};${dest.lon},${dest.lat}?overview=full&geometries=geojson&steps=true`
+        );
+        const routeData = await routeRes.json();
+        if (!routeData.routes || routeData.routes.length === 0) {
+          setVoiceStatus(t.navRouteError);
+          speak(t.navRouteError);
+          return;
+        }
+        const route = routeData.routes[0];
+        const steps = route.legs[0].steps;
+        setRouteSteps(steps);
+        routeStepsRef.current = steps;
+        setNavStepIndex(0);
+        navStepIndexRef.current = 0;
+        setDestCoords(dest);
+        setNavActive(true);
+        setMapOn(true);
+        setCompassOn(false);
+
+        const distKm = (route.distance / 1000).toFixed(1);
+        const durMin = Math.round(route.duration / 60);
+        const msg = t.navStarting(distKm, durMin);
+        setVoiceStatus(msg);
+        speak(msg);
+      } catch (e) {
+        setVoiceStatus(t.navRouteError);
+        speak(t.navRouteError);
+      }
+    },
+    [t, language, speak]
+  );
+
+  const stopNavigation = useCallback(() => {
+    setNavActive(false);
+    setRouteSteps([]);
+    routeStepsRef.current = [];
+    setNavStepIndex(0);
+    navStepIndexRef.current = 0;
+    setDestCoords(null);
+  }, []);
+
+  const announceCurrentDirection = useCallback(() => {
+    const steps = routeStepsRef.current;
+    const idx = navStepIndexRef.current;
+    if (!navActive || steps.length === 0 || idx >= steps.length) {
+      setVoiceStatus(t.navNoActive);
+      speak(t.navNoActive);
+      return;
+    }
+    const msg = phraseForStep(steps[idx], language);
+    setVoiceStatus(msg);
+    speak(msg);
+  }, [navActive, language, speak, t]);
+
+  // Auto-announce the next maneuver when GPS gets close to it
+  useEffect(() => {
+    if (!navActive || routeSteps.length === 0) return;
+    const idx = navStepIndex;
+    if (idx >= routeSteps.length) return;
+    if (!lastPosRef.current) return;
+    const step = routeSteps[idx];
+    const [maneuverLon, maneuverLat] = step.maneuver.location;
+    const distToManeuver =
+      haversineKm(lastPosRef.current.lat, lastPosRef.current.lon, maneuverLat, maneuverLon) * 1000;
+    if (distToManeuver < 40) {
+      const msg = phraseForStep(step, language);
+      setVoiceStatus(msg);
+      speak(msg);
+      if (step.maneuver.type === "arrive") {
+        stopNavigation();
+      } else {
+        const next = idx + 1;
+        setNavStepIndex(next);
+        navStepIndexRef.current = next;
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentSpeed]);
+
   const getMyLocation = useCallback(() => {
     setVoiceStatus(t.locationChecking);
     const getPos = () =>
@@ -1467,6 +1814,20 @@ export default function Volt() {
         getSunsetInfo();
       } else if (has(t.whereAmI_kw)) {
         getMyLocation();
+      } else if (has(t.nav_close_kw)) {
+        stopNavigation();
+        setVoiceStatus(t.navStopped);
+        speak(t.navStopped);
+      } else if (has(t.next_direction_kw)) {
+        announceCurrentDirection();
+      } else if ((NAV_TRIGGERS[language] || NAV_TRIGGERS.en).some((trig) => raw_l.includes(trig))) {
+        const destination = extractDestination(raw, language, t.wake, NAV_TRIGGERS[language] || NAV_TRIGGERS.en);
+        if (destination) {
+          startNavigation(destination);
+        } else {
+          setVoiceStatus(t.navNotFound);
+          speak(t.navNotFound);
+        }
       } else if (has(t.reset)) {
         resetSession();
         setVoiceStatus(t.sessionReset);
@@ -1790,6 +2151,23 @@ export default function Volt() {
           from { transform: translateX(-50%) scale(1); }
           to { transform: translateX(-50%) scale(1.04); }
         }
+        .battery-alert {
+          position: fixed;
+          top: 14px;
+          left: 50%;
+          padding: 10px 20px;
+          border-radius: 999px;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 13px;
+          font-weight: 700;
+          z-index: 95;
+          box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+          animation: alertIn 0.25s ease;
+        }
+        .battery-alert.low { background: #FFA53B; color: #12140F; }
+        .battery-alert.critical { background: #E3574B; color: #F5F5F0; }
       `}</style>
 
       {showSplash && (
@@ -1810,6 +2188,13 @@ export default function Volt() {
         <div className="road-alert">
           <AlertTriangle size={18} color="#12140F" />
           <span>{t.roadWarning}</span>
+        </div>
+      )}
+
+      {batteryWarning && (
+        <div className={`battery-alert ${batteryWarning}`}>
+          <BatteryWarning size={18} color={batteryWarning === "critical" ? "#F5F5F0" : "#12140F"} />
+          <span>{batteryWarning === "critical" ? t.batteryCriticalLabel : t.batteryLowLabel}</span>
         </div>
       )}
 
@@ -2133,65 +2518,4 @@ export default function Volt() {
                   height: 240,
                   display: "flex",
                   flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: 10,
-                  background: "var(--panel)",
-                  borderRadius: 16,
-                }}
-              >
-                <Gauge size={26} color="var(--tick)" />
-                <span style={{ fontSize: 12.5, color: "var(--dim)" }}>{t.mapLoading}</span>
-              </div>
-            )
-          ) : compassOn ? (
-            <>
-              <Compass heading={compassHeading} />
-              <span style={{ fontSize: 10.5, color: "var(--dim)", letterSpacing: 0.5 }}>{t.compassLabel}</span>
-            </>
-          ) : gaugeOn ? (
-            <SpeedArc
-              speed={toDisplay(bootDone ? currentSpeed : bootValue)}
-              max={speedUnit === "mph" ? 40 : 60}
-              flash={splashExiting && !bootDone}
-              unit={displayUnit}
-            />
-          ) : (
-            <div
-              style={{
-                width: 300,
-                height: 230,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 10,
-              }}
-            >
-              <Gauge size={30} color="var(--tick)" />
-              <span style={{ fontSize: 12.5, color: "var(--dim)" }}>{t.gaugeOff}</span>
-            </div>
-          )}
-          {!compassOn && !mapOn && (
-            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-              <div
-                style={{
-                  width: 6,
-                  height: 6,
-                  borderRadius: "50%",
-                  background: gpsError ? "#E3574B" : gaugeOn ? "var(--accent)" : "var(--tick)",
-                }}
-              />
-              <span style={{ fontSize: 10.5, color: "var(--dim)", letterSpacing: 0.5 }}>
-                {gpsError || (gaugeOn ? t.gpsActive : t.gpsOff)}
-              </span>
-            </div>
-          )}
-        </div>
-
-        {/* Invisible spacer to keep the gauge visually centered (landscape only) */}
-        <div className="portrait-spacer" style={{ width: 38, flexShrink: 0 }} />
-      </div>
-    </div>
-  );
-}
+        

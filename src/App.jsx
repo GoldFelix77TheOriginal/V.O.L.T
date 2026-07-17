@@ -22,6 +22,7 @@ const UNIT_WORDS = {
 const KM_TO_MI = 0.621371;
 
 const SENSITIVITY_THRESHOLD = { low: 10, medium: 7, high: 4 };
+const AUTO_PAUSE_THRESHOLD_KMH = 3;
 
 const THEMES = {
   green: { hex: "#D7FF3D", on: "#12140F", light: false },
@@ -99,6 +100,17 @@ const T = {
     navNoActive: "Şu an aktif bir navigasyon yok.",
     nav_close_kw: ["navigasyonu kapat", "navigasyonu durdur", "yol tarifini durdur"],
     next_direction_kw: ["sıradaki yön", "sonraki tarif", "ne yapmalıyım", "sıradaki talimat"],
+    sosLabel: "Acil durum numarası",
+    sosNoNumber: "Ayarlardan önce acil durum numarası eklemen gerekiyor.",
+    sosCalling: "Acil durum numaranı arıyorum.",
+    sos_kw: ["yardım çağır", "acil durum", "imdat"],
+    autoPausedLabel: "Otomatik duraklatıldı",
+    historyLabel: "Geçmiş sürüşler",
+    historyEmpty: "Henüz kayıtlı sürüş yok.",
+    historyClear: "Geçmişi temizle",
+    lastRideNone: "Henüz kayıtlı bir sürüşün yok.",
+    lastRideIs: (dist, avg, max) => `Son sürüşünde ${dist} kilometre gittin, ortalama ${avg}, en yüksek ${max} kilometre hızla.`,
+    lastRide_kw: ["son sürüşüm", "geçen sürüşüm", "önceki sürüşüm"],
     radioOpened: (name) => `${name} çalıyor.`,
     radioClosed: "Radyoyu kapatıyorum.",
     radioNext: (name) => `Şimdi ${name} çalıyor.`,
@@ -113,9 +125,6 @@ const T = {
     emergencyCalling: "Yardım çağırıyorum.",
     emergencyNotSet: "Önce ayarlardan bir acil durum numarası kaydetmen lazım.",
     emergency_kw: ["yardım çağır", "acil durum"],
-    historyLabel: "Sürüş geçmişi",
-    historyEmpty: "Henüz kayıtlı sürüş yok.",
-    historyClear: "Geçmişi temizle",
     map_kw: ["harita"],
     wake: ["hey volt", "volt", "vılt", "hey wolt", "hey bolt", "bolt", "hey bot", " bot", "bot,", "hey jolt", "jolt", "hey colt", "colt", "hey wolf", "wolf"],
     open: ["aç", "ac"],
@@ -199,6 +208,17 @@ const T = {
     navNoActive: "There's no active navigation right now.",
     nav_close_kw: ["stop navigation", "cancel navigation", "end navigation"],
     next_direction_kw: ["next direction", "next instruction", "what's next"],
+    sosLabel: "Emergency number",
+    sosNoNumber: "You need to add an emergency number in settings first.",
+    sosCalling: "Calling your emergency number.",
+    sos_kw: ["call for help", "emergency call", "help me"],
+    autoPausedLabel: "Auto-paused",
+    historyLabel: "Ride history",
+    historyEmpty: "No rides recorded yet.",
+    historyClear: "Clear history",
+    lastRideNone: "You don't have a recorded ride yet.",
+    lastRideIs: (dist, avg, max) => `Your last ride covered ${dist} kilometers, averaging ${avg} with a top speed of ${max} kilometers per hour.`,
+    lastRide_kw: ["last ride", "my previous ride", "how was my last ride"],
     radioOpened: (name) => `${name} is now playing.`,
     radioClosed: "Turning the radio off.",
     radioNext: (name) => `Now playing ${name}.`,
@@ -213,9 +233,6 @@ const T = {
     emergencyCalling: "Calling for help.",
     emergencyNotSet: "Set an emergency number in settings first.",
     emergency_kw: ["call for help", "emergency"],
-    historyLabel: "Ride history",
-    historyEmpty: "No rides saved yet.",
-    historyClear: "Clear history",
     map_kw: ["map"],
     wake: [
       "hey volt", "volt",
@@ -306,6 +323,17 @@ const T = {
     navNoActive: "Сейчас нет активной навигации.",
     nav_close_kw: ["останови навигацию", "отмени навигацию", "заверши навигацию"],
     next_direction_kw: ["следующее направление", "следующая инструкция", "что дальше"],
+    sosLabel: "Экстренный номер",
+    sosNoNumber: "Сначала добавь экстренный номер в настройках.",
+    sosCalling: "Звоню на твой экстренный номер.",
+    sos_kw: ["позови на помощь", "экстренный вызов", "помоги мне"],
+    autoPausedLabel: "Автопауза",
+    historyLabel: "История поездок",
+    historyEmpty: "Пока нет записанных поездок.",
+    historyClear: "Очистить историю",
+    lastRideNone: "У тебя пока нет записанных поездок.",
+    lastRideIs: (dist, avg, max) => `Твоя последняя поездка — ${dist} километров, средняя ${avg}, максимальная ${max} километров в час.`,
+    lastRide_kw: ["последняя поездка", "моя предыдущая поездка", "как прошла последняя поездка"],
     radioOpened: (name) => `Сейчас играет ${name}.`,
     radioClosed: "Выключаю радио.",
     radioNext: (name) => `Теперь играет ${name}.`,
@@ -320,9 +348,6 @@ const T = {
     emergencyCalling: "Вызываю помощь.",
     emergencyNotSet: "Сначала сохрани номер экстренной связи в настройках.",
     emergency_kw: ["вызови помощь", "экстренный вызов"],
-    historyLabel: "История поездок",
-    historyEmpty: "Пока нет сохранённых поездок.",
-    historyClear: "Очистить историю",
     map_kw: ["карта", "карту"],
     wake: ["хэй волт", "хей волт", "волт", "hey bolt", "bolt", "hey bot", " bot", "bot,", "hey jolt", "jolt", "hey colt", "colt", "hey wolf", "wolf"],
     open: ["включи", "открой", "покажи"],
@@ -406,6 +431,17 @@ const T = {
     navNoActive: "Gerade läuft keine Navigation.",
     nav_close_kw: ["navigation stoppen", "navigation beenden", "navigation abbrechen"],
     next_direction_kw: ["nächste richtung", "nächste anweisung", "was kommt jetzt"],
+    sosLabel: "Notfallnummer",
+    sosNoNumber: "Du musst zuerst eine Notfallnummer in den Einstellungen hinzufügen.",
+    sosCalling: "Ich rufe deine Notfallnummer an.",
+    sos_kw: ["hilfe rufen", "notruf", "hilf mir"],
+    autoPausedLabel: "Automatisch pausiert",
+    historyLabel: "Fahrtenverlauf",
+    historyEmpty: "Noch keine Fahrten aufgezeichnet.",
+    historyClear: "Verlauf löschen",
+    lastRideNone: "Du hast noch keine aufgezeichnete Fahrt.",
+    lastRideIs: (dist, avg, max) => `Deine letzte Fahrt waren ${dist} Kilometer, im Schnitt ${avg}, mit einer Höchstgeschwindigkeit von ${max} Kilometern pro Stunde.`,
+    lastRide_kw: ["letzte fahrt", "meine vorherige fahrt", "wie war meine letzte fahrt"],
     radioOpened: (name) => `${name} läuft jetzt.`,
     radioClosed: "Ich schalte das Radio aus.",
     radioNext: (name) => `Jetzt läuft ${name}.`,
@@ -420,9 +456,6 @@ const T = {
     emergencyCalling: "Ich rufe Hilfe.",
     emergencyNotSet: "Lege zuerst eine Notfallnummer in den Einstellungen fest.",
     emergency_kw: ["hilfe rufen", "notfall"],
-    historyLabel: "Fahrtverlauf",
-    historyEmpty: "Noch keine Fahrten gespeichert.",
-    historyClear: "Verlauf löschen",
     map_kw: ["karte"],
     wake: ["hey volt", "volt", "hey bolt", "bolt", "hey bot", " bot", "bot,", "hey jolt", "jolt", "hey colt", "colt", "hey wolf", "wolf"],
     open: ["schalte ein", "öffne", "zeig"],
@@ -506,6 +539,17 @@ const T = {
     navNoActive: "目前没有正在进行的导航。",
     nav_close_kw: ["停止导航", "取消导航", "结束导航"],
     next_direction_kw: ["下一个方向", "下一个指示", "接下来做什么"],
+    sosLabel: "紧急联系电话",
+    sosNoNumber: "你需要先在设置中添加紧急联系电话。",
+    sosCalling: "正在拨打你的紧急联系电话。",
+    sos_kw: ["呼叫救援", "紧急呼叫", "救命"],
+    autoPausedLabel: "自动暂停",
+    historyLabel: "骑行记录",
+    historyEmpty: "还没有骑行记录。",
+    historyClear: "清除记录",
+    lastRideNone: "你还没有骑行记录。",
+    lastRideIs: (dist, avg, max) => `你上次骑行了${dist}公里,平均时速${avg},最高时速${max}公里。`,
+    lastRide_kw: ["上次骑行", "我上一次骑行", "上次骑得怎么样"],
     radioOpened: (name) => `正在播放${name}。`,
     radioClosed: "正在关闭电台。",
     radioNext: (name) => `现在播放${name}。`,
@@ -520,9 +564,6 @@ const T = {
     emergencyCalling: "正在呼叫救援。",
     emergencyNotSet: "请先在设置中保存紧急联系号码。",
     emergency_kw: ["呼叫救援", "紧急情况"],
-    historyLabel: "骑行记录",
-    historyEmpty: "还没有保存的骑行记录。",
-    historyClear: "清除记录",
     map_kw: ["地图"],
     wake: ["嘿volt", "嘿 volt", "volt", "hey bolt", "bolt", "hey bot", " bot", "bot,", "hey jolt", "jolt", "hey colt", "colt", "hey wolf", "wolf"],
     open: ["打开", "开启"],
@@ -606,6 +647,17 @@ const T = {
     navNoActive: "현재 진행 중인 내비게이션이 없습니다.",
     nav_close_kw: ["내비게이션 중지", "내비게이션 취소", "내비게이션 종료"],
     next_direction_kw: ["다음 방향", "다음 안내", "다음에 뭐해"],
+    sosLabel: "비상 연락처",
+    sosNoNumber: "먼저 설정에서 비상 연락처를 추가해야 합니다.",
+    sosCalling: "비상 연락처로 전화를 겁니다.",
+    sos_kw: ["도움 요청", "긴급 전화", "도와줘"],
+    autoPausedLabel: "자동 일시정지",
+    historyLabel: "라이딩 기록",
+    historyEmpty: "아직 기록된 라이딩이 없습니다.",
+    historyClear: "기록 지우기",
+    lastRideNone: "아직 기록된 라이딩이 없습니다.",
+    lastRideIs: (dist, avg, max) => `지난 라이딩은 ${dist}킬로미터였고, 평균 ${avg}, 최고 시속 ${max}킬로미터였습니다.`,
+    lastRide_kw: ["지난 라이딩", "이전 라이딩", "지난번 라이딩 어땠어"],
     radioOpened: (name) => `${name} 재생 중입니다.`,
     radioClosed: "라디오를 끕니다.",
     radioNext: (name) => `이제 ${name}이(가) 재생됩니다.`,
@@ -620,9 +672,6 @@ const T = {
     emergencyCalling: "도움을 요청합니다.",
     emergencyNotSet: "먼저 설정에서 긴급 연락처를 저장하세요.",
     emergency_kw: ["도움 요청", "긴급 상황"],
-    historyLabel: "라이딩 기록",
-    historyEmpty: "저장된 라이딩이 아직 없습니다.",
-    historyClear: "기록 삭제",
     map_kw: ["지도"],
     wake: ["헤이 볼트", "볼트", "hey bolt", "bolt", "hey bot", " bot", "bot,", "hey jolt", "jolt", "hey colt", "colt", "hey wolf", "wolf"],
     open: ["켜", "열어", "보여"],
@@ -1053,6 +1102,7 @@ export default function Volt() {
   const [language, setLanguage] = useState("en");
   const [themeColor, setThemeColor] = useState("green");
   const [soundEnabled, setSoundEnabled] = useState(true);
+  const [emergencyNumber, setEmergencyNumber] = useState("");
   const [speedUnit, setSpeedUnit] = useState("kmh");
   const [roadSensitivity, setRoadSensitivity] = useState("medium");
   const [micEnabled, setMicEnabled] = useState(true);
@@ -1122,8 +1172,23 @@ export default function Volt() {
   const [gaugeOn, setGaugeOn] = useState(true);
   const [currentSpeed, setCurrentSpeed] = useState(0);
   const [gpsError, setGpsError] = useState("");
+  const [autoPaused, setAutoPaused] = useState(false);
   const lastPosRef = useRef(null);
   const watchIdRef = useRef(null);
+
+  const [rideHistory, setRideHistory] = useState([]);
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("volt-ride-history");
+      if (saved) setRideHistory(JSON.parse(saved));
+    } catch (e) {}
+  }, []);
+  const clearHistory = useCallback(() => {
+    setRideHistory([]);
+    try {
+      localStorage.removeItem("volt-ride-history");
+    } catch (e) {}
+  }, []);
 
   // Session stats
   const [sessionMax, setSessionMax] = useState(0);
@@ -1211,7 +1276,9 @@ export default function Volt() {
             if (dt > 0) {
               const distKm = haversineKm(lat, lon, latitude, longitude);
               if (kmh === null) kmh = (distKm / dt) * 3600;
-              if (distKm < 0.5) {
+              const isMoving = kmh >= AUTO_PAUSE_THRESHOLD_KMH;
+              setAutoPaused(!isMoving);
+              if (distKm < 0.5 && isMoving) {
                 sessionDistanceRef.current += distKm;
                 sessionSecondsRef.current += dt;
                 setSessionDistance(sessionDistanceRef.current);
@@ -1235,6 +1302,23 @@ export default function Volt() {
       watchIdRef.current = null;
       setCurrentSpeed(0);
       setGpsError("");
+      setAutoPaused(false);
+      if (sessionDistanceRef.current >= 0.05) {
+        const ride = {
+          date: new Date().toISOString(),
+          distance: sessionDistanceRef.current,
+          avgSpeed: sessionAvgRef.current,
+          maxSpeed: sessionMaxRef.current,
+          durationSeconds: sessionSecondsRef.current,
+        };
+        setRideHistory((prev) => {
+          const next = [ride, ...prev].slice(0, 50);
+          try {
+            localStorage.setItem("volt-ride-history", JSON.stringify(next));
+          } catch (e) {}
+          return next;
+        });
+      }
     }
     return () => {
       if (watchIdRef.current !== null) {
@@ -1655,6 +1739,34 @@ export default function Volt() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentSpeed]);
 
+  const triggerSOS = useCallback(() => {
+    if (!emergencyNumber) {
+      setVoiceStatus(t.sosNoNumber);
+      speak(t.sosNoNumber);
+      return;
+    }
+    setVoiceStatus(t.sosCalling);
+    speak(t.sosCalling);
+    setTimeout(() => {
+      window.location.href = `tel:${emergencyNumber}`;
+    }, 1200);
+  }, [emergencyNumber, t, speak]);
+
+  const getLastRide = useCallback(() => {
+    if (rideHistory.length === 0) {
+      setVoiceStatus(t.lastRideNone);
+      speak(t.lastRideNone);
+      return;
+    }
+    const r = rideHistory[0];
+    const dist = toDisplay(r.distance).toFixed(1);
+    const avg = `${Math.round(toDisplay(r.avgSpeed))} ${unitWord}`;
+    const max = Math.round(toDisplay(r.maxSpeed));
+    const msg = t.lastRideIs(dist, avg, max);
+    setVoiceStatus(msg);
+    speak(msg);
+  }, [rideHistory, t, speak, toDisplay, unitWord]);
+
   const getMyLocation = useCallback(() => {
     setVoiceStatus(t.locationChecking);
     const getPos = () =>
@@ -1781,6 +1893,11 @@ export default function Volt() {
         return;
       }
 
+      if (has(t.sos_kw)) {
+        triggerSOS();
+        return;
+      }
+
       const calc = parseCalculation(raw_l, language);
       if (calc) {
         if (calc.result === null) {
@@ -1814,6 +1931,8 @@ export default function Volt() {
         getSunsetInfo();
       } else if (has(t.whereAmI_kw)) {
         getMyLocation();
+      } else if (has(t.lastRide_kw)) {
+        getLastRide();
       } else if (has(t.nav_close_kw)) {
         stopNavigation();
         setVoiceStatus(t.navStopped);
@@ -1910,7 +2029,7 @@ export default function Volt() {
         speak(t.notUnderstood);
       }
     },
-    [t, speak, resetSession, getWeather, getSunsetInfo, getMyLocation, playStation, stopRadio, radioIndex, toDisplay, unitWord, speedUnit, language]
+    [t, speak, resetSession, getWeather, getSunsetInfo, getMyLocation, getLastRide, triggerSOS, startNavigation, stopNavigation, announceCurrentDirection, playStation, stopRadio, radioIndex, toDisplay, unitWord, speedUnit, language]
   );
 
   useEffect(() => {
@@ -2300,6 +2419,26 @@ export default function Volt() {
             </div>
 
             <div style={{ marginBottom: 18 }}>
+              <div style={{ fontSize: 11, color: "var(--dim2)", marginBottom: 8, letterSpacing: 0.5 }}>{t.sosLabel}</div>
+              <input
+                type="tel"
+                value={emergencyNumber}
+                onChange={(e) => setEmergencyNumber(e.target.value)}
+                placeholder="+90 5xx xxx xx xx"
+                style={{
+                  width: "100%",
+                  boxSizing: "border-box",
+                  padding: "9px 12px",
+                  borderRadius: 10,
+                  border: "1px solid var(--border)",
+                  background: "var(--bg)",
+                  color: "var(--text)",
+                  fontSize: 13,
+                }}
+              />
+            </div>
+
+            <div style={{ marginBottom: 18 }}>
               <div style={{ fontSize: 11, color: "var(--dim2)", marginBottom: 8, letterSpacing: 0.5 }}>{t.fullscreenLabel}</div>
               <button
                 className={`pill ${isFullscreen ? "active" : ""}`}
@@ -2338,184 +2477,20 @@ export default function Volt() {
                 ))}
               </div>
             </div>
-          </div>
-        </div>
-      )}
 
-      <div className="volt-layout">
-        {/* Left: wordmark + voice + stats */}
-        <div className="enter-left portrait-left-align" style={{ display: "flex", flexDirection: "column", gap: 14, flexShrink: 0 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <div
-              style={{
-                width: 28,
-                height: 28,
-                borderRadius: 7,
-                background: "var(--accent)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Zap size={15} color="var(--on-accent)" strokeWidth={2.6} fill="var(--on-accent)" />
-            </div>
-            <span className="digit" style={{ fontSize: 16, fontWeight: 700, letterSpacing: 1.5, color: "var(--text)" }}>
-              VOLT
-            </span>
-          </div>
-
-          <button
-            onClick={radioOn ? pushToTalk : undefined}
-            disabled={!radioOn}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              background: "var(--panel)",
-              border: "1px solid var(--border)",
-              borderRadius: 999,
-              padding: "8px 14px 8px 10px",
-              width: "fit-content",
-              opacity: voiceSupported && !micBlocked ? 1 : 0.4,
-              cursor: radioOn ? "pointer" : "default",
-            }}
-          >
-            <div
-              style={{
-                width: 22,
-                height: 22,
-                borderRadius: "50%",
-                background: speaking
-                  ? "color-mix(in srgb, var(--accent) 30%, transparent)"
-                  : listening
-                  ? "color-mix(in srgb, var(--accent) 15%, transparent)"
-                  : "transparent",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              {voiceSupported && !micBlocked && micEnabled ? (
-                <Mic size={13} color={speaking || listening ? "var(--accent)" : "var(--dim2)"} />
+            <div style={{ marginTop: 18 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                <span style={{ fontSize: 11, color: "var(--dim2)", letterSpacing: 0.5 }}>{t.historyLabel}</span>
+                {rideHistory.length > 0 && (
+                  <button
+                    onClick={clearHistory}
+                    style={{ background: "none", border: "none", color: "var(--dim)", fontSize: 11, cursor: "pointer", textDecoration: "underline" }}
+                  >
+                    {t.historyClear}
+                  </button>
+                )}
+              </div>
+              {rideHistory.length === 0 ? (
+                <div style={{ fontSize: 12, color: "var(--dim)" }}>{t.historyEmpty}</div>
               ) : (
-                <MicOff size={13} color="var(--dim2)" />
-              )}
-            </div>
-            <span style={{ fontSize: 11.5, color: "var(--text)", fontWeight: 600, whiteSpace: "nowrap" }}>
-              {!micEnabled ? t.voiceOff : speaking ? t.speaking : listening ? t.listening : radioOn ? t.tapToTalk : t.voiceOn}
-            </span>
-            {(listening || speaking) && (
-              <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--accent)" }} />
-            )}
-          </button>
-
-          <div style={{ fontSize: 10.5, color: "var(--dim)", maxWidth: 160, lineHeight: 1.4 }}>
-            {!voiceSupported || micBlocked ? t.micNotSupported : !micEnabled ? "" : voiceStatus || t.hint}
-          </div>
-
-          {radioOn && (
-            <div style={{ fontSize: 11, color: "var(--accent)", fontWeight: 600 }}>
-              ♪ {(RADIO_STATIONS[language] || RADIO_STATIONS.en)[radioIndex]?.name}
-            </div>
-          )}
-
-          {radioActivated && (
-          <div style={{ display: "flex", gap: 8 }}>
-            <button
-              className="icon-btn"
-              onClick={() => stepStation(-1)}
-              style={{
-                width: 30,
-                height: 30,
-                borderRadius: "50%",
-                border: "1px solid var(--border)",
-                background: "var(--panel)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-              }}
-              aria-label="Previous station"
-            >
-              <SkipBack size={13} color="var(--dim2)" />
-            </button>
-            <button
-              className="icon-btn"
-              onClick={toggleRadioPlayback}
-              style={{
-                width: 30,
-                height: 30,
-                borderRadius: "50%",
-                border: "none",
-                background: "var(--accent)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-              }}
-              aria-label={radioOn ? "Pause" : "Play"}
-            >
-              {radioOn ? (
-                <Pause size={13} color="var(--on-accent)" />
-              ) : (
-                <Play size={13} color="var(--on-accent)" />
-              )}
-            </button>
-            <button
-              className="icon-btn"
-              onClick={() => stepStation(1)}
-              style={{
-                width: 30,
-                height: 30,
-                borderRadius: "50%",
-                border: "1px solid var(--border)",
-                background: "var(--panel)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                cursor: "pointer",
-              }}
-              aria-label="Next station"
-            >
-              <SkipForward size={13} color="var(--dim2)" />
-            </button>
-          </div>
-          )}
-
-          {gaugeOn && (
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {[
-                { label: t.max, value: `${toDisplay(sessionMax).toFixed(0)} ${displayUnit}` },
-                { label: t.avg, value: `${toDisplay(sessionAvg).toFixed(0)} ${displayUnit}` },
-                { label: t.dist, value: `${toDisplay(sessionDistance).toFixed(1)} ${displayDistUnit}` },
-              ].map((s, i) => (
-                <div key={s.label} className="stat-item" style={{ animationDelay: `${0.35 + i * 0.1}s` }}>
-                  <div className="digit" style={{ fontSize: 15, fontWeight: 700, color: "var(--text)" }}>
-                    {s.value}
-                  </div>
-                  <div style={{ fontSize: 9, color: "var(--dim)", letterSpacing: 0.8, marginTop: 1 }}>{s.label}</div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Center: speed gauge */}
-        <div className="enter-center" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
-          {mapOn ? (
-            mapCoords ? (
-              <iframe
-                title="map"
-                width="320"
-                height="240"
-                style={{ border: 0, borderRadius: 16 }}
-                src={`https://maps.google.com/maps?q=${mapCoords.lat},${mapCoords.lon}&z=15&output=embed`}
-              />
-            ) : (
-              <div
-                style={{
-                  width: 320,
-                  height: 240,
-                  display: "flex",
-                  flexDirection: "column",
-        
+                <div style={{ display: "flex", flexDirection: "column", gap: 8, maxHeight: 180, overflowY: "au

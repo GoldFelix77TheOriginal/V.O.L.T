@@ -10,9 +10,7 @@ import {
   SkipForward,
   Play,
   Pause,
-  Gauge,
   Compass as CompassIcon,
-  MapPin,
   Radio,
   X,
   Maximize2,
@@ -280,7 +278,7 @@ export default function App() {
   const [grade, setGrade] = useState(0);
 
   // Konum
-  const [userCoords, setUserCoords] = useState({ lat: 40.6549, lon: 29.2842 }); // Varsayılan Yalova
+  const [userCoords, setUserCoords] = useState({ lat: 40.6549, lon: 29.2842 });
   const [destinationQuery, setDestinationQuery] = useState("");
   const [trackPoints, setTrackPoints] = useState([]);
 
@@ -423,7 +421,6 @@ export default function App() {
     }
   }, []);
 
-  // "Hey Volt, beni ... ya götür" Navigasyon Araması
   const navigateToLocation = (target) => {
     if (!target) return;
     speakText(`${target} için yol tarifi hazırlanıyor.`);
@@ -447,7 +444,7 @@ export default function App() {
     a.click();
   };
 
-  // Gelişmiş Sesli Asistan ("Hey Volt, beni ... götür")
+  // Sesli Asistan Kontrolcüsü
   const toggleListening = () => {
     if (isListening) {
       if (recognitionRef.current) recognitionRef.current.stop();
@@ -465,16 +462,13 @@ export default function App() {
       const transcript = e.results[0][0].transcript.toLowerCase();
       setAssistantMsg(`"${transcript}"`);
 
-      // "Hey Volt, beni ... götür" veya "beni ... götür" mantığı
       if (transcript.includes("beni") && transcript.includes("götür")) {
         let destination = transcript.replace(/.*beni\s+/, "").replace(/\s+götür.*/, "").trim();
-        // İyelik / yönelme eklerini temizle (örn: "markete" -> "market")
         destination = destination.replace(/(e|a|ye|ya|ne|na)$/i, "");
         if (destination) {
           navigateToLocation(destination);
         }
       } 
-      // Doğrudan Sekme Açma Komutları
       else if (transcript.includes("pusula") || transcript.includes("compass")) {
         setActiveTab("compass");
         speakText("Pusula açılıyor.");
@@ -550,7 +544,6 @@ export default function App() {
         {/* HUD Sekmesi */}
         {activeTab === "hud" && (
           <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-            {/* Hız Göstergesi */}
             <div style={{ textAlign: "center", margin: "25px 0" }}>
               <span style={{ fontSize: "12px", color: "#888", letterSpacing: "3px", display: "block", marginBottom: "4px" }}>{t.speed}</span>
               <div style={{ fontSize: "110px", fontWeight: "900", lineHeight: "0.9", color: theme.primary, textShadow: `0 0 35px ${theme.primary}40` }}>
@@ -559,7 +552,6 @@ export default function App() {
               <div style={{ fontSize: "16px", color: "#aaa", letterSpacing: "2px", marginTop: "8px", fontWeight: "bold" }}>{t.kmh}</div>
             </div>
 
-            {/* Metrikler */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
               <div style={{ background: theme.cardBg, padding: "12px", borderRadius: "12px", textAlign: "center" }}>
                 <span style={{ fontSize: "11px", color: "#888", display: "block" }}>{t.maxSpeed}</span>
@@ -584,7 +576,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* Alt Sayaç Alanı */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "20px", background: theme.cardBg, padding: "12px 16px", borderRadius: "14px" }}>
               <div>
                 <span style={{ fontSize: "10px", color: "#888", display: "block" }}>{t.time}</span>
@@ -671,29 +662,13 @@ export default function App() {
         )}
       </main>
 
-      {/* Ses Kontrolü */}
-      <div style={{ background: "rgba(0,0,0,0.5)", padding: "10px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+      {/* Ses Kontrol Barı (Tek Etkileşim Noktası) */}
+      <div style={{ background: "rgba(0,0,0,0.5)", padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", borderTop: "1px solid rgba(255,255,255,0.05)" }}>
         <span style={{ fontSize: "12px", color: isListening ? theme.primary : "#888" }}>{isListening ? assistantMsg : "Sesli Komut Hazır"}</span>
-        <button onClick={toggleListening} style={{ backgroundColor: isListening ? "#FF2A5F" : theme.primary, border: "none", borderRadius: "50%", width: "36px", height: "36px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
-          {isListening ? <MicOff size={18} color="#fff" /> : <Mic size={18} color="#000" />}
+        <button onClick={toggleListening} style={{ backgroundColor: isListening ? "#FF2A5F" : theme.primary, border: "none", borderRadius: "50%", width: "40px", height: "40px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+          {isListening ? <MicOff size={20} color="#fff" /> : <Mic size={20} color="#000" />}
         </button>
       </div>
-
-      {/* Alt Navigasyon Barı */}
-      <nav style={{ display: "flex", justifyContent: "space-around", padding: "10px 0", backgroundColor: "#0A0B08", borderTop: "1px solid rgba(255,255,255,0.1)" }}>
-        <button onClick={() => setActiveTab("hud")} style={{ background: "none", border: "none", color: activeTab === "hud" ? theme.primary : "#666", display: "flex", flexDirection: "column", alignItems: "center", gap: "2px", cursor: "pointer" }}>
-          <Gauge size={18} /><span style={{ fontSize: "10px" }}>{t.hud}</span>
-        </button>
-        <button onClick={() => setActiveTab("compass")} style={{ background: "none", border: "none", color: activeTab === "compass" ? theme.primary : "#666", display: "flex", flexDirection: "column", alignItems: "center", gap: "2px", cursor: "pointer" }}>
-          <CompassIcon size={18} /><span style={{ fontSize: "10px" }}>{t.compass}</span>
-        </button>
-        <button onClick={() => setActiveTab("map")} style={{ background: "none", border: "none", color: activeTab === "map" ? theme.primary : "#666", display: "flex", flexDirection: "column", alignItems: "center", gap: "2px", cursor: "pointer" }}>
-          <MapPin size={18} /><span style={{ fontSize: "10px" }}>{t.map}</span>
-        </button>
-        <button onClick={() => setActiveTab("radio")} style={{ background: "none", border: "none", color: activeTab === "radio" ? theme.primary : "#666", display: "flex", flexDirection: "column", alignItems: "center", gap: "2px", cursor: "pointer" }}>
-          <Radio size={18} /><span style={{ fontSize: "10px" }}>{t.radio}</span>
-        </button>
-      </nav>
 
       {/* Ayarlar Modalı (7 Dil Seçeneği) */}
       {showSettings && (
@@ -706,7 +681,6 @@ export default function App() {
               </button>
             </div>
 
-            {/* 7 Dil Seçeneği */}
             <div style={{ marginBottom: "16px" }}>
               <label style={{ fontSize: "11px", color: "#888", display: "block", marginBottom: "8px" }}>{t.language}</label>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px" }}>
@@ -731,7 +705,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* Tema Seçeneği */}
             <div style={{ marginBottom: "16px" }}>
               <label style={{ fontSize: "11px", color: "#888", display: "block", marginBottom: "6px" }}>{t.theme}</label>
               <div style={{ display: "flex", gap: "6px" }}>
@@ -752,7 +725,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* Hassasiyet */}
             <div style={{ marginBottom: "18px" }}>
               <label style={{ fontSize: "11px", color: "#888", display: "block", marginBottom: "6px" }}>
                 {t.sensitivity}: {shakeSensitivity} m/s²

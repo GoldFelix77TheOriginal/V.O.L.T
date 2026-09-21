@@ -249,12 +249,43 @@ const LANGUAGES = [
   { code: "es", name: "Español" }
 ];
 
-const RADIO_STATIONS = [
-  { name: "Kral FM", url: "https://radyokralfm.rtp.org.tr/stream" },
-  { name: "Power FM", url: "https://powerfm.listenpowerapp.com/powerfm/mpeg/icecast.audio" },
-  { name: "TRT FM", url: "https://radio-trtfm.medya.trt.com.tr/stream" },
-  { name: "Radyo D", url: "https://stream.radyod.com.tr/radyod.stream" }
-];
+// --- 2. Ülke/Dil Bazlı Radyo İstasyonları ---
+const RADIO_STATIONS_BY_LANG = {
+  tr: [
+    { name: "Kral FM", url: "https://radyokralfm.rtp.org.tr/stream" },
+    { name: "Power FM", url: "https://powerfm.listenpowerapp.com/powerfm/mpeg/icecast.audio" },
+    { name: "TRT FM", url: "https://radio-trtfm.medya.trt.com.tr/stream" },
+    { name: "Radyo D", url: "https://stream.radyod.com.tr/radyod.stream" }
+  ],
+  en: [
+    { name: "Capital FM UK", url: "https://stream-capital.musicradio.com/capitalmp3" },
+    { name: "BBC Radio 1", url: "https://stream.live.vc.bbcmedia.co.uk/bbc_radio_one" },
+    { name: "Dance UK", url: "https://stream.danceuk.radio/danceuk.mp3" }
+  ],
+  ru: [
+    { name: "Европа Плюс", url: "https://ep128.hostingradio.ru:8030/ep128" },
+    { name: "Авторадио", url: "https://pub0202.101.ru:8443/stream/air/aac/64/100" },
+    { name: "Дорожное Радио", url: "https://dorognoe.hostingradio.ru:8000/dorognoe" }
+  ],
+  ko: [
+    { name: "KBS World Radio", url: "https://world-stream.kbs.co.kr/valive/world/world_32k.m3u8" },
+    { name: "MBC FM4U", url: "https://sfm4u.mbc.co.kr/fm4u.m3u8" }
+  ],
+  zh: [
+    { name: "CNR Music Radio", url: "https://ngcdn001.cnr.cn/live/yyzs/index.m3u8" },
+    { name: "Hong Kong Radio 1", url: "https://rthk.hk/live/rthk1.m3u8" }
+  ],
+  az: [
+    { name: "Araz FM", url: "https://s2.radio.co/s8379c6767/listen" },
+    { name: "106.3 FM Baku", url: "https://s3.radio.co/s197f26767/listen" },
+    { name: "Radio Asan", url: "https://asan.stream.az/live" }
+  ],
+  es: [
+    { name: "Los 40 España", url: "https://21223.live.streamtheworld.com/LOS40_ES.mp3" },
+    { name: "Onda Cero", url: "https://ondacero.stream.flumotion.com/ondacero/mp3.mp3" },
+    { name: "Cadena SER", url: "https://25263.live.streamtheworld.com/CADENASER.mp3" }
+  ]
+};
 
 const THEMES = {
   volt: { primary: "#CCFF00", bg: "#12140F", cardBg: "rgba(255,255,255,0.05)" },
@@ -300,9 +331,23 @@ export default function App() {
 
   const t = T[lang] || T.tr;
   const theme = THEMES[themeKey];
+  const currentRadioList = RADIO_STATIONS_BY_LANG[lang] || RADIO_STATIONS_BY_LANG.tr;
+  
   const prevCoordsRef = useRef({ lat: null, lon: null, alt: null });
-  const audioRef = useRef(new Audio(RADIO_STATIONS[0].url));
+  const audioRef = useRef(new Audio(currentRadioList[0].url));
   const recognitionRef = useRef(null);
+
+  // Uygulama Dili Değiştiğinde Radyo Listesini Otomatik Güncelleme
+  useEffect(() => {
+    const newStations = RADIO_STATIONS_BY_LANG[lang] || RADIO_STATIONS_BY_LANG.tr;
+    setCurrentRadioIndex(0);
+    if (audioRef.current) {
+      audioRef.current.src = newStations[0].url;
+      if (isPlayingRadio) {
+        audioRef.current.play();
+      }
+    }
+  }, [lang]);
 
   const speakText = (text) => {
     if ("speechSynthesis" in window) {
@@ -610,7 +655,7 @@ export default function App() {
           </div>
         )}
 
-        {/* Harita / Google Navigasyon Sekmesi */}
+        {/* Harita Sekmesi */}
         {activeTab === "map" && (
           <div style={{ flex: 1, width: "100%", height: "100%", borderRadius: "14px", overflow: "hidden", border: "1px solid rgba(255,255,255,0.1)" }}>
             <iframe
@@ -629,16 +674,16 @@ export default function App() {
           </div>
         )}
 
-        {/* Radyo Sekmesi */}
+        {/* Radyo Sekmesi (Dile Göre Dinamik İstasyonlar) */}
         {activeTab === "radio" && (
           <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "20px" }}>
             <Radio size={56} color={theme.primary} />
-            <h2 style={{ margin: 0 }}>{RADIO_STATIONS[currentRadioIndex].name}</h2>
+            <h2 style={{ margin: 0 }}>{currentRadioList[currentRadioIndex]?.name}</h2>
             <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
               <button onClick={() => {
-                let next = currentRadioIndex - 1 < 0 ? RADIO_STATIONS.length - 1 : currentRadioIndex - 1;
+                let next = currentRadioIndex - 1 < 0 ? currentRadioList.length - 1 : currentRadioIndex - 1;
                 setCurrentRadioIndex(next);
-                audioRef.current.src = RADIO_STATIONS[next].url;
+                audioRef.current.src = currentRadioList[next].url;
                 if (isPlayingRadio) audioRef.current.play();
               }} style={{ background: "none", border: "none", color: "#fff", cursor: "pointer" }}>
                 <SkipBack size={28} />
@@ -650,9 +695,9 @@ export default function App() {
                 {isPlayingRadio ? <Pause size={28} color="#000" /> : <Play size={28} color="#000" />}
               </button>
               <button onClick={() => {
-                let next = (currentRadioIndex + 1) % RADIO_STATIONS.length;
+                let next = (currentRadioIndex + 1) % currentRadioList.length;
                 setCurrentRadioIndex(next);
-                audioRef.current.src = RADIO_STATIONS[next].url;
+                audioRef.current.src = currentRadioList[next].url;
                 if (isPlayingRadio) audioRef.current.play();
               }} style={{ background: "none", border: "none", color: "#fff", cursor: "pointer" }}>
                 <SkipForward size={28} />
@@ -662,7 +707,7 @@ export default function App() {
         )}
       </main>
 
-      {/* Ses Kontrol Barı (Tek Etkileşim Noktası) */}
+      {/* Ses Kontrol Barı */}
       <div style={{ background: "rgba(0,0,0,0.5)", padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", borderTop: "1px solid rgba(255,255,255,0.05)" }}>
         <span style={{ fontSize: "12px", color: isListening ? theme.primary : "#888" }}>{isListening ? assistantMsg : "Sesli Komut Hazır"}</span>
         <button onClick={toggleListening} style={{ backgroundColor: isListening ? "#FF2A5F" : theme.primary, border: "none", borderRadius: "50%", width: "40px", height: "40px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
@@ -681,6 +726,7 @@ export default function App() {
               </button>
             </div>
 
+            {/* 7 Dil Seçeneği */}
             <div style={{ marginBottom: "16px" }}>
               <label style={{ fontSize: "11px", color: "#888", display: "block", marginBottom: "8px" }}>{t.language}</label>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px" }}>

@@ -297,9 +297,8 @@ export default function App() {
   const [grade, setGrade] = useState(0);
 
   // Konum & Rota
-  const [userCoords, setUserCoords] = useState(null);
+  const [userCoords, setUserCoords] = useState({ lat: 40.6549, lon: 29.2842 }); // Varsayılan Yalova
   const [trackPoints, setTrackPoints] = useState([]);
-  const [routeInfo, setRouteInfo] = useState(null);
 
   // Sensörler
   const [heading, setHeading] = useState(0);
@@ -442,11 +441,6 @@ export default function App() {
 
   // POI & Rota
   const searchNearbyPOI = async (type) => {
-    if (!userCoords) {
-      speakText("GPS konumu bekleniyor.");
-      return;
-    }
-
     const isBike = type === "bike";
     speakText(isBike ? t.findingBicycleShop : t.findingMarket);
 
@@ -458,30 +452,10 @@ export default function App() {
       const data = await res.json();
 
       if (data && data.length > 0) {
-        const dest = { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
         speakText(t.shopFound);
-        calculateRoute(userCoords, dest);
+        setActiveTab("map");
       } else {
         speakText(isBike ? t.noBicycleShopFound : t.noMarketFound);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const calculateRoute = async (start, end) => {
-    try {
-      const res = await fetch(
-        `https://router.project-osrm.org/route/v1/biking/${start.lon},${start.lat};${end.lon},${end.lat}?overview=full&geometries=geojson`
-      );
-      const data = await res.json();
-      if (data.routes && data.routes.length > 0) {
-        const route = data.routes[0];
-        setRouteInfo({
-          distance: (route.distance / 1000).toFixed(1),
-          duration: Math.round(route.duration / 60)
-        });
-        setActiveTab("map");
       }
     } catch (err) {
       console.error(err);
@@ -504,7 +478,7 @@ export default function App() {
     a.click();
   };
 
-  // Sesli Asistan
+  // Gelişmiş Sesli Asistan (Pusula, Radyo, Harita, Gösterge)
   const toggleListening = () => {
     if (isListening) {
       if (recognitionRef.current) recognitionRef.current.stop();
@@ -521,11 +495,25 @@ export default function App() {
     recognition.onresult = (e) => {
       const transcript = e.results[0][0].transcript.toLowerCase();
       setAssistantMsg(`"${transcript}"`);
-      if (transcript.includes("tamirci") || transcript.includes("bisiklet")) searchNearbyPOI("bike");
-      else if (transcript.includes("market")) searchNearbyPOI("market");
-      else if (transcript.includes("harita")) setActiveTab("map");
-      else if (transcript.includes("pusula")) setActiveTab("compass");
-      else if (transcript.includes("gösterge")) setActiveTab("hud");
+      
+      // Sesli Sekme Geçişleri ve Komutlar
+      if (transcript.includes("pusula") || transcript.includes("compass")) {
+        setActiveTab("compass");
+        speakText("Pusula açılıyor.");
+      } else if (transcript.includes("radyo") || transcript.includes("radio")) {
+        setActiveTab("radio");
+        speakText("Radyo açılıyor.");
+      } else if (transcript.includes("harita") || transcript.includes("map")) {
+        setActiveTab("map");
+        speakText("Harita açılıyor.");
+      } else if (transcript.includes("gösterge") || transcript.includes("hud") || transcript.includes("hız")) {
+        setActiveTab("hud");
+        speakText("Gösterge paneli açılıyor.");
+      } else if (transcript.includes("tamirci") || transcript.includes("bisiklet")) {
+        searchNearbyPOI("bike");
+      } else if (transcript.includes("market")) {
+        searchNearbyPOI("market");
+      }
     };
     recognition.onerror = () => setIsListening(false);
     recognition.onend = () => setIsListening(false);
@@ -581,10 +569,9 @@ export default function App() {
           </div>
         )}
 
-        {/* HUD Sekmesi - İkonik Dev Hız Göstergesi */}
+        {/* HUD Sekmesi */}
         {activeTab === "hud" && (
           <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-            {/* Orijinal Hız Göstergesi Odak Noktası */}
             <div style={{ textAlign: "center", margin: "20px 0" }}>
               <span style={{ fontSize: "12px", color: "#888", letterSpacing: "3px", display: "block", marginBottom: "4px" }}>{t.speed}</span>
               <div style={{ fontSize: "110px", fontWeight: "900", lineHeight: "0.9", color: theme.primary, textShadow: `0 0 35px ${theme.primary}40` }}>
@@ -593,7 +580,6 @@ export default function App() {
               <div style={{ fontSize: "16px", color: "#aaa", letterSpacing: "2px", marginTop: "8px", fontWeight: "bold" }}>{t.kmh}</div>
             </div>
 
-            {/* Metrik Kartları */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
               <div style={{ background: theme.cardBg, padding: "12px", borderRadius: "12px", textAlign: "center" }}>
                 <span style={{ fontSize: "11px", color: "#888", display: "block" }}>{t.maxSpeed}</span>
@@ -618,7 +604,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* POI Butonları */}
             <div style={{ display: "flex", gap: "10px", marginTop: "12px" }}>
               <button onClick={() => searchNearbyPOI("bike")} style={{ flex: 1, backgroundColor: "rgba(255,255,255,0.08)", border: "none", color: "#fff", padding: "10px", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", cursor: "pointer", fontSize: "12px" }}>
                 <Wrench size={16} color={theme.primary} /> Tamirci
@@ -628,7 +613,6 @@ export default function App() {
               </button>
             </div>
 
-            {/* Alt Sayaç Alanı */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "15px", background: theme.cardBg, padding: "12px 16px", borderRadius: "14px" }}>
               <div>
                 <span style={{ fontSize: "10px", color: "#888", display: "block" }}>{t.time}</span>
@@ -663,25 +647,18 @@ export default function App() {
           </div>
         )}
 
-        {/* Harita Sekmesi */}
+        {/* Harita Sekmesi (Sadece Google Haritalar Servisi) */}
         {activeTab === "map" && (
-          <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center" }}>
-            <Navigation size={48} color={theme.primary} style={{ marginBottom: "15px" }} />
-            {userCoords ? (
-              <div style={{ background: theme.cardBg, padding: "16px", borderRadius: "14px", width: "100%", maxWidth: "320px" }}>
-                <p style={{ margin: "0 0 8px", fontSize: "14px", color: "#aaa" }}>Mevcut Konum</p>
-                <div style={{ fontSize: "16px", fontWeight: "bold" }}>{userCoords.lat.toFixed(5)}, {userCoords.lon.toFixed(5)}</div>
-                {routeInfo && (
-                  <div style={{ marginTop: "15px", paddingTop: "15px", borderTop: "1px solid rgba(255,255,255,0.1)" }}>
-                    <p style={{ margin: 0, color: theme.primary, fontWeight: "bold" }}>Hedef Rota</p>
-                    <p style={{ margin: "4px 0 0", fontSize: "14px" }}>Mesafe: {routeInfo.distance} km</p>
-                    <p style={{ margin: "2px 0 0", fontSize: "14px" }}>Süre: ~{routeInfo.duration} dk</p>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <p style={{ color: "#888" }}>GPS Aratılıyor...</p>
-            )}
+          <div style={{ flex: 1, width: "100%", height: "100%", borderRadius: "14px", overflow: "hidden", border: "1px solid rgba(255,255,255,0.1)" }}>
+            <iframe
+              title="Google Maps"
+              width="100%"
+              height="100%"
+              style={{ border: 0, filter: "invert(90%) hue-rotate(180deg)" }}
+              loading="lazy"
+              allowFullScreen
+              src={`https://maps.google.com/maps?q=${userCoords.lat},${userCoords.lon}&z=15&output=embed`}
+            />
           </div>
         )}
 
@@ -726,7 +703,7 @@ export default function App() {
         </button>
       </div>
 
-      {/* Alt Gezinme Barı */}
+      {/* Alt Navigasyon Barı */}
       <nav style={{ display: "flex", justifyContent: "space-around", padding: "10px 0", backgroundColor: "#0A0B08", borderTop: "1px solid rgba(255,255,255,0.1)" }}>
         <button onClick={() => setActiveTab("hud")} style={{ background: "none", border: "none", color: activeTab === "hud" ? theme.primary : "#666", display: "flex", flexDirection: "column", alignItems: "center", gap: "2px", cursor: "pointer" }}>
           <Gauge size={18} /><span style={{ fontSize: "10px" }}>{t.hud}</span>
@@ -753,7 +730,6 @@ export default function App() {
               </button>
             </div>
 
-            {/* 7 Dil Seçeneği Izgarası */}
             <div style={{ marginBottom: "16px" }}>
               <label style={{ fontSize: "11px", color: "#888", display: "block", marginBottom: "8px" }}>{t.language}</label>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px" }}>
@@ -778,7 +754,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* Tema Seçeneği */}
             <div style={{ marginBottom: "16px" }}>
               <label style={{ fontSize: "11px", color: "#888", display: "block", marginBottom: "6px" }}>{t.theme}</label>
               <div style={{ display: "flex", gap: "6px" }}>
@@ -799,7 +774,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* Hassasiyet */}
             <div style={{ marginBottom: "18px" }}>
               <label style={{ fontSize: "11px", color: "#888", display: "block", marginBottom: "6px" }}>
                 {t.sensitivity}: {shakeSensitivity} m/s²

@@ -17,10 +17,7 @@ import {
   X,
   Maximize2,
   Minimize2,
-  Wrench,
-  ShoppingBag,
-  Download,
-  Navigation
+  Download
 } from "lucide-react";
 
 // --- 1. 7 Dilli Sözlük (i18n) ---
@@ -36,11 +33,9 @@ const T = {
     reset: "SIFIRLA",
     altitude: "RAKIM",
     grade: "EĞİM",
-    findingBicycleShop: "En yakın bisiklet tamircisi aranıyor...",
-    findingMarket: "En yakın market aranıyor...",
-    noBicycleShopFound: "Yakında bisiklet tamircisi bulunamadı.",
-    noMarketFound: "Yakında market bulunamadı.",
-    shopFound: "Nokta bulundu, rota çiziliyor.",
+    findingLocation: "Hedef konum aranıyor...",
+    noLocationFound: "Konum bulunamadı.",
+    routeCreated: "Rota oluşturuldu, haritaya yönlendiriliyorsunuz.",
     settings: "AYARLAR",
     language: "DİL SEÇİMİ",
     theme: "TEMA",
@@ -69,11 +64,9 @@ const T = {
     reset: "RESET",
     altitude: "ALTITUDE",
     grade: "GRADE",
-    findingBicycleShop: "Searching for nearest bicycle shop...",
-    findingMarket: "Searching for nearest market...",
-    noBicycleShopFound: "No bicycle shop found nearby.",
-    noMarketFound: "No market found nearby.",
-    shopFound: "Found, mapping route.",
+    findingLocation: "Searching location...",
+    noLocationFound: "Location not found.",
+    routeCreated: "Route created, redirecting to map.",
     settings: "SETTINGS",
     language: "LANGUAGE",
     theme: "THEME",
@@ -102,11 +95,9 @@ const T = {
     reset: "СБРОС",
     altitude: "ВЫСОТА",
     grade: "УКЛОН",
-    findingBicycleShop: "Поиск веломастерской...",
-    findingMarket: "Поиск магазина...",
-    noBicycleShopFound: "Мастерская не найдена.",
-    noMarketFound: "Магазин не найден.",
-    shopFound: "Найдено, строим маршрут.",
+    findingLocation: "Поиск локации...",
+    noLocationFound: "Локация не найдена.",
+    routeCreated: "Маршрут создан.",
     settings: "НАСТРОЙКИ",
     language: "ЯЗЫК",
     theme: "ТЕМА",
@@ -135,11 +126,9 @@ const T = {
     reset: "초기화",
     altitude: "고도",
     grade: "경사도",
-    findingBicycleShop: "자전거 수리점 검색 중...",
-    findingMarket: "마트 검색 중...",
-    noBicycleShopFound: "주변에 수리점이 없습니다.",
-    noMarketFound: "주변에 마트가 없습니다.",
-    shopFound: "경로를 탐색합니다.",
+    findingLocation: "위치 검색 중...",
+    noLocationFound: "위치를 찾을 수 없습니다.",
+    routeCreated: "경로가 생성되었습니다.",
     settings: "설정",
     language: "언어",
     theme: "테마",
@@ -168,11 +157,9 @@ const T = {
     reset: "重置",
     altitude: "海拔",
     grade: "坡度",
-    findingBicycleShop: "正在搜索自行车维修店...",
-    findingMarket: "正在搜索超市...",
-    noBicycleShopFound: "未找到维修店。",
-    noMarketFound: "未找到超市。",
-    shopFound: "已找到，正在规划路线。",
+    findingLocation: "正在搜索位置...",
+    noLocationFound: "未找到位置。",
+    routeCreated: "路线已生成。",
     settings: "设置",
     language: "语言",
     theme: "主题",
@@ -201,11 +188,9 @@ const T = {
     reset: "SIFIRLA",
     altitude: "HÜNDÜRLÜK",
     grade: "MEYİLLİLİK",
-    findingBicycleShop: "Ən yaxın velosiped təmiri axtarılır...",
-    findingMarket: "Ən yaxın market axtarılır...",
-    noBicycleShopFound: "Yaxınlıqda velosiped təmiri tapılmadı.",
-    noMarketFound: "Yaxınlıqda market tapılmadı.",
-    shopFound: "Nöqtə tapıldı, marşrut çəkilir.",
+    findingLocation: "Məkan axtarılır...",
+    noLocationFound: "Məkan tapılmadı.",
+    routeCreated: "Marşrut yaradıldı.",
     settings: "TƏNZİMLƏMƏLƏR",
     language: "DİL SEÇİMİ",
     theme: "MÖVZU",
@@ -234,11 +219,9 @@ const T = {
     reset: "REINICIAR",
     altitude: "ALTITUD",
     grade: "PENDIENTE",
-    findingBicycleShop: "Buscando taller de bicicletas...",
-    findingMarket: "Buscando supermercado...",
-    noBicycleShopFound: "No se encontró ningún taller cerca.",
-    noMarketFound: "No se encontró ningún supermercado cerca.",
-    shopFound: "Punto encontrado, calculando ruta.",
+    findingLocation: "Buscando ubicación...",
+    noLocationFound: "Ubicación no encontrada.",
+    routeCreated: "Ruta creada.",
     settings: "AJUSTES",
     language: "IDIOMA",
     theme: "TEMA",
@@ -296,8 +279,9 @@ export default function App() {
   const [altitude, setAltitude] = useState(0);
   const [grade, setGrade] = useState(0);
 
-  // Konum & Rota
+  // Konum
   const [userCoords, setUserCoords] = useState({ lat: 40.6549, lon: 29.2842 }); // Varsayılan Yalova
+  const [destinationQuery, setDestinationQuery] = useState("");
   const [trackPoints, setTrackPoints] = useState([]);
 
   // Sensörler
@@ -439,27 +423,12 @@ export default function App() {
     }
   }, []);
 
-  // POI & Rota
-  const searchNearbyPOI = async (type) => {
-    const isBike = type === "bike";
-    speakText(isBike ? t.findingBicycleShop : t.findingMarket);
-
-    try {
-      const query = isBike ? "bisiklet" : "market";
-      const res = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${query}&lat=${userCoords.lat}&lon=${userCoords.lon}&bounded=1&viewbox=${userCoords.lon - 0.05},${userCoords.lat + 0.05},${userCoords.lon + 0.05},${userCoords.lat - 0.05}`
-      );
-      const data = await res.json();
-
-      if (data && data.length > 0) {
-        speakText(t.shopFound);
-        setActiveTab("map");
-      } else {
-        speakText(isBike ? t.noBicycleShopFound : t.noMarketFound);
-      }
-    } catch (err) {
-      console.error(err);
-    }
+  // "Hey Volt, beni ... ya götür" Navigasyon Araması
+  const navigateToLocation = (target) => {
+    if (!target) return;
+    speakText(`${target} için yol tarifi hazırlanıyor.`);
+    setDestinationQuery(target);
+    setActiveTab("map");
   };
 
   const exportGPX = () => {
@@ -478,7 +447,7 @@ export default function App() {
     a.click();
   };
 
-  // Gelişmiş Sesli Asistan (Pusula, Radyo, Harita, Gösterge)
+  // Gelişmiş Sesli Asistan ("Hey Volt, beni ... götür")
   const toggleListening = () => {
     if (isListening) {
       if (recognitionRef.current) recognitionRef.current.stop();
@@ -491,13 +460,22 @@ export default function App() {
     const recognition = new SpeechRecognition();
     recognitionRef.current = recognition;
     recognition.lang = lang === "tr" ? "tr-TR" : "en-US";
-    recognition.onstart = () => { setIsListening(true); setAssistantMsg("..."); };
+    recognition.onstart = () => { setIsListening(true); setAssistantMsg("Dinleniyor..."); };
     recognition.onresult = (e) => {
       const transcript = e.results[0][0].transcript.toLowerCase();
       setAssistantMsg(`"${transcript}"`);
-      
-      // Sesli Sekme Geçişleri ve Komutlar
-      if (transcript.includes("pusula") || transcript.includes("compass")) {
+
+      // "Hey Volt, beni ... götür" veya "beni ... götür" mantığı
+      if (transcript.includes("beni") && transcript.includes("götür")) {
+        let destination = transcript.replace(/.*beni\s+/, "").replace(/\s+götür.*/, "").trim();
+        // İyelik / yönelme eklerini temizle (örn: "markete" -> "market")
+        destination = destination.replace(/(e|a|ye|ya|ne|na)$/i, "");
+        if (destination) {
+          navigateToLocation(destination);
+        }
+      } 
+      // Doğrudan Sekme Açma Komutları
+      else if (transcript.includes("pusula") || transcript.includes("compass")) {
         setActiveTab("compass");
         speakText("Pusula açılıyor.");
       } else if (transcript.includes("radyo") || transcript.includes("radio")) {
@@ -509,10 +487,10 @@ export default function App() {
       } else if (transcript.includes("gösterge") || transcript.includes("hud") || transcript.includes("hız")) {
         setActiveTab("hud");
         speakText("Gösterge paneli açılıyor.");
-      } else if (transcript.includes("tamirci") || transcript.includes("bisiklet")) {
-        searchNearbyPOI("bike");
-      } else if (transcript.includes("market")) {
-        searchNearbyPOI("market");
+      } else if (transcript.includes("tamirci") || transcript.includes("bisiklet tamircisi")) {
+        navigateToLocation("bisiklet tamircisi");
+      } else if (transcript.includes("market") || transcript.includes("bakkal")) {
+        navigateToLocation("market");
       }
     };
     recognition.onerror = () => setIsListening(false);
@@ -572,7 +550,8 @@ export default function App() {
         {/* HUD Sekmesi */}
         {activeTab === "hud" && (
           <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-            <div style={{ textAlign: "center", margin: "20px 0" }}>
+            {/* Hız Göstergesi */}
+            <div style={{ textAlign: "center", margin: "25px 0" }}>
               <span style={{ fontSize: "12px", color: "#888", letterSpacing: "3px", display: "block", marginBottom: "4px" }}>{t.speed}</span>
               <div style={{ fontSize: "110px", fontWeight: "900", lineHeight: "0.9", color: theme.primary, textShadow: `0 0 35px ${theme.primary}40` }}>
                 {speed}
@@ -580,6 +559,7 @@ export default function App() {
               <div style={{ fontSize: "16px", color: "#aaa", letterSpacing: "2px", marginTop: "8px", fontWeight: "bold" }}>{t.kmh}</div>
             </div>
 
+            {/* Metrikler */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
               <div style={{ background: theme.cardBg, padding: "12px", borderRadius: "12px", textAlign: "center" }}>
                 <span style={{ fontSize: "11px", color: "#888", display: "block" }}>{t.maxSpeed}</span>
@@ -604,16 +584,8 @@ export default function App() {
               </div>
             </div>
 
-            <div style={{ display: "flex", gap: "10px", marginTop: "12px" }}>
-              <button onClick={() => searchNearbyPOI("bike")} style={{ flex: 1, backgroundColor: "rgba(255,255,255,0.08)", border: "none", color: "#fff", padding: "10px", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", cursor: "pointer", fontSize: "12px" }}>
-                <Wrench size={16} color={theme.primary} /> Tamirci
-              </button>
-              <button onClick={() => searchNearbyPOI("market")} style={{ flex: 1, backgroundColor: "rgba(255,255,255,0.08)", border: "none", color: "#fff", padding: "10px", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", cursor: "pointer", fontSize: "12px" }}>
-                <ShoppingBag size={16} color={theme.primary} /> Market
-              </button>
-            </div>
-
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "15px", background: theme.cardBg, padding: "12px 16px", borderRadius: "14px" }}>
+            {/* Alt Sayaç Alanı */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "20px", background: theme.cardBg, padding: "12px 16px", borderRadius: "14px" }}>
               <div>
                 <span style={{ fontSize: "10px", color: "#888", display: "block" }}>{t.time}</span>
                 <span style={{ fontSize: "18px", fontWeight: "bold" }}>{formatTime(elapsedTime)}</span>
@@ -647,17 +619,21 @@ export default function App() {
           </div>
         )}
 
-        {/* Harita Sekmesi (Sadece Google Haritalar Servisi) */}
+        {/* Harita / Google Navigasyon Sekmesi */}
         {activeTab === "map" && (
           <div style={{ flex: 1, width: "100%", height: "100%", borderRadius: "14px", overflow: "hidden", border: "1px solid rgba(255,255,255,0.1)" }}>
             <iframe
-              title="Google Maps"
+              title="Google Maps Navigation"
               width="100%"
               height="100%"
               style={{ border: 0, filter: "invert(90%) hue-rotate(180deg)" }}
               loading="lazy"
               allowFullScreen
-              src={`https://maps.google.com/maps?q=${userCoords.lat},${userCoords.lon}&z=15&output=embed`}
+              src={
+                destinationQuery
+                  ? `https://maps.google.com/maps?saddr=${userCoords.lat},${userCoords.lon}&daddr=${encodeURIComponent(destinationQuery)}&output=embed`
+                  : `https://maps.google.com/maps?q=${userCoords.lat},${userCoords.lon}&z=15&output=embed`
+              }
             />
           </div>
         )}
@@ -730,6 +706,7 @@ export default function App() {
               </button>
             </div>
 
+            {/* 7 Dil Seçeneği */}
             <div style={{ marginBottom: "16px" }}>
               <label style={{ fontSize: "11px", color: "#888", display: "block", marginBottom: "8px" }}>{t.language}</label>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px" }}>
@@ -754,6 +731,7 @@ export default function App() {
               </div>
             </div>
 
+            {/* Tema Seçeneği */}
             <div style={{ marginBottom: "16px" }}>
               <label style={{ fontSize: "11px", color: "#888", display: "block", marginBottom: "6px" }}>{t.theme}</label>
               <div style={{ display: "flex", gap: "6px" }}>
@@ -774,6 +752,7 @@ export default function App() {
               </div>
             </div>
 
+            {/* Hassasiyet */}
             <div style={{ marginBottom: "18px" }}>
               <label style={{ fontSize: "11px", color: "#888", display: "block", marginBottom: "6px" }}>
                 {t.sensitivity}: {shakeSensitivity} m/s²

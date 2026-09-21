@@ -15,11 +15,6 @@ import {
   MapPin,
   Radio,
   X,
-  Volume2,
-  VolumeX,
-  ShieldAlert,
-  History,
-  Trash2,
   Maximize2,
   Minimize2,
   Wrench,
@@ -28,12 +23,12 @@ import {
   Navigation
 } from "lucide-react";
 
-// --- 1. Dil Sözlüğü (i18n) ---
+// --- 1. 7 Dilli Sözlük (i18n) ---
 const T = {
   tr: {
     speed: "HIZ",
-    maxSpeed: "MAKS",
-    avgSpeed: "ORT",
+    maxSpeed: "MAKS HIZ",
+    avgSpeed: "ORT HIZ",
     distance: "MESAFE",
     time: "SÜRE",
     pause: "DURAKLAT",
@@ -47,34 +42,26 @@ const T = {
     noMarketFound: "Yakında market bulunamadı.",
     shopFound: "Nokta bulundu, rota çiziliyor.",
     settings: "AYARLAR",
-    language: "DİL",
+    language: "DİL SEÇİMİ",
     theme: "TEMA",
     sensitivity: "SARSINTI HASSASİYETİ",
-    clearHistory: "GEÇMİŞİ TEMİZLE",
     close: "KAPAT",
     potholeWarning: "ÇUKUR/SARSINTI ALGILANDI",
     kmh: "km/s",
     km: "km",
     m: "m",
     radio: "RADYO",
-    voiceAssistant: "SESLİ ASİSTAN",
-    map: "HARİTA",
     compass: "PUSULA",
+    map: "HARİTA",
     hud: "GÖSTERGE",
     exportGpx: "GPX İNDİR",
-    headingN: "K",
-    headingNE: "KB",
-    headingE: "D",
-    headingSE: "GD",
-    headingS: "G",
-    headingSW: "GB",
-    headingW: "B",
-    headingNW: "KD"
+    headingN: "K", headingNE: "KD", headingE: "D", headingSE: "GD",
+    headingS: "G", headingSW: "GB", headingW: "B", headingNW: "KB"
   },
   en: {
     speed: "SPEED",
-    maxSpeed: "MAX",
-    avgSpeed: "AVG",
+    maxSpeed: "MAX SPEED",
+    avgSpeed: "AVG SPEED",
     distance: "DISTANCE",
     time: "TIME",
     pause: "PAUSE",
@@ -91,28 +78,195 @@ const T = {
     language: "LANGUAGE",
     theme: "THEME",
     sensitivity: "SHAKE SENSITIVITY",
-    clearHistory: "CLEAR HISTORY",
     close: "CLOSE",
     potholeWarning: "POTHOLE DETECTED",
     kmh: "km/h",
     km: "km",
     m: "m",
     radio: "RADIO",
-    voiceAssistant: "VOICE ASSISTANT",
-    map: "MAP",
     compass: "COMPASS",
+    map: "MAP",
     hud: "HUD",
     exportGpx: "EXPORT GPX",
-    headingN: "N",
-    headingNE: "NE",
-    headingE: "E",
-    headingSE: "SE",
-    headingS: "S",
-    headingSW: "SW",
-    headingW: "W",
-    headingNW: "NW"
+    headingN: "N", headingNE: "NE", headingE: "E", headingSE: "SE",
+    headingS: "S", headingSW: "SW", headingW: "W", headingNW: "NW"
+  },
+  ru: {
+    speed: "СКОРОСТЬ",
+    maxSpeed: "МАКС. СКОРОСТЬ",
+    avgSpeed: "СРЕД. СКОРОСТЬ",
+    distance: "ДИСТАНЦИЯ",
+    time: "ВРЕМЯ",
+    pause: "ПАУЗА",
+    resume: "ПРОДОЛЖИТЬ",
+    reset: "СБРОС",
+    altitude: "ВЫСОТА",
+    grade: "УКЛОН",
+    findingBicycleShop: "Поиск веломастерской...",
+    findingMarket: "Поиск магазина...",
+    noBicycleShopFound: "Мастерская не найдена.",
+    noMarketFound: "Магазин не найден.",
+    shopFound: "Найдено, строим маршрут.",
+    settings: "НАСТРОЙКИ",
+    language: "ЯЗЫК",
+    theme: "ТЕМА",
+    sensitivity: "ЧУВСТВИТЕЛЬНОСТЬ",
+    close: "ЗАКРЫТЬ",
+    potholeWarning: "ОБНАРУЖЕНА ВЫБОИНА",
+    kmh: "км/ч",
+    km: "км",
+    m: "м",
+    radio: "РАДИО",
+    compass: "КОМПАС",
+    map: "КАРТА",
+    hud: "СПИДОМЕТР",
+    exportGpx: "СКАЧАТЬ GPX",
+    headingN: "С", headingNE: "СВ", headingE: "В", headingSE: "ЮВ",
+    headingS: "Ю", headingSW: "ЮЗ", headingW: "З", headingNW: "СЗ"
+  },
+  ko: {
+    speed: "속도",
+    maxSpeed: "최고 속도",
+    avgSpeed: "평균 속도",
+    distance: "거리",
+    time: "시간",
+    pause: "일시정지",
+    resume: "재개",
+    reset: "초기화",
+    altitude: "고도",
+    grade: "경사도",
+    findingBicycleShop: "자전거 수리점 검색 중...",
+    findingMarket: "마트 검색 중...",
+    noBicycleShopFound: "주변에 수리점이 없습니다.",
+    noMarketFound: "주변에 마트가 없습니다.",
+    shopFound: "경로를 탐색합니다.",
+    settings: "설정",
+    language: "언어",
+    theme: "테마",
+    sensitivity: "충격 감도",
+    close: "닫기",
+    potholeWarning: "충격 감지됨",
+    kmh: "km/h",
+    km: "km",
+    m: "m",
+    radio: "라디오",
+    compass: "나침반",
+    map: "지도",
+    hud: "계기판",
+    exportGpx: "GPX 내보내기",
+    headingN: "북", headingNE: "북동", headingE: "동", headingSE: "남동",
+    headingS: "남", headingSW: "남서", headingW: "서", headingNW: "북서"
+  },
+  zh: {
+    speed: "速度",
+    maxSpeed: "最高速度",
+    avgSpeed: "平均速度",
+    distance: "距离",
+    time: "时间",
+    pause: "暂停",
+    resume: "继续",
+    reset: "重置",
+    altitude: "海拔",
+    grade: "坡度",
+    findingBicycleShop: "正在搜索自行车维修店...",
+    findingMarket: "正在搜索超市...",
+    noBicycleShopFound: "未找到维修店。",
+    noMarketFound: "未找到超市。",
+    shopFound: "已找到，正在规划路线。",
+    settings: "设置",
+    language: "语言",
+    theme: "主题",
+    sensitivity: "震动敏感度",
+    close: "关闭",
+    potholeWarning: "检测到坑洼/震动",
+    kmh: "km/h",
+    km: "km",
+    m: "m",
+    radio: "收音机",
+    compass: "指南针",
+    map: "地图",
+    hud: "仪表盘",
+    exportGpx: "导出 GPX",
+    headingN: "北", headingNE: "东北", headingE: "东", headingSE: "东南",
+    headingS: "南", headingSW: "西南", headingW: "西", headingNW: "西北"
+  },
+  az: {
+    speed: "SÜRƏT",
+    maxSpeed: "MAKS SÜRƏT",
+    avgSpeed: "ORT SÜRƏT",
+    distance: "MƏSAFƏ",
+    time: "MÜDDƏT",
+    pause: "DAYANDIR",
+    resume: "DAVAM ET",
+    reset: "SIFIRLA",
+    altitude: "HÜNDÜRLÜK",
+    grade: "MEYİLLİLİK",
+    findingBicycleShop: "Ən yaxın velosiped təmiri axtarılır...",
+    findingMarket: "Ən yaxın market axtarılır...",
+    noBicycleShopFound: "Yaxınlıqda velosiped təmiri tapılmadı.",
+    noMarketFound: "Yaxınlıqda market tapılmadı.",
+    shopFound: "Nöqtə tapıldı, marşrut çəkilir.",
+    settings: "TƏNZİMLƏMƏLƏR",
+    language: "DİL SEÇİMİ",
+    theme: "MÖVZU",
+    sensitivity: "SƏS/TƏKAN HƏSSASLIĞI",
+    close: "BAĞLA",
+    potholeWarning: "ÇUXUR/TƏKAN AŞKARLANDI",
+    kmh: "km/saat",
+    km: "km",
+    m: "m",
+    radio: "RADİO",
+    compass: "COMPASS",
+    map: "XƏRİTƏ",
+    hud: "GÖSTƏRİCİ",
+    exportGpx: "GPX YÜKLƏ",
+    headingN: "Şm", headingNE: "Şm-Şə", headingE: "Şə", headingSE: "C-Şə",
+    headingS: "C", headingSW: "C-Qə", headingW: "Qə", headingNW: "Şm-Qə"
+  },
+  es: {
+    speed: "VELOCIDAD",
+    maxSpeed: "VEL. MÁXIMA",
+    avgSpeed: "VEL. MEDIA",
+    distance: "DISTANCIA",
+    time: "TIEMPO",
+    pause: "PAUSAR",
+    resume: "REANUDAR",
+    reset: "REINICIAR",
+    altitude: "ALTITUD",
+    grade: "PENDIENTE",
+    findingBicycleShop: "Buscando taller de bicicletas...",
+    findingMarket: "Buscando supermercado...",
+    noBicycleShopFound: "No se encontró ningún taller cerca.",
+    noMarketFound: "No se encontró ningún supermercado cerca.",
+    shopFound: "Punto encontrado, calculando ruta.",
+    settings: "AJUSTES",
+    language: "IDIOMA",
+    theme: "TEMA",
+    sensitivity: "SENSIBILIDAD DE IMPACTO",
+    close: "CERRAR",
+    potholeWarning: "BACHE DETECTADO",
+    kmh: "km/h",
+    km: "km",
+    m: "m",
+    radio: "RADIO",
+    compass: "BRÚJULA",
+    map: "MAPA",
+    hud: "VELOCÍMETRO",
+    exportGpx: "EXPORTAR GPX",
+    headingN: "N", headingNE: "NE", headingE: "E", headingSE: "SE",
+    headingS: "S", headingSW: "SO", headingW: "O", headingNW: "NO"
   }
 };
+
+const LANGUAGES = [
+  { code: "tr", name: "Türkçe" },
+  { code: "en", name: "English" },
+  { code: "ru", name: "Русский" },
+  { code: "ko", name: "한국어" },
+  { code: "zh", name: "中文" },
+  { code: "az", name: "Azərbaycan" },
+  { code: "es", name: "Español" }
+];
 
 const RADIO_STATIONS = [
   { name: "Kral FM", url: "https://radyokralfm.rtp.org.tr/stream" },
@@ -142,10 +296,9 @@ export default function App() {
   const [altitude, setAltitude] = useState(0);
   const [grade, setGrade] = useState(0);
 
-  // Konum & Rota Kaydı (GPX İçi)
+  // Konum & Rota
   const [userCoords, setUserCoords] = useState(null);
-  const [trackPoints, setTrackPoints] = useState([]); // [{lat, lon, alt, time}]
-  const [targetPOI, setTargetPOI] = useState(null);
+  const [trackPoints, setTrackPoints] = useState([]);
   const [routeInfo, setRouteInfo] = useState(null);
 
   // Sensörler
@@ -164,23 +317,23 @@ export default function App() {
   const [showSettings, setShowSettings] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
 
-  const t = T[lang];
+  const t = T[lang] || T.tr;
   const theme = THEMES[themeKey];
   const prevCoordsRef = useRef({ lat: null, lon: null, alt: null });
   const audioRef = useRef(new Audio(RADIO_STATIONS[0].url));
   const recognitionRef = useRef(null);
 
-  // --- TTS ---
   const speakText = (text) => {
     if ("speechSynthesis" in window) {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = lang === "tr" ? "tr-TR" : "en-US";
+      const voiceLangs = { tr: "tr-TR", en: "en-US", ru: "ru-RU", ko: "ko-KR", zh: "zh-CN", az: "az-AZ", es: "es-ES" };
+      utterance.lang = voiceLangs[lang] || "en-US";
       window.speechSynthesis.speak(utterance);
     }
   };
 
-  // --- GPS, Hız, Mesafe, Rakım, Eğim & İz Kaydı ---
+  // GPS & Telemetri
   useEffect(() => {
     if (!navigator.geolocation) return;
 
@@ -197,13 +350,11 @@ export default function App() {
         setMaxSpeed((prev) => Math.max(prev, currentSpeedKmh));
         setAltitude(currentAlt);
 
-        // GPX İzi İçin Nokta Ekle
         setTrackPoints((prev) => [
           ...prev,
           { lat: latitude, lon: longitude, alt: currentAlt, time: new Date().toISOString() }
         ]);
 
-        // Mesafe ve Eğim Hesabı
         if (prevCoordsRef.current.lat !== null && prevCoordsRef.current.alt !== null) {
           const lat1 = prevCoordsRef.current.lat;
           const lon1 = prevCoordsRef.current.lon;
@@ -239,7 +390,7 @@ export default function App() {
     return () => navigator.geolocation.clearWatch(watchId);
   }, [isPaused]);
 
-  // --- Süre Sayacı ---
+  // Sayaç
   useEffect(() => {
     let interval;
     if (!isPaused) {
@@ -248,27 +399,23 @@ export default function App() {
     return () => clearInterval(interval);
   }, [isPaused]);
 
-  // --- Pusula ---
+  // Pusula Sensörü
   useEffect(() => {
     const handleOrientation = (e) => {
-      if (e.webkitCompassHeading) {
-        setHeading(e.webkitCompassHeading);
-      } else if (e.alpha) {
-        setHeading(360 - e.alpha);
-      }
+      if (e.webkitCompassHeading) setHeading(e.webkitCompassHeading);
+      else if (e.alpha) setHeading(360 - e.alpha);
     };
     window.addEventListener("deviceorientation", handleOrientation, true);
     return () => window.removeEventListener("deviceorientation", handleOrientation, true);
   }, []);
 
-  // Yön Metni (K, B, D, G)
   const getHeadingText = (deg) => {
     const directions = [t.headingN, t.headingNE, t.headingE, t.headingSE, t.headingS, t.headingSW, t.headingW, t.headingNW];
     const index = Math.round(deg / 45) % 8;
     return directions[index];
   };
 
-  // --- Akselerometre (Sarsıntı) ---
+  // Akselerometre
   useEffect(() => {
     const handleMotion = (e) => {
       const acc = e.accelerationIncludingGravity;
@@ -283,7 +430,7 @@ export default function App() {
     return () => window.removeEventListener("devicemotion", handleMotion);
   }, [shakeSensitivity]);
 
-  // --- Pil Takibi ---
+  // Pil
   useEffect(() => {
     if (navigator.getBattery) {
       navigator.getBattery().then((b) => {
@@ -293,10 +440,10 @@ export default function App() {
     }
   }, []);
 
-  // --- POI & Rota Arama ---
+  // POI & Rota
   const searchNearbyPOI = async (type) => {
     if (!userCoords) {
-      speakText(lang === "tr" ? "GPS konumu bekleniyor." : "Waiting for GPS location.");
+      speakText("GPS konumu bekleniyor.");
       return;
     }
 
@@ -311,15 +458,14 @@ export default function App() {
       const data = await res.json();
 
       if (data && data.length > 0) {
-        const dest = { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon), name: data[0].display_name };
-        setTargetPOI(dest);
+        const dest = { lat: parseFloat(data[0].lat), lon: parseFloat(data[0].lon) };
         speakText(t.shopFound);
         calculateRoute(userCoords, dest);
       } else {
         speakText(isBike ? t.noBicycleShopFound : t.noMarketFound);
       }
     } catch (err) {
-      console.error("POI arama hatası:", err);
+      console.error(err);
     }
   };
 
@@ -338,121 +484,52 @@ export default function App() {
         setActiveTab("map");
       }
     } catch (err) {
-      console.error("OSRM Rota hatası:", err);
+      console.error(err);
     }
   };
 
-  // --- GPX Dosyası Dışa Aktarma ---
   const exportGPX = () => {
-    if (trackPoints.length === 0) {
-      alert("Henüz kaydedilmiş bir sürüş izi yok.");
-      return;
-    }
-
-    let gpxContent = `<?xml version="1.0" encoding="UTF-8"?>
-<gpx version="1.1" creator="VOLT Bike Computer">
-  <trk>
-    <name>Sürüş Kaydı - ${new Date().toLocaleDateString()}</name>
-    <trkseg>`;
-
+    if (trackPoints.length === 0) return;
+    let gpxContent = `<?xml version="1.0" encoding="UTF-8"?><gpx version="1.1" creator="VOLT"><trk><trkseg>`;
     trackPoints.forEach((pt) => {
-      gpxContent += `
-      <trkpt lat="${pt.lat}" lon="${pt.lon}">
-        <ele>${pt.alt}</ele>
-        <time>${pt.time}</time>
-      </trkpt>`;
+      gpxContent += `<trkpt lat="${pt.lat}" lon="${pt.lon}"><ele>${pt.alt}</ele><time>${pt.time}</time></trkpt>`;
     });
-
-    gpxContent += `
-    </trkseg>
-  </trk>
-</gpx>`;
+    gpxContent += `</trkseg></trk></gpx>`;
 
     const blob = new Blob([gpxContent], { type: "application/gpx+xml" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `VOLT_Surus_${Date.now()}.gpx`;
+    a.download = `VOLT_Ride_${Date.now()}.gpx`;
     a.click();
   };
 
-  // --- Sesli Asistan ---
+  // Sesli Asistan
   const toggleListening = () => {
     if (isListening) {
       if (recognitionRef.current) recognitionRef.current.stop();
       setIsListening(false);
       return;
     }
-
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-      alert("Tarayıcınız ses tanıma özelliğini desteklemiyor.");
-      return;
-    }
+    if (!SpeechRecognition) return;
 
     const recognition = new SpeechRecognition();
     recognitionRef.current = recognition;
     recognition.lang = lang === "tr" ? "tr-TR" : "en-US";
-
-    recognition.onstart = () => {
-      setIsListening(true);
-      setAssistantMsg("Dinleniyor...");
-    };
-
-    recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript.toLowerCase();
+    recognition.onstart = () => { setIsListening(true); setAssistantMsg("..."); };
+    recognition.onresult = (e) => {
+      const transcript = e.results[0][0].transcript.toLowerCase();
       setAssistantMsg(`"${transcript}"`);
-      processVoiceCommand(transcript);
+      if (transcript.includes("tamirci") || transcript.includes("bisiklet")) searchNearbyPOI("bike");
+      else if (transcript.includes("market")) searchNearbyPOI("market");
+      else if (transcript.includes("harita")) setActiveTab("map");
+      else if (transcript.includes("pusula")) setActiveTab("compass");
+      else if (transcript.includes("gösterge")) setActiveTab("hud");
     };
-
     recognition.onerror = () => setIsListening(false);
     recognition.onend = () => setIsListening(false);
-
     recognition.start();
-  };
-
-  const processVoiceCommand = (cmd) => {
-    if (cmd.includes("tamirci") || cmd.includes("bisiklet")) {
-      searchNearbyPOI("bike");
-    } else if (cmd.includes("market") || cmd.includes("bakkal")) {
-      searchNearbyPOI("market");
-    } else if (cmd.includes("radyo aç")) {
-      playRadio();
-    } else if (cmd.includes("radyo kapat")) {
-      pauseRadio();
-    } else if (cmd.includes("harita")) {
-      setActiveTab("map");
-    } else if (cmd.includes("pusula")) {
-      setActiveTab("compass");
-    } else if (cmd.includes("gösterge")) {
-      setActiveTab("hud");
-    } else if (cmd.includes("duraklat")) {
-      setIsPaused(true);
-    } else if (cmd.includes("devam et")) {
-      setIsPaused(false);
-    } else {
-      speakText(lang === "tr" ? "Anlaşılamadı." : "Not understood.");
-    }
-  };
-
-  // --- Radyo Kontrolleri ---
-  const playRadio = () => {
-    audioRef.current.play();
-    setIsPlayingRadio(true);
-  };
-
-  const pauseRadio = () => {
-    audioRef.current.pause();
-    setIsPlayingRadio(false);
-  };
-
-  const changeRadioStation = (dir) => {
-    let nextIdx = currentRadioIndex + dir;
-    if (nextIdx < 0) nextIdx = RADIO_STATIONS.length - 1;
-    if (nextIdx >= RADIO_STATIONS.length) nextIdx = 0;
-    setCurrentRadioIndex(nextIdx);
-    audioRef.current.src = RADIO_STATIONS[nextIdx].url;
-    if (isPlayingRadio) audioRef.current.play();
   };
 
   const formatTime = (secs) => {
@@ -465,72 +542,31 @@ export default function App() {
     if (!document.fullscreenElement) {
       document.documentElement.requestFullscreen();
       setIsFullScreen(true);
-    } else {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-        setIsFullScreen(false);
-      }
+    } else if (document.exitFullscreen) {
+      document.exitFullscreen();
+      setIsFullScreen(false);
     }
   };
 
   return (
-    <div
-      style={{
-        backgroundColor: theme.bg,
-        color: "#fff",
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        fontFamily: "system-ui, -apple-system, sans-serif",
-        userSelect: "none"
-      }}
-    >
+    <div style={{ backgroundColor: theme.bg, color: "#fff", minHeight: "100vh", display: "flex", flexDirection: "column", fontFamily: "system-ui, sans-serif", userSelect: "none" }}>
       {/* Üst Bar */}
-      <header
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "16px 20px",
-          borderBottom: "1px solid rgba(255,255,255,0.1)"
-        }}
-      >
+      <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 20px", borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <Zap size={26} color={theme.primary} />
-          <span style={{ fontSize: "20px", fontWeight: "900", letterSpacing: "2px", color: theme.primary }}>
-            V.O.L.T
-          </span>
+          <span style={{ fontSize: "20px", fontWeight: "900", letterSpacing: "2px", color: theme.primary }}>V.O.L.T</span>
         </div>
-
         <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
-          <button
-            onClick={exportGPX}
-            title={t.exportGpx}
-            style={{
-              background: "rgba(255,255,255,0.1)",
-              border: "none",
-              color: "#fff",
-              padding: "6px 10px",
-              borderRadius: "8px",
-              display: "flex",
-              alignItems: "center",
-              gap: "4px",
-              fontSize: "12px",
-              cursor: "pointer"
-            }}
-          >
+          <button onClick={exportGPX} style={{ background: "rgba(255,255,255,0.1)", border: "none", color: "#fff", padding: "6px 10px", borderRadius: "8px", display: "flex", alignItems: "center", gap: "4px", fontSize: "12px", cursor: "pointer" }}>
             <Download size={14} color={theme.primary} /> GPX
           </button>
-
           <div style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "13px", color: "#aaa" }}>
             <BatteryWarning size={16} color={batteryLevel <= 15 ? "#FF2A5F" : theme.primary} />
             <span>%{batteryLevel}</span>
           </div>
-
           <button onClick={toggleFullScreen} style={{ background: "none", border: "none", color: "#aaa", cursor: "pointer" }}>
             {isFullScreen ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
           </button>
-
           <button onClick={() => setShowSettings(true)} style={{ background: "none", border: "none", color: "#aaa", cursor: "pointer" }}>
             <Settings size={18} />
           </button>
@@ -540,170 +576,69 @@ export default function App() {
       {/* Ana İçerik */}
       <main style={{ flex: 1, display: "flex", flexDirection: "column", padding: "16px" }}>
         {potholeAlert && (
-          <div
-            style={{
-              backgroundColor: "#FF2A5F",
-              color: "#fff",
-              padding: "10px",
-              borderRadius: "10px",
-              textAlign: "center",
-              fontWeight: "bold",
-              marginBottom: "12px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "8px"
-            }}
-          >
+          <div style={{ backgroundColor: "#FF2A5F", color: "#fff", padding: "10px", borderRadius: "10px", textAlign: "center", fontWeight: "bold", marginBottom: "12px", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}>
             <AlertTriangle size={18} /> {t.potholeWarning}
           </div>
         )}
 
-        {/* HUD Sekmesi */}
+        {/* HUD Sekmesi - İkonik Dev Hız Göstergesi */}
         {activeTab === "hud" && (
           <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-            <div style={{ textAlign: "center", margin: "15px 0" }}>
-              <div
-                style={{
-                  fontSize: "90px",
-                  fontWeight: "900",
-                  lineHeight: "1",
-                  color: theme.primary,
-                  textShadow: `0 0 25px ${theme.primary}30`
-                }}
-              >
+            {/* Orijinal Hız Göstergesi Odak Noktası */}
+            <div style={{ textAlign: "center", margin: "20px 0" }}>
+              <span style={{ fontSize: "12px", color: "#888", letterSpacing: "3px", display: "block", marginBottom: "4px" }}>{t.speed}</span>
+              <div style={{ fontSize: "110px", fontWeight: "900", lineHeight: "0.9", color: theme.primary, textShadow: `0 0 35px ${theme.primary}40` }}>
                 {speed}
               </div>
-              <div style={{ fontSize: "14px", color: "#888", letterSpacing: "2px", marginTop: "4px" }}>{t.kmh}</div>
+              <div style={{ fontSize: "16px", color: "#aaa", letterSpacing: "2px", marginTop: "8px", fontWeight: "bold" }}>{t.kmh}</div>
             </div>
 
-            {/* Temel Metrikler */}
+            {/* Metrik Kartları */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
               <div style={{ background: theme.cardBg, padding: "12px", borderRadius: "12px", textAlign: "center" }}>
                 <span style={{ fontSize: "11px", color: "#888", display: "block" }}>{t.maxSpeed}</span>
-                <span style={{ fontSize: "18px", fontWeight: "bold" }}>
-                  {maxSpeed} <small style={{ fontSize: "10px" }}>{t.kmh}</small>
-                </span>
+                <span style={{ fontSize: "18px", fontWeight: "bold" }}>{maxSpeed} <small style={{ fontSize: "10px" }}>{t.kmh}</small></span>
               </div>
               <div style={{ background: theme.cardBg, padding: "12px", borderRadius: "12px", textAlign: "center" }}>
                 <span style={{ fontSize: "11px", color: "#888", display: "block" }}>{t.distance}</span>
-                <span style={{ fontSize: "18px", fontWeight: "bold" }}>
-                  {distance.toFixed(2)} <small style={{ fontSize: "10px" }}>{t.km}</small>
-                </span>
+                <span style={{ fontSize: "18px", fontWeight: "bold" }}>{distance.toFixed(2)} <small style={{ fontSize: "10px" }}>{t.km}</small></span>
               </div>
             </div>
 
-            {/* Rakım & Eğim Metrikleri */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginTop: "10px" }}>
               <div style={{ background: theme.cardBg, padding: "12px", borderRadius: "12px", textAlign: "center" }}>
                 <span style={{ fontSize: "11px", color: "#888", display: "block" }}>{t.altitude}</span>
-                <span style={{ fontSize: "18px", fontWeight: "bold" }}>
-                  {altitude} <small style={{ fontSize: "10px" }}>{t.m}</small>
-                </span>
+                <span style={{ fontSize: "18px", fontWeight: "bold" }}>{altitude} <small style={{ fontSize: "10px" }}>{t.m}</small></span>
               </div>
               <div style={{ background: theme.cardBg, padding: "12px", borderRadius: "12px", textAlign: "center" }}>
                 <span style={{ fontSize: "11px", color: "#888", display: "block" }}>{t.grade}</span>
-                <span
-                  style={{
-                    fontSize: "18px",
-                    fontWeight: "bold",
-                    color: grade > 4 ? "#FF2A5F" : grade < -4 ? "#4CAF50" : "#fff"
-                  }}
-                >
+                <span style={{ fontSize: "18px", fontWeight: "bold", color: grade > 4 ? "#FF2A5F" : grade < -4 ? "#4CAF50" : "#fff" }}>
                   {grade > 0 ? `+${grade}` : grade}%
                 </span>
               </div>
             </div>
 
-            {/* POI Kısayolları */}
+            {/* POI Butonları */}
             <div style={{ display: "flex", gap: "10px", marginTop: "12px" }}>
-              <button
-                onClick={() => searchNearbyPOI("bike")}
-                style={{
-                  flex: 1,
-                  backgroundColor: "rgba(255,255,255,0.08)",
-                  border: "none",
-                  color: "#fff",
-                  padding: "10px",
-                  borderRadius: "10px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "6px",
-                  cursor: "pointer",
-                  fontSize: "12px"
-                }}
-              >
+              <button onClick={() => searchNearbyPOI("bike")} style={{ flex: 1, backgroundColor: "rgba(255,255,255,0.08)", border: "none", color: "#fff", padding: "10px", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", cursor: "pointer", fontSize: "12px" }}>
                 <Wrench size={16} color={theme.primary} /> Tamirci
               </button>
-              <button
-                onClick={() => searchNearbyPOI("market")}
-                style={{
-                  flex: 1,
-                  backgroundColor: "rgba(255,255,255,0.08)",
-                  border: "none",
-                  color: "#fff",
-                  padding: "10px",
-                  borderRadius: "10px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "6px",
-                  cursor: "pointer",
-                  fontSize: "12px"
-                }}
-              >
+              <button onClick={() => searchNearbyPOI("market")} style={{ flex: 1, backgroundColor: "rgba(255,255,255,0.08)", border: "none", color: "#fff", padding: "10px", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", cursor: "pointer", fontSize: "12px" }}>
                 <ShoppingBag size={16} color={theme.primary} /> Market
               </button>
             </div>
 
-            {/* Sayaç Barı */}
-            <div
-              style={{
-                display: "flex",
-                justify: "space-between",
-                alignItems: "center",
-                marginTop: "15px",
-                background: theme.cardBg,
-                padding: "12px 16px",
-                borderRadius: "14px"
-              }}
-            >
+            {/* Alt Sayaç Alanı */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "15px", background: theme.cardBg, padding: "12px 16px", borderRadius: "14px" }}>
               <div>
                 <span style={{ fontSize: "10px", color: "#888", display: "block" }}>{t.time}</span>
                 <span style={{ fontSize: "18px", fontWeight: "bold" }}>{formatTime(elapsedTime)}</span>
               </div>
               <div style={{ display: "flex", gap: "8px" }}>
-                <button
-                  onClick={() => setIsPaused(!isPaused)}
-                  style={{
-                    backgroundColor: theme.primary,
-                    color: "#000",
-                    border: "none",
-                    padding: "8px 14px",
-                    borderRadius: "8px",
-                    fontWeight: "bold",
-                    cursor: "pointer"
-                  }}
-                >
+                <button onClick={() => setIsPaused(!isPaused)} style={{ backgroundColor: theme.primary, color: "#000", border: "none", padding: "8px 14px", borderRadius: "8px", fontWeight: "bold", cursor: "pointer" }}>
                   {isPaused ? t.resume : t.pause}
                 </button>
-                <button
-                  onClick={() => {
-                    setDistance(0);
-                    setElapsedTime(0);
-                    setMaxSpeed(0);
-                    setTrackPoints([]);
-                  }}
-                  style={{
-                    backgroundColor: "rgba(255,255,255,0.1)",
-                    color: "#fff",
-                    border: "none",
-                    padding: "8px 12px",
-                    borderRadius: "8px",
-                    cursor: "pointer"
-                  }}
-                >
+                <button onClick={() => { setDistance(0); setElapsedTime(0); setMaxSpeed(0); setTrackPoints([]); }} style={{ backgroundColor: "rgba(255,255,255,0.1)", color: "#fff", border: "none", padding: "8px 12px", borderRadius: "8px", cursor: "pointer" }}>
                   {t.reset}
                 </button>
               </div>
@@ -714,20 +649,7 @@ export default function App() {
         {/* Pusula Sekmesi */}
         {activeTab === "compass" && (
           <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-            <div
-              style={{
-                width: "200px",
-                height: "200px",
-                borderRadius: "50%",
-                border: `4px solid ${theme.primary}`,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                position: "relative",
-                transform: `rotate(${-heading}deg)`,
-                transition: "transform 0.2s ease-out"
-              }}
-            >
+            <div style={{ width: "200px", height: "200px", borderRadius: "50%", border: `4px solid ${theme.primary}`, display: "flex", alignItems: "center", justifyContent: "center", position: "relative", transform: `rotate(${-heading}deg)`, transition: "transform 0.2s ease-out" }}>
               <div style={{ position: "absolute", top: "10px", fontWeight: "bold", color: "#FF2A5F" }}>K</div>
               <div style={{ position: "absolute", bottom: "10px", fontWeight: "bold" }}>G</div>
               <div style={{ position: "absolute", left: "10px", fontWeight: "bold" }}>B</div>
@@ -747,20 +669,18 @@ export default function App() {
             <Navigation size={48} color={theme.primary} style={{ marginBottom: "15px" }} />
             {userCoords ? (
               <div style={{ background: theme.cardBg, padding: "16px", borderRadius: "14px", width: "100%", maxWidth: "320px" }}>
-                <p style={{ margin: "0 0 8px", fontSize: "14px", color: "#aaa" }}>Mevcut Koordinatlar</p>
-                <div style={{ fontSize: "16px", fontWeight: "bold" }}>
-                  {userCoords.lat.toFixed(5)}, {userCoords.lon.toFixed(5)}
-                </div>
+                <p style={{ margin: "0 0 8px", fontSize: "14px", color: "#aaa" }}>Mevcut Konum</p>
+                <div style={{ fontSize: "16px", fontWeight: "bold" }}>{userCoords.lat.toFixed(5)}, {userCoords.lon.toFixed(5)}</div>
                 {routeInfo && (
                   <div style={{ marginTop: "15px", paddingTop: "15px", borderTop: "1px solid rgba(255,255,255,0.1)" }}>
-                    <p style={{ margin: 0, color: theme.primary, fontWeight: "bold" }}>Hedef Rota Bilgisi</p>
+                    <p style={{ margin: 0, color: theme.primary, fontWeight: "bold" }}>Hedef Rota</p>
                     <p style={{ margin: "4px 0 0", fontSize: "14px" }}>Mesafe: {routeInfo.distance} km</p>
                     <p style={{ margin: "2px 0 0", fontSize: "14px" }}>Süre: ~{routeInfo.duration} dk</p>
                   </div>
                 )}
               </div>
             ) : (
-              <p style={{ color: "#888" }}>GPS Konumu Yükleniyor...</p>
+              <p style={{ color: "#888" }}>GPS Aratılıyor...</p>
             )}
           </div>
         )}
@@ -771,16 +691,26 @@ export default function App() {
             <Radio size={56} color={theme.primary} />
             <h2 style={{ margin: 0 }}>{RADIO_STATIONS[currentRadioIndex].name}</h2>
             <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
-              <button onClick={() => changeRadioStation(-1)} style={{ background: "none", border: "none", color: "#fff", cursor: "pointer" }}>
+              <button onClick={() => {
+                let next = currentRadioIndex - 1 < 0 ? RADIO_STATIONS.length - 1 : currentRadioIndex - 1;
+                setCurrentRadioIndex(next);
+                audioRef.current.src = RADIO_STATIONS[next].url;
+                if (isPlayingRadio) audioRef.current.play();
+              }} style={{ background: "none", border: "none", color: "#fff", cursor: "pointer" }}>
                 <SkipBack size={28} />
               </button>
-              <button
-                onClick={isPlayingRadio ? pauseRadio : playRadio}
-                style={{ backgroundColor: theme.primary, border: "none", borderRadius: "50%", padding: "16px", cursor: "pointer" }}
-              >
+              <button onClick={() => {
+                if (isPlayingRadio) { audioRef.current.pause(); setIsPlayingRadio(false); }
+                else { audioRef.current.play(); setIsPlayingRadio(true); }
+              }} style={{ backgroundColor: theme.primary, border: "none", borderRadius: "50%", padding: "16px", cursor: "pointer" }}>
                 {isPlayingRadio ? <Pause size={28} color="#000" /> : <Play size={28} color="#000" />}
               </button>
-              <button onClick={() => changeRadioStation(1)} style={{ background: "none", border: "none", color: "#fff", cursor: "pointer" }}>
+              <button onClick={() => {
+                let next = (currentRadioIndex + 1) % RADIO_STATIONS.length;
+                setCurrentRadioIndex(next);
+                audioRef.current.src = RADIO_STATIONS[next].url;
+                if (isPlayingRadio) audioRef.current.play();
+              }} style={{ background: "none", border: "none", color: "#fff", cursor: "pointer" }}>
                 <SkipForward size={28} />
               </button>
             </div>
@@ -788,141 +718,34 @@ export default function App() {
         )}
       </main>
 
-      {/* Sesli Asistan Kontrol Barı */}
-      <div
-        style={{
-          background: "rgba(0,0,0,0.5)",
-          padding: "10px 16px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          borderTop: "1px solid rgba(255,255,255,0.05)"
-        }}
-      >
-        <span style={{ fontSize: "12px", color: isListening ? theme.primary : "#888" }}>
-          {isListening ? assistantMsg : "Sesli Komut Dinleme Hazır"}
-        </span>
-        <button
-          onClick={toggleListening}
-          style={{
-            backgroundColor: isListening ? "#FF2A5F" : theme.primary,
-            border: "none",
-            borderRadius: "50%",
-            width: "36px",
-            height: "36px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            cursor: "pointer"
-          }}
-        >
+      {/* Ses Kontrolü */}
+      <div style={{ background: "rgba(0,0,0,0.5)", padding: "10px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+        <span style={{ fontSize: "12px", color: isListening ? theme.primary : "#888" }}>{isListening ? assistantMsg : "Sesli Komut Hazır"}</span>
+        <button onClick={toggleListening} style={{ backgroundColor: isListening ? "#FF2A5F" : theme.primary, border: "none", borderRadius: "50%", width: "36px", height: "36px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
           {isListening ? <MicOff size={18} color="#fff" /> : <Mic size={18} color="#000" />}
         </button>
       </div>
 
-      {/* Alt Navigasyon Barı */}
-      <nav
-        style={{
-          display: "flex",
-          justify: "space-around",
-          padding: "10px 0",
-          backgroundColor: "#0A0B08",
-          borderTop: "1px solid rgba(255,255,255,0.1)"
-        }}
-      >
-        <button
-          onClick={() => setActiveTab("hud")}
-          style={{
-            background: "none",
-            border: "none",
-            color: activeTab === "hud" ? theme.primary : "#666",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "2px",
-            cursor: "pointer"
-          }}
-        >
-          <Gauge size={18} />
-          <span style={{ fontSize: "10px" }}>{t.hud}</span>
+      {/* Alt Gezinme Barı */}
+      <nav style={{ display: "flex", justifyContent: "space-around", padding: "10px 0", backgroundColor: "#0A0B08", borderTop: "1px solid rgba(255,255,255,0.1)" }}>
+        <button onClick={() => setActiveTab("hud")} style={{ background: "none", border: "none", color: activeTab === "hud" ? theme.primary : "#666", display: "flex", flexDirection: "column", alignItems: "center", gap: "2px", cursor: "pointer" }}>
+          <Gauge size={18} /><span style={{ fontSize: "10px" }}>{t.hud}</span>
         </button>
-        <button
-          onClick={() => setActiveTab("compass")}
-          style={{
-            background: "none",
-            border: "none",
-            color: activeTab === "compass" ? theme.primary : "#666",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "2px",
-            cursor: "pointer"
-          }}
-        >
-          <CompassIcon size={18} />
-          <span style={{ fontSize: "10px" }}>{t.compass}</span>
+        <button onClick={() => setActiveTab("compass")} style={{ background: "none", border: "none", color: activeTab === "compass" ? theme.primary : "#666", display: "flex", flexDirection: "column", alignItems: "center", gap: "2px", cursor: "pointer" }}>
+          <CompassIcon size={18} /><span style={{ fontSize: "10px" }}>{t.compass}</span>
         </button>
-        <button
-          onClick={() => setActiveTab("map")}
-          style={{
-            background: "none",
-            border: "none",
-            color: activeTab === "map" ? theme.primary : "#666",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "2px",
-            cursor: "pointer"
-          }}
-        >
-          <MapPin size={18} />
-          <span style={{ fontSize: "10px" }}>{t.map}</span>
+        <button onClick={() => setActiveTab("map")} style={{ background: "none", border: "none", color: activeTab === "map" ? theme.primary : "#666", display: "flex", flexDirection: "column", alignItems: "center", gap: "2px", cursor: "pointer" }}>
+          <MapPin size={18} /><span style={{ fontSize: "10px" }}>{t.map}</span>
         </button>
-        <button
-          onClick={() => setActiveTab("radio")}
-          style={{
-            background: "none",
-            border: "none",
-            color: activeTab === "radio" ? theme.primary : "#666",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "2px",
-            cursor: "pointer"
-          }}
-        >
-          <Radio size={18} />
-          <span style={{ fontSize: "10px" }}>{t.radio}</span>
+        <button onClick={() => setActiveTab("radio")} style={{ background: "none", border: "none", color: activeTab === "radio" ? theme.primary : "#666", display: "flex", flexDirection: "column", alignItems: "center", gap: "2px", cursor: "pointer" }}>
+          <Radio size={18} /><span style={{ fontSize: "10px" }}>{t.radio}</span>
         </button>
       </nav>
 
-      {/* Ayarlar Modalı */}
+      {/* Ayarlar Modalı (7 Dil Seçeneği) */}
       {showSettings && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0,0,0,0.85)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 1000,
-            padding: "20px"
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "#181A15",
-              borderRadius: "16px",
-              padding: "20px",
-              width: "100%",
-              maxWidth: "340px",
-              border: "1px solid rgba(255,255,255,0.1)"
-            }}
-          >
+        <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.85)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000, padding: "20px" }}>
+          <div style={{ backgroundColor: "#181A15", borderRadius: "16px", padding: "20px", width: "100%", maxWidth: "360px", border: "1px solid rgba(255,255,255,0.1)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
               <h3 style={{ margin: 0 }}>{t.settings}</h3>
               <button onClick={() => setShowSettings(false)} style={{ background: "none", border: "none", color: "#aaa", cursor: "pointer" }}>
@@ -930,41 +753,33 @@ export default function App() {
               </button>
             </div>
 
-            <div style={{ marginBottom: "14px" }}>
-              <label style={{ fontSize: "11px", color: "#888", display: "block", marginBottom: "6px" }}>{t.language}</label>
-              <div style={{ display: "flex", gap: "6px" }}>
-                <button
-                  onClick={() => setLang("tr")}
-                  style={{
-                    flex: 1,
-                    padding: "6px",
-                    borderRadius: "6px",
-                    border: "none",
-                    backgroundColor: lang === "tr" ? theme.primary : "rgba(255,255,255,0.05)",
-                    color: lang === "tr" ? "#000" : "#fff",
-                    fontWeight: "bold"
-                  }}
-                >
-                  Türkçe
-                </button>
-                <button
-                  onClick={() => setLang("en")}
-                  style={{
-                    flex: 1,
-                    padding: "6px",
-                    borderRadius: "6px",
-                    border: "none",
-                    backgroundColor: lang === "en" ? theme.primary : "rgba(255,255,255,0.05)",
-                    color: lang === "en" ? "#000" : "#fff",
-                    fontWeight: "bold"
-                  }}
-                >
-                  English
-                </button>
+            {/* 7 Dil Seçeneği Izgarası */}
+            <div style={{ marginBottom: "16px" }}>
+              <label style={{ fontSize: "11px", color: "#888", display: "block", marginBottom: "8px" }}>{t.language}</label>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px" }}>
+                {LANGUAGES.map((item) => (
+                  <button
+                    key={item.code}
+                    onClick={() => setLang(item.code)}
+                    style={{
+                      padding: "8px",
+                      borderRadius: "6px",
+                      border: "none",
+                      backgroundColor: lang === item.code ? theme.primary : "rgba(255,255,255,0.05)",
+                      color: lang === item.code ? "#000" : "#fff",
+                      fontWeight: "bold",
+                      fontSize: "12px",
+                      cursor: "pointer"
+                    }}
+                  >
+                    {item.name}
+                  </button>
+                ))}
               </div>
             </div>
 
-            <div style={{ marginBottom: "14px" }}>
+            {/* Tema Seçeneği */}
+            <div style={{ marginBottom: "16px" }}>
               <label style={{ fontSize: "11px", color: "#888", display: "block", marginBottom: "6px" }}>{t.theme}</label>
               <div style={{ display: "flex", gap: "6px" }}>
                 {Object.keys(THEMES).map((key) => (
@@ -984,6 +799,7 @@ export default function App() {
               </div>
             </div>
 
+            {/* Hassasiyet */}
             <div style={{ marginBottom: "18px" }}>
               <label style={{ fontSize: "11px", color: "#888", display: "block", marginBottom: "6px" }}>
                 {t.sensitivity}: {shakeSensitivity} m/s²
@@ -998,19 +814,7 @@ export default function App() {
               />
             </div>
 
-            <button
-              onClick={() => setShowSettings(false)}
-              style={{
-                width: "100%",
-                padding: "10px",
-                borderRadius: "8px",
-                border: "none",
-                backgroundColor: theme.primary,
-                color: "#000",
-                fontWeight: "bold",
-                cursor: "pointer"
-              }}
-            >
+            <button onClick={() => setShowSettings(false)} style={{ width: "100%", padding: "10px", borderRadius: "8px", border: "none", backgroundColor: theme.primary, color: "#000", fontWeight: "bold", cursor: "pointer" }}>
               {t.close}
             </button>
           </div>

@@ -17,10 +17,9 @@ import {
   Minimize2,
   Download,
   Terminal,
-  Gauge,
-  MapPin,
   Lock,
-  Unlock
+  Unlock,
+  KeyRound
 } from "lucide-react";
 
 // --- 1. 6 Dilli Sözlük (i18n) ---
@@ -175,18 +174,18 @@ export default function App() {
   const [userCoords, setUserCoords] = useState({ lat: 40.6549, lon: 29.2842 });
   const [destinationQuery, setDestinationQuery] = useState("");
   const [trackPoints, setTrackPoints] = useState([]);
-  const [rideHistory, setRideHistory] = useState([]);
 
   // Sensörler & Güvenlik
   const [heading, setHeading] = useState(0);
   const [batteryLevel, setBatteryLevel] = useState(100);
-  const [lowBatteryAlert, setLowBatteryAlert] = useState(false);
   const [potholeAlert, setPotholeAlert] = useState(false);
   const [shakeSensitivity, setShakeSensitivity] = useState(18);
-  const [emergencyPhone, setEmergencyPhone] = useState("112");
 
-  // Geliştirici Seçenekleri (Secret Combination Unlock)
+  // Geliştirici Seçenekleri & Parola Koruması
   const [devClicks, setDevClicks] = useState(0);
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [inputPassword, setInputPassword] = useState("");
+  const [passwordError, setPasswordError] = useState(false);
   const [isDevUnlocked, setIsDevUnlocked] = useState(false);
 
   // Sesli Asistan & Medya
@@ -350,13 +349,27 @@ export default function App() {
     return () => window.removeEventListener("devicemotion", handleMotion);
   }, [shakeSensitivity]);
 
-  // Gizli Geliştirici Tıklama Kombinasyonu
+  // Kilit Tıklama & Parola Doğrulama
   const handleDevClick = () => {
+    if (isDevUnlocked) return;
     const newClicks = devClicks + 1;
     setDevClicks(newClicks);
     if (newClicks >= 5) {
+      setShowPasswordModal(true);
+      setDevClicks(0);
+    }
+  };
+
+  const handlePasswordSubmit = () => {
+    if (inputPassword === "130782") {
       setIsDevUnlocked(true);
+      setShowPasswordModal(false);
+      setInputPassword("");
+      setPasswordError(false);
       speakText("Geliştirici seçenekleri açıldı.");
+    } else {
+      setPasswordError(true);
+      setInputPassword("");
     }
   };
 
@@ -465,7 +478,7 @@ export default function App() {
         </div>
       </header>
 
-      {/* Ana Ekran (Genişleyen Flex Alanı) */}
+      {/* Ana Ekran */}
       <main style={{ flex: 1, display: "flex", flexDirection: "column", position: "relative", overflow: "hidden" }}>
         {potholeAlert && (
           <div style={{ backgroundColor: "#FF2A5F", color: "#fff", padding: "10px", textAlign: "center", fontWeight: "bold", position: "absolute", top: 0, left: 0, right: 0, zIndex: 10 }}>
@@ -540,7 +553,7 @@ export default function App() {
           </div>
         )}
 
-        {/* Harita Sekmesi (TAM EKRAN BUG'I ÇÖZÜLDÜ) */}
+        {/* Harita Sekmesi */}
         {activeTab === "map" && (
           <div style={{ width: "100%", height: "100%", flex: 1, display: "flex", flexDirection: "column" }}>
             <iframe
@@ -600,7 +613,38 @@ export default function App() {
         </button>
       </div>
 
-      {/* Ayarlar ve Geliştirici Seçenekleri Modalı */}
+      {/* 6 Haneli Parola Modalı */}
+      {showPasswordModal && (
+        <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.9)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1100, padding: "20px" }}>
+          <div style={{ backgroundColor: "#181A15", borderRadius: "16px", padding: "24px", width: "100%", maxWidth: "320px", border: `1px solid ${theme.primary}`, textAlign: "center" }}>
+            <KeyRound size={36} color={theme.primary} style={{ margin: "0 auto 10px" }} />
+            <h4 style={{ margin: "0 0 10px", color: "#fff" }}>Geliştirici Parolası</h4>
+            <p style={{ fontSize: "12px", color: "#aaa", margin: "0 0 16px" }}>Lütfen 6 haneli erişim kodunu girin.</p>
+            
+            <input
+              type="password"
+              maxLength={6}
+              value={inputPassword}
+              onChange={(e) => setInputPassword(e.target.value)}
+              placeholder="••••••"
+              style={{ width: "100%", padding: "12px", borderRadius: "8px", border: passwordError ? "1px solid #FF2A5F" : "1px solid #444", backgroundColor: "#0A0B08", color: "#fff", fontSize: "20px", textAlign: "center", letterSpacing: "8px", marginBottom: "12px" }}
+            />
+
+            {passwordError && <p style={{ color: "#FF2A5F", fontSize: "12px", margin: "0 0 12px" }}>Hatalı Parola!</p>}
+
+            <div style={{ display: "flex", gap: "8px" }}>
+              <button onClick={() => { setShowPasswordModal(false); setInputPassword(""); setPasswordError(false); }} style={{ flex: 1, padding: "10px", borderRadius: "8px", border: "none", backgroundColor: "rgba(255,255,255,0.1)", color: "#fff" }}>
+                İptal
+              </button>
+              <button onClick={handlePasswordSubmit} style={{ flex: 1, padding: "10px", borderRadius: "8px", border: "none", backgroundColor: theme.primary, color: "#000", fontWeight: "bold" }}>
+                Giriş
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Ayarlar Modalı */}
       {showSettings && (
         <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.85)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000, padding: "20px" }}>
           <div style={{ backgroundColor: themeKey === "white" ? "#fff" : "#181A15", color: themeKey === "white" ? "#000" : "#fff", borderRadius: "16px", padding: "20px", width: "100%", maxWidth: "380px", maxHeight: "90vh", overflowY: "auto", border: "1px solid rgba(255,255,255,0.1)" }}>
@@ -645,17 +689,17 @@ export default function App() {
               </div>
             </div>
 
-            {/* Kilit Açıldıysa: Geliştirici Seçenekleri Tuşları */}
+            {/* Geliştirici Seçenekleri (Kilidi Açılmışsa Görünür) */}
             {isDevUnlocked && (
               <div style={{ marginBottom: "16px", padding: "12px", background: "rgba(255,255,255,0.05)", borderRadius: "10px", border: `1px solid ${theme.primary}` }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", fontWeight: "bold", color: theme.primary, marginBottom: "8px" }}>
                   <Terminal size={14} /> {t.devOptions}
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px" }}>
-                  <button onClick={() => { setActiveTab("hud"); setShowSettings(false); }} style={{ padding: "6px", fontSize: "11px", borderRadius: "6px", border: "none", background: "rgba(255,255,255,0.1)", color: theme.text }}>Gösterge Panel</button>
-                  <button onClick={() => { setActiveTab("compass"); setShowSettings(false); }} style={{ padding: "6px", fontSize: "11px", borderRadius: "6px", border: "none", background: "rgba(255,255,255,0.1)", color: theme.text }}>Pusula Modu</button>
-                  <button onClick={() => { setActiveTab("map"); setShowSettings(false); }} style={{ padding: "6px", fontSize: "11px", borderRadius: "6px", border: "none", background: "rgba(255,255,255,0.1)", color: theme.text }}>Harita Modu</button>
-                  <button onClick={() => { setActiveTab("radio"); setShowSettings(false); }} style={{ padding: "6px", fontSize: "11px", borderRadius: "6px", border: "none", background: "rgba(255,255,255,0.1)", color: theme.text }}>Radyo Modu</button>
+                  <button onClick={() => { setActiveTab("hud"); setShowSettings(false); }} style={{ padding: "6px", fontSize: "11px", borderRadius: "6px", border: "none", background: "rgba(255,255,255,0.1)", color: theme.text, cursor: "pointer" }}>Gösterge Panel</button>
+                  <button onClick={() => { setActiveTab("compass"); setShowSettings(false); }} style={{ padding: "6px", fontSize: "11px", borderRadius: "6px", border: "none", background: "rgba(255,255,255,0.1)", color: theme.text, cursor: "pointer" }}>Pusula Modu</button>
+                  <button onClick={() => { setActiveTab("map"); setShowSettings(false); }} style={{ padding: "6px", fontSize: "11px", borderRadius: "6px", border: "none", background: "rgba(255,255,255,0.1)", color: theme.text, cursor: "pointer" }}>Harita Modu</button>
+                  <button onClick={() => { setActiveTab("radio"); setShowSettings(false); }} style={{ padding: "6px", fontSize: "11px", borderRadius: "6px", border: "none", background: "rgba(255,255,255,0.1)", color: theme.text, cursor: "pointer" }}>Radyo Modu</button>
                 </div>
               </div>
             )}

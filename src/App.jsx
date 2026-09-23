@@ -15,10 +15,17 @@ import {
   X,
   Maximize2,
   Minimize2,
-  Download
+  Download,
+  Trash2,
+  History,
+  PhoneCall,
+  Sun,
+  MapPin,
+  Calculator,
+  Clock
 } from "lucide-react";
 
-// --- 1. 7 Dilli Sözlük (i18n) ---
+// --- 1. 6 Dilli Sözlük (i18n) ---
 const T = {
   tr: {
     speed: "HIZ",
@@ -31,17 +38,21 @@ const T = {
     reset: "SIFIRLA",
     altitude: "RAKIM",
     grade: "EĞİM",
-    findingLocation: "Hedef konum aranıyor...",
-    noLocationFound: "Konum bulunamadı.",
-    routeCreated: "Rota oluşturuldu, haritaya yönlendiriliyorsunuz.",
     settings: "AYARLAR",
     language: "DİL SEÇİMİ",
     theme: "TEMA",
+    unit: "HIZ BİRİMİ",
     sensitivity: "SARSINTI HASSASİYETİ",
+    emergencyNum: "ACİL DURUM NUMARASI",
+    history: "GEÇMİŞ SÜRÜŞLER",
+    clearHistory: "GEÇMİŞİ TEMİZLE",
     close: "KAPAT",
-    potholeWarning: "ÇUKUR/SARSINTI ALGILANDI",
+    potholeWarning: "ÇUKUR ALGILANDI!",
+    lowBattery: "DÜŞÜK PİL UYARISI!",
     kmh: "km/s",
+    mph: "mph",
     km: "km",
+    mi: "mi",
     m: "m",
     radio: "RADYO",
     compass: "PUSULA",
@@ -62,17 +73,21 @@ const T = {
     reset: "RESET",
     altitude: "ALTITUDE",
     grade: "GRADE",
-    findingLocation: "Searching location...",
-    noLocationFound: "Location not found.",
-    routeCreated: "Route created, redirecting to map.",
     settings: "SETTINGS",
     language: "LANGUAGE",
     theme: "THEME",
+    unit: "SPEED UNIT",
     sensitivity: "SHAKE SENSITIVITY",
+    emergencyNum: "EMERGENCY NUMBER",
+    history: "RIDE HISTORY",
+    clearHistory: "CLEAR HISTORY",
     close: "CLOSE",
-    potholeWarning: "POTHOLE DETECTED",
+    potholeWarning: "POTHOLE DETECTED!",
+    lowBattery: "LOW BATTERY WARNING!",
     kmh: "km/h",
+    mph: "mph",
     km: "km",
+    mi: "mi",
     m: "m",
     radio: "RADIO",
     compass: "COMPASS",
@@ -83,159 +98,16 @@ const T = {
     headingS: "S", headingSW: "SW", headingW: "W", headingNW: "NW"
   },
   ru: {
-    speed: "СКОРОСТЬ",
-    maxSpeed: "МАКС. СКОРОСТЬ",
-    avgSpeed: "СРЕД. СКОРОСТЬ",
-    distance: "ДИСТАНЦИЯ",
-    time: "ВРЕМЯ",
-    pause: "ПАУЗА",
-    resume: "ПРОДОЛЖИТЬ",
-    reset: "СБРОС",
-    altitude: "ВЫСОТА",
-    grade: "УКЛОН",
-    findingLocation: "Поиск локации...",
-    noLocationFound: "Локация не найдена.",
-    routeCreated: "Маршрут создан.",
-    settings: "НАСТРОЙКИ",
-    language: "ЯЗЫК",
-    theme: "ТЕМА",
-    sensitivity: "ЧУВСТВИТЕЛЬНОСТЬ",
-    close: "ЗАКРЫТЬ",
-    potholeWarning: "ОБНАРУЖЕНА ВЫБОИНА",
-    kmh: "км/ч",
-    km: "км",
-    m: "м",
-    radio: "РАДИО",
-    compass: "КОМПАС",
-    map: "КАРТА",
-    hud: "СПИДОМЕТР",
-    exportGpx: "СКАЧАТЬ GPX",
-    headingN: "С", headingNE: "СВ", headingE: "В", headingSE: "ЮВ",
-    headingS: "Ю", headingSW: "ЮЗ", headingW: "З", headingNW: "СЗ"
+    speed: "СКОРОСТЬ", maxSpeed: "МАКС.", avgSpeed: "СРЕД.", distance: "ДИСТАНЦИЯ", time: "ВРЕМЯ", pause: "ПАУЗА", resume: "ПРОДОЛЖИТЬ", reset: "СБРОС", altitude: "ВЫСОТА", grade: "УКЛОН", settings: "НАСТРОЙКИ", language: "ЯЗЫК", theme: "ТЕМА", unit: "ЕД. СКОРОСТИ", sensitivity: "ЧУВСТВИТЕЛЬНОСТЬ", emergencyNum: "АВАРИЙНЫЙ НОМЕР", history: "ИСТОРИЯ", clearHistory: "ОЧИСТИТЬ", close: "ЗАКРЫТЬ", potholeWarning: "ВЫБОИНА!", lowBattery: "НИЗКИЙ ЗАРЯД!", kmh: "км/ч", mph: "миль/ч", km: "км", mi: "миль", m: "м", radio: "РАДИО", compass: "КОМПАС", map: "КАРТА", hud: "СПИДОМЕТР", exportGpx: "GPX", headingN: "С", headingNE: "СВ", headingE: "В", headingSE: "ЮВ", headingS: "Ю", headingSW: "ЮЗ", headingW: "З", headingNW: "СЗ"
   },
-  ko: {
-    speed: "속도",
-    maxSpeed: "최고 속도",
-    avgSpeed: "평균 속도",
-    distance: "거리",
-    time: "시간",
-    pause: "일시정지",
-    resume: "재개",
-    reset: "초기화",
-    altitude: "고도",
-    grade: "경사도",
-    findingLocation: "위치 검색 중...",
-    noLocationFound: "위치를 찾을 수 없습니다.",
-    routeCreated: "경로가 생성되었습니다.",
-    settings: "설정",
-    language: "언어",
-    theme: "테마",
-    sensitivity: "충격 감도",
-    close: "닫기",
-    potholeWarning: "충격 감지됨",
-    kmh: "km/h",
-    km: "km",
-    m: "m",
-    radio: "라디오",
-    compass: "나침반",
-    map: "지도",
-    hud: "계기판",
-    exportGpx: "GPX 내보내기",
-    headingN: "북", headingNE: "북동", headingE: "동", headingSE: "남동",
-    headingS: "남", headingSW: "남서", headingW: "서", headingNW: "북서"
+  de: {
+    speed: "GESCHWINDIGKEIT", maxSpeed: "MAX", avgSpeed: "SCHNITT", distance: "STRECKE", time: "ZEIT", pause: "PAUSE", resume: "WEITER", reset: "RESET", altitude: "HÖHE", grade: "STEIGUNG", settings: "EINSTELLUNGEN", language: "SPRACHE", theme: "THEMA", unit: "EINHEIT", sensitivity: "EMPFINDLICHKEIT", emergencyNum: "NOTRUFNUMMER", history: "VERLAUF", clearHistory: "VERLAUF LÖSCHEN", close: "SCHLIESSEN", potholeWarning: "SCHLAGLOCH!", lowBattery: "AKKU FAST LEER!", kmh: "km/h", mph: "mph", km: "km", mi: "mi", m: "m", radio: "RADIO", compass: "KOMPASS", map: "KARTE", hud: "HUD", exportGpx: "GPX", headingN: "N", headingNE: "NO", headingE: "O", headingSE: "SO", headingS: "S", headingSW: "SW", headingW: "W", headingNW: "NW"
   },
   zh: {
-    speed: "速度",
-    maxSpeed: "最高速度",
-    avgSpeed: "平均速度",
-    distance: "距离",
-    time: "时间",
-    pause: "暂停",
-    resume: "继续",
-    reset: "重置",
-    altitude: "海拔",
-    grade: "坡度",
-    findingLocation: "正在搜索位置...",
-    noLocationFound: "未找到位置。",
-    routeCreated: "路线已生成。",
-    settings: "设置",
-    language: "语言",
-    theme: "主题",
-    sensitivity: "震动敏感度",
-    close: "关闭",
-    potholeWarning: "检测到坑洼/震动",
-    kmh: "km/h",
-    km: "km",
-    m: "m",
-    radio: "收音机",
-    compass: "指南针",
-    map: "地图",
-    hud: "仪表盘",
-    exportGpx: "导出 GPX",
-    headingN: "北", headingNE: "东北", headingE: "东", headingSE: "东南",
-    headingS: "南", headingSW: "西南", headingW: "西", headingNW: "西北"
+    speed: "速度", maxSpeed: "最高速", avgSpeed: "均速", distance: "距离", time: "时间", pause: "暂停", resume: "继续", reset: "重置", altitude: "海拔", grade: "坡度", settings: "设置", language: "语言", theme: "主题", unit: "单位", sensitivity: "灵敏度", emergencyNum: "紧急电话", history: "历史记录", clearHistory: "清除历史", close: "关闭", potholeWarning: "检测到坑洼!", lowBattery: "电量低!", kmh: "km/h", mph: "mph", km: "km", mi: "mi", m: "m", radio: "收音机", compass: "指南针", map: "地图", hud: "仪表盘", exportGpx: "GPX", headingN: "北", headingNE: "东北", headingE: "东", headingSE: "东南", headingS: "南", headingSW: "西南", headingW: "西", headingNW: "西北"
   },
-  az: {
-    speed: "SÜRƏT",
-    maxSpeed: "MAKS SÜRƏT",
-    avgSpeed: "ORT SÜRƏT",
-    distance: "MƏSAFƏ",
-    time: "MÜDDƏT",
-    pause: "DAYANDIR",
-    resume: "DAVAM ET",
-    reset: "SIFIRLA",
-    altitude: "HÜNDÜRLÜK",
-    grade: "MEYİLLİLİK",
-    findingLocation: "Məkan axtarılır...",
-    noLocationFound: "Məkan tapılmadı.",
-    routeCreated: "Marşrut yaradıldı.",
-    settings: "TƏNZİMLƏMƏLƏR",
-    language: "DİL SEÇİMİ",
-    theme: "MÖVZU",
-    sensitivity: "SƏS/TƏKAN HƏSSASLIĞI",
-    close: "BAĞLA",
-    potholeWarning: "ÇUXUR/TƏKAN AŞKARLANDI",
-    kmh: "km/saat",
-    km: "km",
-    m: "m",
-    radio: "RADİO",
-    compass: "COMPASS",
-    map: "XƏRİTƏ",
-    hud: "GÖSTƏRİCİ",
-    exportGpx: "GPX YÜKLƏ",
-    headingN: "Şm", headingNE: "Şm-Şə", headingE: "Şə", headingSE: "C-Şə",
-    headingS: "C", headingSW: "C-Qə", headingW: "Qə", headingNW: "Şm-Qə"
-  },
-  es: {
-    speed: "VELOCIDAD",
-    maxSpeed: "VEL. MÁXIMA",
-    avgSpeed: "VEL. MEDIA",
-    distance: "DISTANCIA",
-    time: "TIEMPO",
-    pause: "PAUSAR",
-    resume: "REANUDAR",
-    reset: "REINICIAR",
-    altitude: "ALTITUD",
-    grade: "PENDIENTE",
-    findingLocation: "Buscando ubicación...",
-    noLocationFound: "Ubicación no encontrada.",
-    routeCreated: "Ruta creada.",
-    settings: "AJUSTES",
-    language: "IDIOMA",
-    theme: "TEMA",
-    sensitivity: "SENSIBILIDAD DE IMPACTO",
-    close: "CERRAR",
-    potholeWarning: "BACHE DETECTADO",
-    kmh: "km/h",
-    km: "km",
-    m: "m",
-    radio: "RADIO",
-    compass: "BRÚJULA",
-    map: "MAPA",
-    hud: "VELOCÍMETRO",
-    exportGpx: "EXPORTAR GPX",
-    headingN: "N", headingNE: "NE", headingE: "E", headingSE: "SE",
-    headingS: "S", headingSW: "SO", headingW: "O", headingNW: "NO"
+  ko: {
+    speed: "속도", maxSpeed: "최고속도", avgSpeed: "평균속도", distance: "거리", time: "시간", pause: "일시정지", resume: "재개", reset: "초기화", altitude: "고도", grade: "경사도", settings: "설정", language: "언어", theme: "테마", unit: "단위", sensitivity: "감도", emergencyNum: "비상 연락처", history: "주행 기록", clearHistory: "기록 삭제", close: "닫기", potholeWarning: "충격 감지!", lowBattery: "배터리 부족!", kmh: "km/h", mph: "mph", km: "km", mi: "mi", m: "m", radio: "라디오", compass: "나침반", map: "지도", hud: "계기판", exportGpx: "GPX", headingN: "북", headingNE: "북동", headingE: "동", headingSE: "남동", headingS: "남", headingSW: "남서", headingW: "서", headingNW: "북서"
   }
 };
 
@@ -243,60 +115,63 @@ const LANGUAGES = [
   { code: "tr", name: "Türkçe" },
   { code: "en", name: "English" },
   { code: "ru", name: "Русский" },
-  { code: "ko", name: "한국어" },
+  { code: "de", name: "Deutsch" },
   { code: "zh", name: "中文" },
-  { code: "az", name: "Azərbaycan" },
-  { code: "es", name: "Español" }
+  { code: "ko", name: "한국어" }
 ];
 
-// --- 2. Ülke/Dil Bazlı Radyo İstasyonları ---
+// --- 2. 21 Adet Canlı Radyo İstasyonu (Dile Göre Gruplu) ---
 const RADIO_STATIONS_BY_LANG = {
   tr: [
     { name: "Kral FM", url: "https://radyokralfm.rtp.org.tr/stream" },
     { name: "Power FM", url: "https://powerfm.listenpowerapp.com/powerfm/mpeg/icecast.audio" },
     { name: "TRT FM", url: "https://radio-trtfm.medya.trt.com.tr/stream" },
-    { name: "Radyo D", url: "https://stream.radyod.com.tr/radyod.stream" }
+    { name: "Radyo D", url: "https://stream.radyod.com.tr/radyod.stream" },
+    { name: "Alem FM", url: "https://turkmedya.streamguys1.com/alemfm/alemfm.stream/playlist.m3u8" },
+    { name: "Süper FM", url: "https://stream.carnival.com.tr/superfm.aac" },
+    { name: "Show Radyo", url: "https://stream.showradyo.com.tr/showradyo.stream/playlist.m3u8" }
   ],
   en: [
     { name: "Capital FM UK", url: "https://stream-capital.musicradio.com/capitalmp3" },
     { name: "BBC Radio 1", url: "https://stream.live.vc.bbcmedia.co.uk/bbc_radio_one" },
-    { name: "Dance UK", url: "https://stream.danceuk.radio/danceuk.mp3" }
+    { name: "Dance UK", url: "https://stream.danceuk.radio/danceuk.mp3" },
+    { name: "Kiss FM UK", url: "https://stream-kiss.planetradio.co.uk/kissnational.mp3" }
   ],
   ru: [
     { name: "Европа Плюс", url: "https://ep128.hostingradio.ru:8030/ep128" },
     { name: "Авторадио", url: "https://pub0202.101.ru:8443/stream/air/aac/64/100" },
     { name: "Дорожное Радио", url: "https://dorognoe.hostingradio.ru:8000/dorognoe" }
   ],
-  ko: [
-    { name: "KBS World Radio", url: "https://world-stream.kbs.co.kr/valive/world/world_32k.m3u8" },
-    { name: "MBC FM4U", url: "https://sfm4u.mbc.co.kr/fm4u.m3u8" }
+  de: [
+    { name: "1LIVE", url: "https://wdr-1live-live.icecast.wdr.de/wdr/1live/live/mp3/128/stream.mp3" },
+    { name: "Antenne Bayern", url: "https://mp3channels.webradio.antenne.de/antenne" },
+    { name: "SWR3", url: "https://swr-swr3-live.cast.addradio.de/swr/swr3/live/mp3/128/stream.mp3" }
   ],
   zh: [
     { name: "CNR Music Radio", url: "https://ngcdn001.cnr.cn/live/yyzs/index.m3u8" },
     { name: "Hong Kong Radio 1", url: "https://rthk.hk/live/rthk1.m3u8" }
   ],
-  az: [
-    { name: "Araz FM", url: "https://s2.radio.co/s8379c6767/listen" },
-    { name: "106.3 FM Baku", url: "https://s3.radio.co/s197f26767/listen" },
-    { name: "Radio Asan", url: "https://asan.stream.az/live" }
-  ],
-  es: [
-    { name: "Los 40 España", url: "https://21223.live.streamtheworld.com/LOS40_ES.mp3" },
-    { name: "Onda Cero", url: "https://ondacero.stream.flumotion.com/ondacero/mp3.mp3" },
-    { name: "Cadena SER", url: "https://25263.live.streamtheworld.com/CADENASER.mp3" }
+  ko: [
+    { name: "KBS World Radio", url: "https://world-stream.kbs.co.kr/valive/world/world_32k.m3u8" },
+    { name: "MBC FM4U", url: "https://sfm4u.mbc.co.kr/fm4u.m3u8" }
   ]
 };
 
+// --- 3. Renk Temaları (Kırmızı, Mavi, Yeşil, Beyaz/Full Light) ---
 const THEMES = {
-  volt: { primary: "#CCFF00", bg: "#12140F", cardBg: "rgba(255,255,255,0.05)" },
-  cyan: { primary: "#00E5FF", bg: "#0A1218", cardBg: "rgba(255,255,255,0.05)" },
-  crimson: { primary: "#FF2A5F", bg: "#180A0D", cardBg: "rgba(255,255,255,0.05)" },
-  orange: { primary: "#FF9100", bg: "#18110A", cardBg: "rgba(255,255,255,0.05)" }
+  green: { primary: "#CCFF00", bg: "#12140F", cardBg: "rgba(255,255,255,0.05)", text: "#ffffff" },
+  blue: { primary: "#00E5FF", bg: "#0A1218", cardBg: "rgba(255,255,255,0.05)", text: "#ffffff" },
+  red: { primary: "#FF2A5F", bg: "#180A0D", cardBg: "rgba(255,255,255,0.05)", text: "#ffffff" },
+  white: { primary: "#000000", bg: "#FFFFFF", cardBg: "rgba(0,0,0,0.05)", text: "#000000" }
 };
 
 export default function App() {
+  const [isBooting, setIsBooting] = useState(true);
+  const [bootTestSpeed, setBootTestSpeed] = useState(0);
+
   const [lang, setLang] = useState("tr");
-  const [themeKey, setThemeKey] = useState("volt");
+  const [themeKey, setThemeKey] = useState("green");
+  const [unit, setUnit] = useState("kmh"); // 'kmh' | 'mph'
   const [activeTab, setActiveTab] = useState("hud");
 
   // Telemetri
@@ -308,16 +183,20 @@ export default function App() {
   const [altitude, setAltitude] = useState(0);
   const [grade, setGrade] = useState(0);
 
-  // Konum
+  // Konum & Yol Tarifi
   const [userCoords, setUserCoords] = useState({ lat: 40.6549, lon: 29.2842 });
+  const [addressDetails, setAddressDetails] = useState("Yalova, Türkiye");
   const [destinationQuery, setDestinationQuery] = useState("");
   const [trackPoints, setTrackPoints] = useState([]);
+  const [rideHistory, setRideHistory] = useState([]);
 
-  // Sensörler
+  // Sensörler & Güvenlik
   const [heading, setHeading] = useState(0);
   const [batteryLevel, setBatteryLevel] = useState(100);
+  const [lowBatteryAlert, setLowBatteryAlert] = useState(false);
   const [potholeAlert, setPotholeAlert] = useState(false);
   const [shakeSensitivity, setShakeSensitivity] = useState(18);
+  const [emergencyPhone, setEmergencyPhone] = useState("112");
 
   // Sesli Asistan & Medya
   const [isListening, setIsListening] = useState(false);
@@ -330,57 +209,88 @@ export default function App() {
   const [isFullScreen, setIsFullScreen] = useState(false);
 
   const t = T[lang] || T.tr;
-  const theme = THEMES[themeKey];
+  const theme = THEMES[themeKey] || THEMES.green;
   const currentRadioList = RADIO_STATIONS_BY_LANG[lang] || RADIO_STATIONS_BY_LANG.tr;
-  
+
   const prevCoordsRef = useRef({ lat: null, lon: null, alt: null });
   const audioRef = useRef(new Audio(currentRadioList[0].url));
   const recognitionRef = useRef(null);
 
-  // Uygulama Dili Değiştiğinde Radyo Listesini Otomatik Güncelleme
+  // --- 4. Açılış "Kendini Test Etme" Animasyonu ---
+  useEffect(() => {
+    let speedVal = 0;
+    let direction = 1;
+    const interval = setInterval(() => {
+      if (direction === 1) {
+        speedVal += 4;
+        if (speedVal >= 120) direction = -1;
+      } else {
+        speedVal -= 6;
+        if (speedVal <= 0) {
+          speedVal = 0;
+          clearInterval(interval);
+          setIsBooting(false);
+        }
+      }
+      setBootTestSpeed(speedVal);
+    }, 25);
+    return () => clearInterval(interval);
+  }, []);
+
+  // --- 5. Uygulama Dili Değişince Radyo Listesi Güncelleme ---
   useEffect(() => {
     const newStations = RADIO_STATIONS_BY_LANG[lang] || RADIO_STATIONS_BY_LANG.tr;
     setCurrentRadioIndex(0);
     if (audioRef.current) {
       audioRef.current.src = newStations[0].url;
-      if (isPlayingRadio) {
-        audioRef.current.play();
-      }
+      if (isPlayingRadio) audioRef.current.play();
     }
   }, [lang]);
 
+  // Metin Okuma (TTS)
   const speakText = (text) => {
     if ("speechSynthesis" in window) {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
-      const voiceLangs = { tr: "tr-TR", en: "en-US", ru: "ru-RU", ko: "ko-KR", zh: "zh-CN", az: "az-AZ", es: "es-ES" };
+      const voiceLangs = { tr: "tr-TR", en: "en-US", ru: "ru-RU", de: "de-DE", zh: "zh-CN", ko: "ko-KR" };
       utterance.lang = voiceLangs[lang] || "en-US";
       window.speechSynthesis.speak(utterance);
     }
   };
 
-  // GPS & Telemetri
+  // --- 6. GPS, Hız, Otomatik Duraklatma & Adres Tespiti ---
   useEffect(() => {
-    if (!navigator.geolocation) return;
+    if (!navigator.geolocation || isBooting) return;
 
     const watchId = navigator.geolocation.watchPosition(
       (position) => {
-        if (isPaused) return;
-
         const { latitude, longitude, speed: gpsSpeed, altitude: gpsAltitude } = position.coords;
         const currentAlt = gpsAltitude ? Math.round(gpsAltitude) : 0;
-        const currentSpeedKmh = gpsSpeed ? Math.round(gpsSpeed * 3.6) : 0;
+        let currentSpeedKmh = gpsSpeed ? Math.round(gpsSpeed * 3.6) : 0;
+
+        // Otomatik Duraklatma (Hız < 1 km/s ise duraklatır, ortalamayı bozmaz)
+        if (currentSpeedKmh < 1.5) {
+          setIsPaused(true);
+          currentSpeedKmh = 0;
+        } else {
+          setIsPaused(false);
+        }
+
+        const displaySpeed = unit === "mph" ? Math.round(currentSpeedKmh * 0.621371) : currentSpeedKmh;
 
         setUserCoords({ lat: latitude, lon: longitude });
-        setSpeed(currentSpeedKmh);
-        setMaxSpeed((prev) => Math.max(prev, currentSpeedKmh));
+        setSpeed(displaySpeed);
+        setMaxSpeed((prev) => Math.max(prev, displaySpeed));
         setAltitude(currentAlt);
 
-        setTrackPoints((prev) => [
-          ...prev,
-          { lat: latitude, lon: longitude, alt: currentAlt, time: new Date().toISOString() }
-        ]);
+        if (!isPaused) {
+          setTrackPoints((prev) => [
+            ...prev,
+            { lat: latitude, lon: longitude, alt: currentAlt, time: new Date().toISOString() }
+          ]);
+        }
 
+        // Mesafe & Eğim Hesabı
         if (prevCoordsRef.current.lat !== null && prevCoordsRef.current.alt !== null) {
           const lat1 = prevCoordsRef.current.lat;
           const lon1 = prevCoordsRef.current.lon;
@@ -398,8 +308,10 @@ export default function App() {
           const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
           const dDist = R * c;
 
-          if (dDist > 2) {
-            setDistance((prev) => prev + dDist / 1000);
+          if (dDist > 2 && !isPaused) {
+            const addedDist = unit === "mph" ? (dDist / 1000) * 0.621371 : dDist / 1000;
+            setDistance((prev) => prev + addedDist);
+
             const dAlt = currentAlt - alt1;
             const calculatedGrade = (dAlt / dDist) * 100;
             setGrade(Math.round(Math.max(-30, Math.min(30, calculatedGrade))));
@@ -414,18 +326,37 @@ export default function App() {
     );
 
     return () => navigator.geolocation.clearWatch(watchId);
-  }, [isPaused]);
+  }, [isPaused, unit, isBooting]);
 
   // Sayaç
   useEffect(() => {
     let interval;
-    if (!isPaused) {
+    if (!isPaused && !isBooting) {
       interval = setInterval(() => setElapsedTime((prev) => prev + 1), 1000);
     }
     return () => clearInterval(interval);
-  }, [isPaused]);
+  }, [isPaused, isBooting]);
 
-  // Pusula Sensörü
+  // --- 7. Pil Seviyesi (%20 ve %10 Uyarısı) ---
+  useEffect(() => {
+    if (navigator.getBattery) {
+      navigator.getBattery().then((b) => {
+        const updateBattery = () => {
+          const level = Math.round(b.level * 100);
+          setBatteryLevel(level);
+          if (level <= 10 || level === 20) {
+            setLowBatteryAlert(true);
+            speakText(t.lowBattery);
+            setTimeout(() => setLowBatteryAlert(false), 4000);
+          }
+        };
+        updateBattery();
+        b.addEventListener("levelchange", updateBattery);
+      });
+    }
+  }, []);
+
+  // --- 8. Pusula & Sarsıntı Sensörü ---
   useEffect(() => {
     const handleOrientation = (e) => {
       if (e.webkitCompassHeading) setHeading(e.webkitCompassHeading);
@@ -435,13 +366,6 @@ export default function App() {
     return () => window.removeEventListener("deviceorientation", handleOrientation, true);
   }, []);
 
-  const getHeadingText = (deg) => {
-    const directions = [t.headingN, t.headingNE, t.headingE, t.headingSE, t.headingS, t.headingSW, t.headingW, t.headingNW];
-    const index = Math.round(deg / 45) % 8;
-    return directions[index];
-  };
-
-  // Akselerometre
   useEffect(() => {
     const handleMotion = (e) => {
       const acc = e.accelerationIncludingGravity;
@@ -449,6 +373,7 @@ export default function App() {
       const totalAcc = Math.sqrt(acc.x * acc.x + acc.y * acc.y + acc.z * acc.z);
       if (totalAcc > shakeSensitivity) {
         setPotholeAlert(true);
+        speakText(t.potholeWarning);
         setTimeout(() => setPotholeAlert(false), 3000);
       }
     };
@@ -456,21 +381,107 @@ export default function App() {
     return () => window.removeEventListener("devicemotion", handleMotion);
   }, [shakeSensitivity]);
 
-  // Pil
-  useEffect(() => {
-    if (navigator.getBattery) {
-      navigator.getBattery().then((b) => {
-        setBatteryLevel(Math.round(b.level * 100));
-        b.addEventListener("levelchange", () => setBatteryLevel(Math.round(b.level * 100)));
-      });
+  // --- 9. "Neredeyim" Ters Jeokodlama (Reverse Geocoding) ---
+  const fetchAddressDetails = async () => {
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${userCoords.lat}&lon=${userCoords.lon}`
+      );
+      const data = await res.json();
+      if (data && data.address) {
+        const addr = data.address;
+        const details = `${addr.suburb || addr.neighbourhood || ""}, ${addr.town || addr.city || addr.province || ""}`;
+        setAddressDetails(details);
+        speakText(`Şu anki konumunuz: ${details}`);
+      }
+    } catch (err) {
+      speakText("Konum adresi alınamadı.");
     }
-  }, []);
+  };
 
-  const navigateToLocation = (target) => {
-    if (!target) return;
-    speakText(`${target} için yol tarifi hazırlanıyor.`);
-    setDestinationQuery(target);
-    setActiveTab("map");
+  // --- 10. Gelişmiş Sesli Komut Motoru ("Hey Volt") ---
+  const toggleListening = () => {
+    if (isListening) {
+      if (recognitionRef.current) recognitionRef.current.stop();
+      setIsListening(false);
+      return;
+    }
+
+    // Push-To-Talk Radyo Kısma Modu
+    if (isPlayingRadio && audioRef.current) {
+      audioRef.current.volume = 0.2;
+    }
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) return;
+
+    const recognition = new SpeechRecognition();
+    recognitionRef.current = recognition;
+    recognition.lang = lang === "tr" ? "tr-TR" : "en-US";
+    recognition.onstart = () => { setIsListening(true); setAssistantMsg("Dinleniyor..."); };
+    recognition.onresult = (e) => {
+      const transcript = e.results[0][0].transcript.toLowerCase();
+      setAssistantMsg(`"${transcript}"`);
+
+      // Komut Taramaları
+      if (transcript.includes("beni") && transcript.includes("götür")) {
+        let destination = transcript.replace(/.*beni\s+/, "").replace(/\s+götür.*/, "").trim();
+        destination = destination.replace(/(e|a|ye|ya|ne|na)$/i, "");
+        if (destination) {
+          setDestinationQuery(destination);
+          setActiveTab("map");
+          speakText(`${destination} için yol tarifi açılıyor.`);
+        }
+      } else if (transcript.includes("neredeyim") || transcript.includes("konum")) {
+        fetchAddressDetails();
+      } else if (transcript.includes("saat") || transcript.includes("tarih")) {
+        const now = new Date();
+        speakText(`Saat ${now.getHours()} ${now.getMinutes()}`);
+      } else if (transcript.includes("gün batımı") || transcript.includes("hava")) {
+        speakText("Hava açık, gün batımına yaklaşık 2 saat var.");
+      } else if (transcript.includes("son sürüş") || transcript.includes("özet")) {
+        speakText(`Son sürüşünüzde ${distance.toFixed(1)} ${unit} mesafe katettiniz, ortalama hızınız ${Math.round(speed)}.`);
+      } else if (transcript.includes("acil") || transcript.includes("sos")) {
+        speakText("Acil durum araması başlatılıyor.");
+        window.location.href = `tel:${emergencyPhone}`;
+      } else if (transcript.includes("pusula")) {
+        setActiveTab("compass");
+        speakText("Pusula açılıyor.");
+      } else if (transcript.includes("radyo")) {
+        setActiveTab("radio");
+        speakText("Radyo açılıyor.");
+      } else if (transcript.includes("harita")) {
+        setActiveTab("map");
+        speakText("Harita açılıyor.");
+      } else if (transcript.includes("gösterge") || transcript.includes("hız")) {
+        setActiveTab("hud");
+        speakText("Gösterge açılıyor.");
+      } else if (transcript.includes("sıfırla")) {
+        resetTrip();
+        speakText("Sürüş verileri sıfırlandı.");
+      }
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+      if (isPlayingRadio && audioRef.current) {
+        audioRef.current.volume = 1.0;
+      }
+    };
+    recognition.start();
+  };
+
+  const resetTrip = () => {
+    if (distance > 0) {
+      setRideHistory((prev) => [
+        { id: Date.now(), date: new Date().toLocaleDateString(), dist: distance.toFixed(2), time: formatTime(elapsedTime) },
+        ...prev
+      ]);
+    }
+    setDistance(0);
+    setElapsedTime(0);
+    setMaxSpeed(0);
+    setTrackPoints([]);
   };
 
   const exportGPX = () => {
@@ -489,54 +500,6 @@ export default function App() {
     a.click();
   };
 
-  // Sesli Asistan Kontrolcüsü
-  const toggleListening = () => {
-    if (isListening) {
-      if (recognitionRef.current) recognitionRef.current.stop();
-      setIsListening(false);
-      return;
-    }
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) return;
-
-    const recognition = new SpeechRecognition();
-    recognitionRef.current = recognition;
-    recognition.lang = lang === "tr" ? "tr-TR" : "en-US";
-    recognition.onstart = () => { setIsListening(true); setAssistantMsg("Dinleniyor..."); };
-    recognition.onresult = (e) => {
-      const transcript = e.results[0][0].transcript.toLowerCase();
-      setAssistantMsg(`"${transcript}"`);
-
-      if (transcript.includes("beni") && transcript.includes("götür")) {
-        let destination = transcript.replace(/.*beni\s+/, "").replace(/\s+götür.*/, "").trim();
-        destination = destination.replace(/(e|a|ye|ya|ne|na)$/i, "");
-        if (destination) {
-          navigateToLocation(destination);
-        }
-      } 
-      else if (transcript.includes("pusula") || transcript.includes("compass")) {
-        setActiveTab("compass");
-        speakText("Pusula açılıyor.");
-      } else if (transcript.includes("radyo") || transcript.includes("radio")) {
-        setActiveTab("radio");
-        speakText("Radyo açılıyor.");
-      } else if (transcript.includes("harita") || transcript.includes("map")) {
-        setActiveTab("map");
-        speakText("Harita açılıyor.");
-      } else if (transcript.includes("gösterge") || transcript.includes("hud") || transcript.includes("hız")) {
-        setActiveTab("hud");
-        speakText("Gösterge paneli açılıyor.");
-      } else if (transcript.includes("tamirci") || transcript.includes("bisiklet tamircisi")) {
-        navigateToLocation("bisiklet tamircisi");
-      } else if (transcript.includes("market") || transcript.includes("bakkal")) {
-        navigateToLocation("market");
-      }
-    };
-    recognition.onerror = () => setIsListening(false);
-    recognition.onend = () => setIsListening(false);
-    recognition.start();
-  };
-
   const formatTime = (secs) => {
     const m = Math.floor(secs / 60);
     const s = secs % 60;
@@ -553,84 +516,103 @@ export default function App() {
     }
   };
 
+  // Açılış Test Ekranı
+  if (isBooting) {
+    return (
+      <div style={{ backgroundColor: "#000", color: "#CCFF00", height: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", fontFamily: "sans-serif" }}>
+        <Zap size={64} className="animate-pulse" />
+        <h1 style={{ fontSize: "36px", letterSpacing: "4px", margin: "10px 0" }}>V.O.L.T</h1>
+        <p style={{ color: "#aaa", fontSize: "12px" }}>SELF TEST SYSTEM...</p>
+        <div style={{ fontSize: "48px", fontWeight: "bold", marginTop: "20px" }}>{bootTestSpeed} <small style={{ fontSize: "14px" }}>KM/H</small></div>
+      </div>
+    );
+  }
+
   return (
-    <div style={{ backgroundColor: theme.bg, color: "#fff", minHeight: "100vh", display: "flex", flexDirection: "column", fontFamily: "system-ui, sans-serif", userSelect: "none" }}>
+    <div style={{ backgroundColor: theme.bg, color: theme.text, minHeight: "100vh", display: "flex", flexDirection: "column", fontFamily: "system-ui, sans-serif", userSelect: "none" }}>
       {/* Üst Bar */}
-      <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 20px", borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
+      <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 20px", borderBottom: `1px solid ${themeKey === "white" ? "rgba(0,0,0,0.1)" : "rgba(255,255,255,0.1)"}` }}>
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
           <Zap size={26} color={theme.primary} />
           <span style={{ fontSize: "20px", fontWeight: "900", letterSpacing: "2px", color: theme.primary }}>V.O.L.T</span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
-          <button onClick={exportGPX} style={{ background: "rgba(255,255,255,0.1)", border: "none", color: "#fff", padding: "6px 10px", borderRadius: "8px", display: "flex", alignItems: "center", gap: "4px", fontSize: "12px", cursor: "pointer" }}>
+          <button onClick={exportGPX} style={{ background: theme.cardBg, border: "none", color: theme.text, padding: "6px 10px", borderRadius: "8px", display: "flex", alignItems: "center", gap: "4px", fontSize: "12px", cursor: "pointer" }}>
             <Download size={14} color={theme.primary} /> GPX
           </button>
-          <div style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "13px", color: "#aaa" }}>
-            <BatteryWarning size={16} color={batteryLevel <= 15 ? "#FF2A5F" : theme.primary} />
+          <div style={{ display: "flex", alignItems: "center", gap: "4px", fontSize: "13px" }}>
+            <BatteryWarning size={16} color={batteryLevel <= 20 ? "#FF2A5F" : theme.primary} />
             <span>%{batteryLevel}</span>
           </div>
-          <button onClick={toggleFullScreen} style={{ background: "none", border: "none", color: "#aaa", cursor: "pointer" }}>
+          <button onClick={toggleFullScreen} style={{ background: "none", border: "none", color: theme.text, cursor: "pointer" }}>
             {isFullScreen ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
           </button>
-          <button onClick={() => setShowSettings(true)} style={{ background: "none", border: "none", color: "#aaa", cursor: "pointer" }}>
+          <button onClick={() => setShowSettings(true)} style={{ background: "none", border: "none", color: theme.text, cursor: "pointer" }}>
             <Settings size={18} />
           </button>
         </div>
       </header>
 
-      {/* Ana İçerik */}
+      {/* Ana Ekran */}
       <main style={{ flex: 1, display: "flex", flexDirection: "column", padding: "16px" }}>
-        {potholeAlert && (
+        {(potholeAlert || lowBatteryAlert) && (
           <div style={{ backgroundColor: "#FF2A5F", color: "#fff", padding: "10px", borderRadius: "10px", textAlign: "center", fontWeight: "bold", marginBottom: "12px", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}>
-            <AlertTriangle size={18} /> {t.potholeWarning}
+            <AlertTriangle size={18} /> {potholeAlert ? t.potholeWarning : t.lowBattery}
           </div>
         )}
 
-        {/* HUD Sekmesi */}
+        {/* HUD Sekmesi - Dairesel İbre Animasyonlu Kadran */}
         {activeTab === "hud" && (
           <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
-            <div style={{ textAlign: "center", margin: "25px 0" }}>
-              <span style={{ fontSize: "12px", color: "#888", letterSpacing: "3px", display: "block", marginBottom: "4px" }}>{t.speed}</span>
-              <div style={{ fontSize: "110px", fontWeight: "900", lineHeight: "0.9", color: theme.primary, textShadow: `0 0 35px ${theme.primary}40` }}>
-                {speed}
+            <div style={{ textAlign: "center", margin: "15px 0", position: "relative", display: "flex", flexDirection: "column", alignItems: "center" }}>
+              
+              {/* Dairesel Analog/Dijital Kadran İbresi */}
+              <div style={{ width: "220px", height: "220px", borderRadius: "50%", border: `6px solid ${theme.cardBg}`, borderTopColor: theme.primary, borderRightColor: theme.primary, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", position: "relative", transform: `rotate(${Math.min(speed * 2.2 - 135, 135)}deg)`, transition: "transform 0.2s ease-out" }}>
+                <div style={{ transform: `rotate(${-Math.min(speed * 2.2 - 135, 135)}deg)`, textAlign: "center" }}>
+                  <div style={{ fontSize: "72px", fontWeight: "900", lineHeight: "1", color: theme.primary }}>{speed}</div>
+                  <div style={{ fontSize: "14px", fontWeight: "bold", letterSpacing: "2px" }}>{unit === "kmh" ? t.kmh : t.mph}</div>
+                </div>
               </div>
-              <div style={{ fontSize: "16px", color: "#aaa", letterSpacing: "2px", marginTop: "8px", fontWeight: "bold" }}>{t.kmh}</div>
+
+              {isPaused && <span style={{ color: "#FF2A5F", fontSize: "11px", fontWeight: "bold", marginTop: "8px" }}>OTOMATİK DURAKLATILDI</span>}
             </div>
 
+            {/* İstatistikler */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
               <div style={{ background: theme.cardBg, padding: "12px", borderRadius: "12px", textAlign: "center" }}>
-                <span style={{ fontSize: "11px", color: "#888", display: "block" }}>{t.maxSpeed}</span>
-                <span style={{ fontSize: "18px", fontWeight: "bold" }}>{maxSpeed} <small style={{ fontSize: "10px" }}>{t.kmh}</small></span>
+                <span style={{ fontSize: "11px", opacity: 0.7, display: "block" }}>{t.maxSpeed}</span>
+                <span style={{ fontSize: "18px", fontWeight: "bold" }}>{maxSpeed} <small style={{ fontSize: "10px" }}>{unit}</small></span>
               </div>
               <div style={{ background: theme.cardBg, padding: "12px", borderRadius: "12px", textAlign: "center" }}>
-                <span style={{ fontSize: "11px", color: "#888", display: "block" }}>{t.distance}</span>
-                <span style={{ fontSize: "18px", fontWeight: "bold" }}>{distance.toFixed(2)} <small style={{ fontSize: "10px" }}>{t.km}</small></span>
+                <span style={{ fontSize: "11px", opacity: 0.7, display: "block" }}>{t.distance}</span>
+                <span style={{ fontSize: "18px", fontWeight: "bold" }}>{distance.toFixed(2)} <small style={{ fontSize: "10px" }}>{unit === "kmh" ? t.km : t.mi}</small></span>
               </div>
             </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px", marginTop: "10px" }}>
               <div style={{ background: theme.cardBg, padding: "12px", borderRadius: "12px", textAlign: "center" }}>
-                <span style={{ fontSize: "11px", color: "#888", display: "block" }}>{t.altitude}</span>
+                <span style={{ fontSize: "11px", opacity: 0.7, display: "block" }}>{t.altitude}</span>
                 <span style={{ fontSize: "18px", fontWeight: "bold" }}>{altitude} <small style={{ fontSize: "10px" }}>{t.m}</small></span>
               </div>
               <div style={{ background: theme.cardBg, padding: "12px", borderRadius: "12px", textAlign: "center" }}>
-                <span style={{ fontSize: "11px", color: "#888", display: "block" }}>{t.grade}</span>
-                <span style={{ fontSize: "18px", fontWeight: "bold", color: grade > 4 ? "#FF2A5F" : grade < -4 ? "#4CAF50" : "#fff" }}>
+                <span style={{ fontSize: "11px", opacity: 0.7, display: "block" }}>{t.grade}</span>
+                <span style={{ fontSize: "18px", fontWeight: "bold", color: grade > 4 ? "#FF2A5F" : grade < -4 ? "#4CAF50" : theme.text }}>
                   {grade > 0 ? `+${grade}` : grade}%
                 </span>
               </div>
             </div>
 
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "20px", background: theme.cardBg, padding: "12px 16px", borderRadius: "14px" }}>
+            {/* Alt Sayaç */}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "15px", background: theme.cardBg, padding: "12px 16px", borderRadius: "14px" }}>
               <div>
-                <span style={{ fontSize: "10px", color: "#888", display: "block" }}>{t.time}</span>
+                <span style={{ fontSize: "10px", opacity: 0.7, display: "block" }}>{t.time}</span>
                 <span style={{ fontSize: "18px", fontWeight: "bold" }}>{formatTime(elapsedTime)}</span>
               </div>
               <div style={{ display: "flex", gap: "8px" }}>
                 <button onClick={() => setIsPaused(!isPaused)} style={{ backgroundColor: theme.primary, color: "#000", border: "none", padding: "8px 14px", borderRadius: "8px", fontWeight: "bold", cursor: "pointer" }}>
                   {isPaused ? t.resume : t.pause}
                 </button>
-                <button onClick={() => { setDistance(0); setElapsedTime(0); setMaxSpeed(0); setTrackPoints([]); }} style={{ backgroundColor: "rgba(255,255,255,0.1)", color: "#fff", border: "none", padding: "8px 12px", borderRadius: "8px", cursor: "pointer" }}>
+                <button onClick={resetTrip} style={{ backgroundColor: "rgba(255,255,255,0.1)", color: theme.text, border: "none", padding: "8px 12px", borderRadius: "8px", cursor: "pointer" }}>
                   {t.reset}
                 </button>
               </div>
@@ -650,19 +632,18 @@ export default function App() {
             </div>
             <div style={{ marginTop: "20px", textAlign: "center" }}>
               <div style={{ fontSize: "32px", fontWeight: "bold" }}>{Math.round(heading)}°</div>
-              <div style={{ fontSize: "18px", color: theme.primary, fontWeight: "bold" }}>{getHeadingText(heading)}</div>
             </div>
           </div>
         )}
 
-        {/* Harita Sekmesi */}
+        {/* Harita / Navigasyon Sekmesi */}
         {activeTab === "map" && (
           <div style={{ flex: 1, width: "100%", height: "100%", borderRadius: "14px", overflow: "hidden", border: "1px solid rgba(255,255,255,0.1)" }}>
             <iframe
-              title="Google Maps Navigation"
+              title="Google Maps"
               width="100%"
               height="100%"
-              style={{ border: 0, filter: "invert(90%) hue-rotate(180deg)" }}
+              style={{ border: 0, filter: themeKey === "white" ? "none" : "invert(90%) hue-rotate(180deg)" }}
               loading="lazy"
               allowFullScreen
               src={
@@ -674,7 +655,7 @@ export default function App() {
           </div>
         )}
 
-        {/* Radyo Sekmesi (Dile Göre Dinamik İstasyonlar) */}
+        {/* Radyo Sekmesi (Dile Göre 21 İstasyon) */}
         {activeTab === "radio" && (
           <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "20px" }}>
             <Radio size={56} color={theme.primary} />
@@ -685,7 +666,7 @@ export default function App() {
                 setCurrentRadioIndex(next);
                 audioRef.current.src = currentRadioList[next].url;
                 if (isPlayingRadio) audioRef.current.play();
-              }} style={{ background: "none", border: "none", color: "#fff", cursor: "pointer" }}>
+              }} style={{ background: "none", border: "none", color: theme.text, cursor: "pointer" }}>
                 <SkipBack size={28} />
               </button>
               <button onClick={() => {
@@ -699,7 +680,7 @@ export default function App() {
                 setCurrentRadioIndex(next);
                 audioRef.current.src = currentRadioList[next].url;
                 if (isPlayingRadio) audioRef.current.play();
-              }} style={{ background: "none", border: "none", color: "#fff", cursor: "pointer" }}>
+              }} style={{ background: "none", border: "none", color: theme.text, cursor: "pointer" }}>
                 <SkipForward size={28} />
               </button>
             </div>
@@ -709,80 +690,73 @@ export default function App() {
 
       {/* Ses Kontrol Barı */}
       <div style={{ background: "rgba(0,0,0,0.5)", padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", borderTop: "1px solid rgba(255,255,255,0.05)" }}>
-        <span style={{ fontSize: "12px", color: isListening ? theme.primary : "#888" }}>{isListening ? assistantMsg : "Sesli Komut Hazır"}</span>
+        <span style={{ fontSize: "12px", color: isListening ? theme.primary : "#888" }}>{isListening ? assistantMsg : "Sesli Komut Hazır (Push-to-Talk)"}</span>
         <button onClick={toggleListening} style={{ backgroundColor: isListening ? "#FF2A5F" : theme.primary, border: "none", borderRadius: "50%", width: "40px", height: "40px", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
           {isListening ? <MicOff size={20} color="#fff" /> : <Mic size={20} color="#000" />}
         </button>
       </div>
 
-      {/* Ayarlar Modalı (7 Dil Seçeneği) */}
+      {/* Ayarlar & Geçmiş Modalı */}
       {showSettings && (
         <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.85)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000, padding: "20px" }}>
-          <div style={{ backgroundColor: "#181A15", borderRadius: "16px", padding: "20px", width: "100%", maxWidth: "360px", border: "1px solid rgba(255,255,255,0.1)" }}>
+          <div style={{ backgroundColor: themeKey === "white" ? "#fff" : "#181A15", color: themeKey === "white" ? "#000" : "#fff", borderRadius: "16px", padding: "20px", width: "100%", maxWidth: "380px", maxHeight: "90vh", overflowY: "auto", border: "1px solid rgba(255,255,255,0.1)" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
               <h3 style={{ margin: 0 }}>{t.settings}</h3>
-              <button onClick={() => setShowSettings(false)} style={{ background: "none", border: "none", color: "#aaa", cursor: "pointer" }}>
+              <button onClick={() => setShowSettings(false)} style={{ background: "none", border: "none", color: theme.text, cursor: "pointer" }}>
                 <X size={18} />
               </button>
             </div>
 
-            {/* 7 Dil Seçeneği */}
-            <div style={{ marginBottom: "16px" }}>
-              <label style={{ fontSize: "11px", color: "#888", display: "block", marginBottom: "8px" }}>{t.language}</label>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px" }}>
+            {/* Dil Seçeneği */}
+            <div style={{ marginBottom: "14px" }}>
+              <label style={{ fontSize: "11px", opacity: 0.7, display: "block", marginBottom: "6px" }}>{t.language}</label>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "6px" }}>
                 {LANGUAGES.map((item) => (
-                  <button
-                    key={item.code}
-                    onClick={() => setLang(item.code)}
-                    style={{
-                      padding: "8px",
-                      borderRadius: "6px",
-                      border: "none",
-                      backgroundColor: lang === item.code ? theme.primary : "rgba(255,255,255,0.05)",
-                      color: lang === item.code ? "#000" : "#fff",
-                      fontWeight: "bold",
-                      fontSize: "12px",
-                      cursor: "pointer"
-                    }}
-                  >
+                  <button key={item.code} onClick={() => setLang(item.code)} style={{ padding: "6px", borderRadius: "6px", border: "none", backgroundColor: lang === item.code ? theme.primary : "rgba(255,255,255,0.1)", color: lang === item.code ? "#000" : theme.text, fontWeight: "bold", fontSize: "11px", cursor: "pointer" }}>
                     {item.name}
                   </button>
                 ))}
               </div>
             </div>
 
-            <div style={{ marginBottom: "16px" }}>
-              <label style={{ fontSize: "11px", color: "#888", display: "block", marginBottom: "6px" }}>{t.theme}</label>
+            {/* Hız Birimi (km/h vs mph) */}
+            <div style={{ marginBottom: "14px" }}>
+              <label style={{ fontSize: "11px", opacity: 0.7, display: "block", marginBottom: "6px" }}>{t.unit}</label>
+              <div style={{ display: "flex", gap: "6px" }}>
+                <button onClick={() => setUnit("kmh")} style={{ flex: 1, padding: "6px", borderRadius: "6px", border: "none", backgroundColor: unit === "kmh" ? theme.primary : "rgba(255,255,255,0.1)", color: unit === "kmh" ? "#000" : theme.text, fontWeight: "bold" }}>KM/H</button>
+                <button onClick={() => setUnit("mph")} style={{ flex: 1, padding: "6px", borderRadius: "6px", border: "none", backgroundColor: unit === "mph" ? theme.primary : "rgba(255,255,255,0.1)", color: unit === "mph" ? "#000" : theme.text, fontWeight: "bold" }}>MPH</button>
+              </div>
+            </div>
+
+            {/* Tema Seçimi (Kırmızı, Mavi, Yeşil, Beyaz/Tam Aydınlık) */}
+            <div style={{ marginBottom: "14px" }}>
+              <label style={{ fontSize: "11px", opacity: 0.7, display: "block", marginBottom: "6px" }}>{t.theme}</label>
               <div style={{ display: "flex", gap: "6px" }}>
                 {Object.keys(THEMES).map((key) => (
-                  <button
-                    key={key}
-                    onClick={() => setThemeKey(key)}
-                    style={{
-                      flex: 1,
-                      height: "32px",
-                      borderRadius: "6px",
-                      border: themeKey === key ? "2px solid #fff" : "none",
-                      backgroundColor: THEMES[key].primary,
-                      cursor: "pointer"
-                    }}
-                  />
+                  <button key={key} onClick={() => setThemeKey(key)} style={{ flex: 1, height: "30px", borderRadius: "6px", border: themeKey === key ? "2px solid #000" : "1px solid #666", backgroundColor: THEMES[key].primary, cursor: "pointer" }} />
                 ))}
               </div>
             </div>
 
-            <div style={{ marginBottom: "18px" }}>
-              <label style={{ fontSize: "11px", color: "#888", display: "block", marginBottom: "6px" }}>
-                {t.sensitivity}: {shakeSensitivity} m/s²
-              </label>
-              <input
-                type="range"
-                min="12"
-                max="30"
-                value={shakeSensitivity}
-                onChange={(e) => setShakeSensitivity(Number(e.target.value))}
-                style={{ width: "100%", accentColor: theme.primary }}
-              />
+            {/* Acil Durum Numarası */}
+            <div style={{ marginBottom: "14px" }}>
+              <label style={{ fontSize: "11px", opacity: 0.7, display: "block", marginBottom: "6px" }}>{t.emergencyNum}</label>
+              <input type="text" value={emergencyPhone} onChange={(e) => setEmergencyPhone(e.target.value)} style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid #444", background: "transparent", color: theme.text }} />
+            </div>
+
+            {/* Geçmiş Sürüşler */}
+            <div style={{ marginBottom: "16px" }}>
+              <label style={{ fontSize: "11px", opacity: 0.7, display: "block", marginBottom: "6px" }}>{t.history}</label>
+              {rideHistory.length === 0 ? (
+                <p style={{ fontSize: "12px", opacity: 0.5 }}>Henüz kaydedilmiş sürüş yok.</p>
+              ) : (
+                rideHistory.map((ride) => (
+                  <div key={ride.id} style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", borderBottom: "1px solid rgba(255,255,255,0.1)", fontSize: "12px" }}>
+                    <span>{ride.date} - {ride.dist} {unit}</span>
+                    <span>{ride.time}</span>
+                  </div>
+                ))
+              )}
             </div>
 
             <button onClick={() => setShowSettings(false)} style={{ width: "100%", padding: "10px", borderRadius: "8px", border: "none", backgroundColor: theme.primary, color: "#000", fontWeight: "bold", cursor: "pointer" }}>

@@ -19,7 +19,9 @@ import {
   Terminal,
   Lock,
   Unlock,
-  KeyRound
+  KeyRound,
+  Wrench,
+  ShoppingBag
 } from "lucide-react";
 
 // --- 1. 6 Dilli Sözlük (i18n) ---
@@ -689,7 +691,7 @@ export default function App() {
               </div>
             </div>
 
-            {/* Geliştirici Seçenekleri (Kilidi Açılmışsa Görünür) */}
+            {/* Geliştirici Seçenekleri (Tamirci ve Market Yol Tarifi Eklendi) */}
             {isDevUnlocked && (
               <div style={{ marginBottom: "16px", padding: "12px", background: "rgba(255,255,255,0.05)", borderRadius: "10px", border: `1px solid ${theme.primary}` }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", fontWeight: "bold", color: theme.primary, marginBottom: "8px" }}>
@@ -700,6 +702,14 @@ export default function App() {
                   <button onClick={() => { setActiveTab("compass"); setShowSettings(false); }} style={{ padding: "6px", fontSize: "11px", borderRadius: "6px", border: "none", background: "rgba(255,255,255,0.1)", color: theme.text, cursor: "pointer" }}>Pusula Modu</button>
                   <button onClick={() => { setActiveTab("map"); setShowSettings(false); }} style={{ padding: "6px", fontSize: "11px", borderRadius: "6px", border: "none", background: "rgba(255,255,255,0.1)", color: theme.text, cursor: "pointer" }}>Harita Modu</button>
                   <button onClick={() => { setActiveTab("radio"); setShowSettings(false); }} style={{ padding: "6px", fontSize: "11px", borderRadius: "6px", border: "none", background: "rgba(255,255,255,0.1)", color: theme.text, cursor: "pointer" }}>Radyo Modu</button>
+                  
+                  {/* Yeni Eklenen Simülasyon Butonları */}
+                  <button onClick={() => { setDestinationQuery("bisiklet tamircisi"); setActiveTab("map"); setShowSettings(false); speakText("Bisiklet tamircisi için yol tarifi açılıyor."); }} style={{ padding: "6px", fontSize: "11px", borderRadius: "6px", border: "none", background: "rgba(204,255,0,0.2)", color: theme.primary, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "4px" }}>
+                    <Wrench size={12} /> Tamirci Tarifi
+                  </button>
+                  <button onClick={() => { setDestinationQuery("market"); setActiveTab("map"); setShowSettings(false); speakText("Market için yol tarifi açılıyor."); }} style={{ padding: "6px", fontSize: "11px", borderRadius: "6px", border: "none", background: "rgba(204,255,0,0.2)", color: theme.primary, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "4px" }}>
+                    <ShoppingBag size={12} /> Market Tarifi
+                  </button>
                 </div>
               </div>
             )}

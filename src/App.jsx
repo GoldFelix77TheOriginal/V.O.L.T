@@ -24,7 +24,7 @@ import {
   ShoppingBag
 } from "lucide-react";
 
-// --- 1. 6 Dilli Sözlük (i18n) ---
+// --- 1. 6 Dilli Sözlük ve Ses Metinleri (i18n & TTS) ---
 const T = {
   tr: {
     speed: "HIZ",
@@ -59,6 +59,13 @@ const T = {
     hud: "GÖSTERGE",
     exportGpx: "GPX İNDİR",
     devOptions: "GELİŞTİRİCİ SEÇENEKLERİ",
+    voiceDevUnlocked: "Geliştirici seçenekleri açıldı.",
+    voiceNav: "için yol tarifi hazırlanıyor.",
+    voiceCompass: "Pusula modu açılıyor.",
+    voiceRadio: "Radyo açılıyor.",
+    voiceMap: "Harita modu açılıyor.",
+    voiceHud: "Gösterge paneli açılıyor.",
+    voiceReset: "Sürüş verileri sıfırlandı.",
     headingN: "K", headingNE: "KD", headingE: "D", headingSE: "GD",
     headingS: "G", headingSW: "GB", headingW: "B", headingNW: "KB"
   },
@@ -95,20 +102,27 @@ const T = {
     hud: "HUD",
     exportGpx: "EXPORT GPX",
     devOptions: "DEVELOPER OPTIONS",
+    voiceDevUnlocked: "Developer options unlocked.",
+    voiceNav: "Getting directions for",
+    voiceCompass: "Opening compass mode.",
+    voiceRadio: "Opening radio.",
+    voiceMap: "Opening map mode.",
+    voiceHud: "Opening dashboard.",
+    voiceReset: "Ride data reset.",
     headingN: "N", headingNE: "NE", headingE: "E", headingSE: "SE",
     headingS: "S", headingSW: "SW", headingW: "W", headingNW: "NW"
   },
   ru: {
-    speed: "СКОРОСТЬ", maxSpeed: "МАКС.", avgSpeed: "СРЕД.", distance: "ДИСТАНЦИЯ", time: "ВРЕМЯ", pause: "ПАУЗА", resume: "ПРОДОЛЖИТЬ", reset: "СБРОС", altitude: "ВЫСОТА", grade: "УКЛОН", settings: "НАСТРОЙКИ", language: "ЯЗЫК", theme: "ТЕМА", unit: "ЕД. СКОРОСТИ", sensitivity: "ЧУВСТВИТЕЛЬНОСТЬ", emergencyNum: "АВАРИЙНЫЙ НОМЕР", history: "ИСТОРИЯ", clearHistory: "ОЧИСТИТЬ", close: "ЗАКРЫТЬ", potholeWarning: "ВЫБОИНА!", lowBattery: "НИЗКИЙ ЗАРЯД!", kmh: "км/ч", mph: "миль/ч", km: "км", mi: "миль", m: "м", radio: "РАДИО", compass: "КОМПАС", map: "КАРТА", hud: "СПИДОМЕТР", exportGpx: "GPX", devOptions: "ОПЦИИ РАЗРАБОТЧИКА", headingN: "С", headingNE: "СВ", headingE: "В", headingSE: "ЮВ", headingS: "Ю", headingSW: "ЮЗ", headingW: "З", headingNW: "СЗ"
+    speed: "СКОРОСТЬ", maxSpeed: "МАКС.", avgSpeed: "СРЕД.", distance: "ДИСТАНЦИЯ", time: "ВРЕМЯ", pause: "ПАУЗА", resume: "ПРОДОЛЖИТЬ", reset: "СБРОС", altitude: "ВЫСОТА", grade: "УКЛОН", settings: "НАСТРОЙКИ", language: "ЯЗЫК", theme: "ТЕМА", unit: "ЕД. СКОРОСТИ", sensitivity: "ЧУВСТВИТЕЛЬНОСТЬ", emergencyNum: "АВАРИЙНЫЙ НОМЕР", history: "ИСТОРИЯ", clearHistory: "ОЧИСТИТЬ", close: "ЗАКРЫТЬ", potholeWarning: "ВЫБОИНА!", lowBattery: "НИЗКИЙ ЗАРЯД!", kmh: "км/ч", mph: "миль/ч", km: "км", mi: "миль", m: "м", radio: "РАДИО", compass: "КОМПАС", map: "КАРТА", hud: "СПИДОМЕТР", exportGpx: "GPX", devOptions: "ОПЦИИ РАЗРАБОТЧИКА", voiceDevUnlocked: "Режим разработчика включен.", voiceNav: "Маршрут для", voiceCompass: "Открываю компас.", voiceRadio: "Включаю радио.", voiceMap: "Открываю карту.", voiceHud: "Открываю спидометр.", voiceReset: "Данные сброшены.", headingN: "С", headingNE: "СВ", headingE: "В", headingSE: "ЮВ", headingS: "Ю", headingSW: "ЮЗ", headingW: "З", headingNW: "СЗ"
   },
   de: {
-    speed: "GESCHWINDIGKEIT", maxSpeed: "MAX", avgSpeed: "SCHNITT", distance: "STRECKE", time: "ZEIT", pause: "PAUSE", resume: "WEITER", reset: "RESET", altitude: "HÖHE", grade: "STEIGUNG", settings: "EINSTELLUNGEN", language: "SPRACHE", theme: "THEMA", unit: "EINHEIT", sensitivity: "EMPFINDLICHKEIT", emergencyNum: "NOTRUFNUMMER", history: "VERLAUF", clearHistory: "VERLAUF LÖSCHEN", close: "SCHLIESSEN", potholeWarning: "SCHLAGLOCH!", lowBattery: "AKKU FAST LEER!", kmh: "km/h", mph: "mph", km: "km", mi: "mi", m: "m", radio: "RADIO", compass: "KOMPASS", map: "KARTE", hud: "HUD", exportGpx: "GPX", devOptions: "ENTWICKLEROPTIONEN", headingN: "N", headingNE: "NO", headingE: "O", headingSE: "SO", headingS: "S", headingSW: "SW", headingW: "W", headingNW: "NW"
+    speed: "GESCHWINDIGKEIT", maxSpeed: "MAX", avgSpeed: "SCHNITT", distance: "STRECKE", time: "ZEIT", pause: "PAUSE", resume: "WEITER", reset: "RESET", altitude: "HÖHE", grade: "STEIGUNG", settings: "EINSTELLUNGEN", language: "SPRACHE", theme: "THEMA", unit: "EINHEIT", sensitivity: "EMPFINDLICHKEIT", emergencyNum: "NOTRUFNUMMER", history: "VERLAUF", clearHistory: "VERLAUF LÖSCHEN", close: "SCHLIESSEN", potholeWarning: "SCHLAGLOCH!", lowBattery: "AKKU FAST LEER!", kmh: "km/h", mph: "mph", km: "km", mi: "mi", m: "m", radio: "RADIO", compass: "KOMPASS", map: "KARTE", hud: "HUD", exportGpx: "GPX", devOptions: "ENTWICKLEROPTIONEN", voiceDevUnlocked: "Entwickleroptionen freigeschaltet.", voiceNav: "Route wird berechnet für", voiceCompass: "Kompass wird geöffnet.", voiceRadio: "Radio wird geöffnet.", voiceMap: "Karte wird geöffnet.", voiceHud: "Tacho wird geöffnet.", voiceReset: "Fahrdaten zurückgesetzt.", headingN: "N", headingNE: "NO", headingE: "O", headingSE: "SO", headingS: "S", headingSW: "SW", headingW: "W", headingNW: "NW"
   },
   zh: {
-    speed: "速度", maxSpeed: "最高速", avgSpeed: "均速", distance: "距离", time: "时间", pause: "暂停", resume: "继续", reset: "重置", altitude: "海拔", grade: "坡度", settings: "设置", language: "语言", theme: "主题", unit: "单位", sensitivity: "灵敏度", emergencyNum: "紧急电话", history: "历史记录", clearHistory: "清除历史", close: "关闭", potholeWarning: "检测到坑洼!", lowBattery: "电量低!", kmh: "km/h", mph: "mph", km: "km", mi: "mi", m: "m", radio: "收音机", compass: "指南针", map: "地图", hud: "仪表盘", exportGpx: "GPX", devOptions: "开发者选项", headingN: "北", headingNE: "东北", headingE: "东", headingSE: "东南", headingS: "南", headingSW: "西南", headingW: "西", headingNW: "西北"
+    speed: "速度", maxSpeed: "最高速", avgSpeed: "均速", distance: "距离", time: "时间", pause: "暂停", resume: "继续", reset: "重置", altitude: "海拔", grade: "坡度", settings: "设置", language: "语言", theme: "主题", unit: "单位", sensitivity: "灵敏度", emergencyNum: "紧急电话", history: "历史记录", clearHistory: "清除历史", close: "关闭", potholeWarning: "检测到坑洼!", lowBattery: "电量低!", kmh: "km/h", mph: "mph", km: "km", mi: "mi", m: "m", radio: "收音机", compass: "指南针", map: "地图", hud: "仪表盘", exportGpx: "GPX", devOptions: "开发者选项", voiceDevUnlocked: "开发者选项已解锁。", voiceNav: "正在导航至", voiceCompass: "打开指南针。", voiceRadio: "打开收音机。", voiceMap: "打开地图。", voiceHud: "打开仪表盘。", voiceReset: "骑行数据已重置。", headingN: "北", headingNE: "东北", headingE: "东", headingSE: "东南", headingS: "南", headingSW: "西南", headingW: "西", headingNW: "西北"
   },
   ko: {
-    speed: "속도", maxSpeed: "최고속도", avgSpeed: "평균속도", distance: "거리", time: "시간", pause: "일시정지", resume: "재개", reset: "초기화", altitude: "고도", grade: "경사도", settings: "설정", language: "언어", theme: "테마", unit: "단위", sensitivity: "감도", emergencyNum: "비상 연락처", history: "주행 기록", clearHistory: "기록 삭제", close: "닫기", potholeWarning: "충격 감지!", lowBattery: "배터리 부족!", kmh: "km/h", mph: "mph", km: "km", mi: "mi", m: "m", radio: "라디오", compass: "나침반", map: "지도", hud: "계기판", exportGpx: "GPX", devOptions: "개발자 옵션", headingN: "북", headingNE: "북동", headingE: "동", headingSE: "남동", headingS: "남", headingSW: "남서", headingW: "서", headingNW: "북서"
+    speed: "속도", maxSpeed: "최고속도", avgSpeed: "평균속도", distance: "거리", time: "시간", pause: "일시정지", resume: "재개", reset: "초기화", altitude: "고도", grade: "경사도", settings: "설정", language: "언어", theme: "테마", unit: "단위", sensitivity: "감도", emergencyNum: "비상 연락처", history: "주행 기록", clearHistory: "기록 삭제", close: "닫기", potholeWarning: "충격 감지!", lowBattery: "배터리 부족!", kmh: "km/h", mph: "mph", km: "km", mi: "mi", m: "m", radio: "라디오", compass: "나침반", map: "지도", hud: "계기판", exportGpx: "GPX", devOptions: "개발자 옵션", voiceDevUnlocked: "개발자 옵션이 해제되었습니다.", voiceNav: "경로를 검색합니다:", voiceCompass: "나침반을 엽니다.", voiceRadio: "라디오를 켭니다.", voiceMap: "지도를 엽니다.", voiceHud: "계기판을 엽니다.", voiceReset: "주행 데이터가 초기화되었습니다.", headingN: "북", headingNE: "북동", headingE: "동", headingSE: "남동", headingS: "남", headingSW: "남서", headingW: "서", headingNW: "북서"
   }
 };
 
@@ -208,6 +222,24 @@ export default function App() {
   const audioRef = useRef(new Audio(currentRadioList[0].url));
   const recognitionRef = useRef(null);
 
+  // ÇOK DİLLİ SES MOTORU (TTS)
+  const speakText = (text) => {
+    if ("speechSynthesis" in window) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      const voiceLangs = {
+        tr: "tr-TR",
+        en: "en-US",
+        ru: "ru-RU",
+        de: "de-DE",
+        zh: "zh-CN",
+        ko: "ko-KR"
+      };
+      utterance.lang = voiceLangs[lang] || "en-US";
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
   // Açılış Animasyonu
   useEffect(() => {
     let speedVal = 0;
@@ -238,16 +270,6 @@ export default function App() {
       if (isPlayingRadio) audioRef.current.play();
     }
   }, [lang]);
-
-  const speakText = (text) => {
-    if ("speechSynthesis" in window) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      const voiceLangs = { tr: "tr-TR", en: "en-US", ru: "ru-RU", de: "de-DE", zh: "zh-CN", ko: "ko-KR" };
-      utterance.lang = voiceLangs[lang] || "en-US";
-      window.speechSynthesis.speak(utterance);
-    }
-  };
 
   // GPS & Telemetri
   useEffect(() => {
@@ -368,14 +390,14 @@ export default function App() {
       setShowPasswordModal(false);
       setInputPassword("");
       setPasswordError(false);
-      speakText("Geliştirici seçenekleri açıldı.");
+      speakText(t.voiceDevUnlocked);
     } else {
       setPasswordError(true);
       setInputPassword("");
     }
   };
 
-  // Sesli Asistan
+  // Çok Dilli Sesli Asistan Tanıma Motoru
   const toggleListening = () => {
     if (isListening) {
       if (recognitionRef.current) recognitionRef.current.stop();
@@ -392,35 +414,38 @@ export default function App() {
 
     const recognition = new SpeechRecognition();
     recognitionRef.current = recognition;
-    recognition.lang = lang === "tr" ? "tr-TR" : "en-US";
-    recognition.onstart = () => { setIsListening(true); setAssistantMsg("Dinleniyor..."); };
+    
+    const voiceLangs = { tr: "tr-TR", en: "en-US", ru: "ru-RU", de: "de-DE", zh: "zh-CN", ko: "ko-KR" };
+    recognition.lang = voiceLangs[lang] || "en-US";
+
+    recognition.onstart = () => { setIsListening(true); setAssistantMsg("..."); };
     recognition.onresult = (e) => {
       const transcript = e.results[0][0].transcript.toLowerCase();
       setAssistantMsg(`"${transcript}"`);
 
-      if (transcript.includes("beni") && transcript.includes("götür")) {
-        let destination = transcript.replace(/.*beni\s+/, "").replace(/\s+götür.*/, "").trim();
+      if (transcript.includes("beni") || transcript.includes("take me") || transcript.includes("führung")) {
+        let destination = transcript.replace(/.*(beni|take me to|führung)\s+/, "").replace(/\s+(götür|to|führen).*/, "").trim();
         destination = destination.replace(/(e|a|ye|ya|ne|na)$/i, "");
         if (destination) {
           setDestinationQuery(destination);
           setActiveTab("map");
-          speakText(`${destination} için yol tarifi açılıyor.`);
+          speakText(`${destination} ${t.voiceNav}`);
         }
-      } else if (transcript.includes("pusula")) {
+      } else if (transcript.includes("pusula") || transcript.includes("compass") || transcript.includes("компас")) {
         setActiveTab("compass");
-        speakText("Pusula açılıyor.");
-      } else if (transcript.includes("radyo")) {
+        speakText(t.voiceCompass);
+      } else if (transcript.includes("radyo") || transcript.includes("radio") || transcript.includes("радио")) {
         setActiveTab("radio");
-        speakText("Radyo açılıyor.");
-      } else if (transcript.includes("harita")) {
+        speakText(t.voiceRadio);
+      } else if (transcript.includes("harita") || transcript.includes("map") || transcript.includes("карта")) {
         setActiveTab("map");
-        speakText("Harita açılıyor.");
-      } else if (transcript.includes("gösterge") || transcript.includes("hız")) {
+        speakText(t.voiceMap);
+      } else if (transcript.includes("gösterge") || transcript.includes("hud") || transcript.includes("speed")) {
         setActiveTab("hud");
-        speakText("Gösterge açılıyor.");
-      } else if (transcript.includes("sıfırla")) {
+        speakText(t.voiceHud);
+      } else if (transcript.includes("sıfırla") || transcript.includes("reset")) {
         setDistance(0); setElapsedTime(0); setMaxSpeed(0);
-        speakText("Sıfırlandı.");
+        speakText(t.voiceReset);
       }
     };
 
@@ -691,7 +716,7 @@ export default function App() {
               </div>
             </div>
 
-            {/* Geliştirici Seçenekleri (Tamirci ve Market Yol Tarifi Eklendi) */}
+            {/* Geliştirici Seçenekleri */}
             {isDevUnlocked && (
               <div style={{ marginBottom: "16px", padding: "12px", background: "rgba(255,255,255,0.05)", borderRadius: "10px", border: `1px solid ${theme.primary}` }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", fontWeight: "bold", color: theme.primary, marginBottom: "8px" }}>
@@ -703,11 +728,10 @@ export default function App() {
                   <button onClick={() => { setActiveTab("map"); setShowSettings(false); }} style={{ padding: "6px", fontSize: "11px", borderRadius: "6px", border: "none", background: "rgba(255,255,255,0.1)", color: theme.text, cursor: "pointer" }}>Harita Modu</button>
                   <button onClick={() => { setActiveTab("radio"); setShowSettings(false); }} style={{ padding: "6px", fontSize: "11px", borderRadius: "6px", border: "none", background: "rgba(255,255,255,0.1)", color: theme.text, cursor: "pointer" }}>Radyo Modu</button>
                   
-                  {/* Yeni Eklenen Simülasyon Butonları */}
-                  <button onClick={() => { setDestinationQuery("bisiklet tamircisi"); setActiveTab("map"); setShowSettings(false); speakText("Bisiklet tamircisi için yol tarifi açılıyor."); }} style={{ padding: "6px", fontSize: "11px", borderRadius: "6px", border: "none", background: "rgba(204,255,0,0.2)", color: theme.primary, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "4px" }}>
+                  <button onClick={() => { setDestinationQuery("bisiklet tamircisi"); setActiveTab("map"); setShowSettings(false); speakText(`${t.voiceNav} bisiklet tamircisi`); }} style={{ padding: "6px", fontSize: "11px", borderRadius: "6px", border: "none", background: "rgba(204,255,0,0.2)", color: theme.primary, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "4px" }}>
                     <Wrench size={12} /> Tamirci Tarifi
                   </button>
-                  <button onClick={() => { setDestinationQuery("market"); setActiveTab("map"); setShowSettings(false); speakText("Market için yol tarifi açılıyor."); }} style={{ padding: "6px", fontSize: "11px", borderRadius: "6px", border: "none", background: "rgba(204,255,0,0.2)", color: theme.primary, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "4px" }}>
+                  <button onClick={() => { setDestinationQuery("market"); setActiveTab("map"); setShowSettings(false); speakText(`${t.voiceNav} market`); }} style={{ padding: "6px", fontSize: "11px", borderRadius: "6px", border: "none", background: "rgba(204,255,0,0.2)", color: theme.primary, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "4px" }}>
                     <ShoppingBag size={12} /> Market Tarifi
                   </button>
                 </div>

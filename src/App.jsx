@@ -22,7 +22,8 @@ import {
   ShoppingBag,
   PhoneCall,
   ShieldCheck,
-  ShieldOff
+  ShieldOff,
+  Sliders
 } from "lucide-react";
 
 // --- 1. 6 Dilli Sözlük ve Varsayılan Acil Durum Numaraları ---
@@ -70,6 +71,12 @@ const T = {
     hud: "GÖSTERGE",
     exportGpx: "GPX İNDİR",
     devOptions: "GELİŞTİRİCİ SEÇENEKLERİ",
+    devHud: "Gösterge Panel",
+    devCompass: "Pusula Modu",
+    devMap: "Harita Modu",
+    devRadio: "Radyo Modu",
+    devRepair: "Tamirci Tarifi",
+    devMarket: "Market Tarifi",
     voiceDevUnlocked: "Geliştirici seçenekleri açıldı.",
     voiceDevLocked: "Geliştirici seçenekleri kapatıldı.",
     voiceNav: "için yol tarifi hazırlanıyor.",
@@ -115,6 +122,12 @@ const T = {
     hud: "HUD",
     exportGpx: "EXPORT GPX",
     devOptions: "DEVELOPER OPTIONS",
+    devHud: "HUD Panel",
+    devCompass: "Compass Mode",
+    devMap: "Map Mode",
+    devRadio: "Radio Mode",
+    devRepair: "Repair Route",
+    devMarket: "Market Route",
     voiceDevUnlocked: "Developer options unlocked.",
     voiceDevLocked: "Developer options locked.",
     voiceNav: "Getting directions for",
@@ -127,16 +140,16 @@ const T = {
     headingS: "S", headingSW: "SW", headingW: "W", headingNW: "NW"
   },
   ru: {
-    speed: "СКОРОСТЬ", maxSpeed: "МАКС.", avgSpeed: "СРЕД.", distance: "ДИСТАНЦИЯ", time: "ВРЕМЯ", pause: "ПАУЗА", resume: "ПРОДОЛЖИТЬ", reset: "СБРОС", altitude: "ВЫСОТА", grade: "УКЛОН", settings: "НАСТРОЙКИ", language: "ЯЗЫК", theme: "ТЕМА", unit: "ЕД. СКОРОСТИ", sensitivity: "ЧУВСТВИТЕЛЬНОСТЬ", potholeDetection: "ДЕТЕКЦИЯ ВЫБОИН", emergencyNum: "АВАРИЙНЫЙ НОМЕР", history: "ИСТОРИЯ", clearHistory: "ОЧИСТИТЬ", close: "ЗАКРЫТЬ", potholeWarning: "ВЫБОИНА!", lowBattery: "НИЗКИЙ ЗАРЯД!", kmh: "км/ч", mph: "миль/ч", km: "км", mi: "миль", m: "м", radio: "РАДИО", compass: "КОМПАС", map: "КАРТА", hud: "СПИДОМЕТР", exportGpx: "GPX", devOptions: "ОПЦИИ РАЗРАБОТЧИКА", voiceDevUnlocked: "Режим разработчика включен.", voiceDevLocked: "Режим разработчика выключен.", voiceNav: "Маршрут для", voiceCompass: "Открываю компас.", voiceRadio: "Включаю радио.", voiceMap: "Открываю карту.", voiceHud: "Открываю спидометр.", voiceReset: "Данные сброшены.", headingN: "С", headingNE: "СВ", headingE: "В", headingSE: "ЮВ", headingS: "Ю", headingSW: "ЮЗ", headingW: "З", headingNW: "СЗ"
+    speed: "СКОРОСТЬ", maxSpeed: "МАКС.", avgSpeed: "СРЕД.", distance: "ДИСТАНЦИЯ", time: "ВРЕМЯ", pause: "ПАУЗА", resume: "ПРОДОЛЖИТЬ", reset: "СБРОС", altitude: "ВЫСОТА", grade: "УКЛОН", settings: "НАСТРОЙКИ", language: "ЯЗЫК", theme: "ТЕМА", unit: "ЕД. СКОРОСТИ", sensitivity: "ЧУВСТВИТЕЛЬНОСТЬ", potholeDetection: "ДЕТЕКЦИЯ ВЫБОИН", emergencyNum: "АВАРИЙНЫЙ НОМЕР", history: "ИСТОРИЯ", clearHistory: "ОЧИСТИТЬ", close: "ЗАКРЫТЬ", potholeWarning: "ВЫБОИНА!", lowBattery: "НИЗКИЙ ЗАРЯД!", kmh: "км/ч", mph: "миль/ч", km: "км", mi: "миль", m: "м", radio: "РАДИО", compass: "КОМПАС", map: "КАРТА", hud: "СПИДОМЕТР", exportGpx: "GPX", devOptions: "ОПЦИИ РАЗРАБОТЧИКА", devHud: "Спидометр", devCompass: "Компас", devMap: "Карта", devRadio: "Радио", devRepair: "Ремонт", devMarket: "Магазин", voiceDevUnlocked: "Режим разработчика включен.", voiceDevLocked: "Режим разработчика выключен.", voiceNav: "Маршрут для", voiceCompass: "Открываю компас.", voiceRadio: "Включаю радио.", voiceMap: "Открываю карту.", voiceHud: "Открываю спидометр.", voiceReset: "Данные сброшены.", headingN: "С", headingNE: "СВ", headingE: "В", headingSE: "ЮВ", headingS: "Ю", headingSW: "ЮЗ", headingW: "З", headingNW: "СЗ"
   },
   de: {
-    speed: "GESCHWINDIGKEIT", maxSpeed: "MAX", avgSpeed: "SCHNITT", distance: "STRECKE", time: "ZEIT", pause: "PAUSE", resume: "WEITER", reset: "RESET", altitude: "HÖHE", grade: "STEIGUNG", settings: "EINSTELLUNGEN", language: "SPRACHE", theme: "THEMA", unit: "EINHEIT", sensitivity: "EMPFINDLICHKEIT", potholeDetection: "SCHLAGLOCHERKENNUNG", emergencyNum: "NOTRUFNUMMER", history: "VERLAUF", clearHistory: "VERLAUF LÖSCHEN", close: "SCHLIESSEN", potholeWarning: "SCHLAGLOCH!", lowBattery: "AKKU FAST LEER!", kmh: "km/h", mph: "mph", km: "km", mi: "mi", m: "m", radio: "RADIO", compass: "KOMPASS", map: "KARTE", hud: "HUD", exportGpx: "GPX", devOptions: "ENTWICKLEROPTIONEN", voiceDevUnlocked: "Entwickleroptionen freigeschaltet.", voiceDevLocked: "Entwickleroptionen gesperrt.", voiceNav: "Route wird berechnet für", voiceCompass: "Kompass wird geöffnet.", voiceRadio: "Radio wird geöffnet.", voiceMap: "Karte wird geöffnet.", voiceHud: "Tacho wird geöffnet.", voiceReset: "Fahrdaten zurückgesetzt.", headingN: "N", headingNE: "NO", headingE: "O", headingSE: "SO", headingS: "S", headingSW: "SW", headingW: "W", headingNW: "NW"
+    speed: "GESCHWINDIGKEIT", maxSpeed: "MAX", avgSpeed: "SCHNITT", distance: "STRECKE", time: "ZEIT", pause: "PAUSE", resume: "WEITER", reset: "RESET", altitude: "HÖHE", grade: "STEIGUNG", settings: "EINSTELLUNGEN", language: "SPRACHE", theme: "THEMA", unit: "EINHEIT", sensitivity: "EMPFINDLICHKEIT", potholeDetection: "SCHLAGLOCHERKENNUNG", emergencyNum: "NOTRUFNUMMER", history: "VERLAUF", clearHistory: "VERLAUF LÖSCHEN", close: "SCHLIESSEN", potholeWarning: "SCHLAGLOCH!", lowBattery: "AKKU FAST LEER!", kmh: "km/h", mph: "mph", km: "km", mi: "mi", m: "m", radio: "RADIO", compass: "KOMPASS", map: "KARTE", hud: "HUD", exportGpx: "GPX", devOptions: "ENTWICKLEROPTIONEN", devHud: "Tacho Panel", devCompass: "Kompass Modus", devMap: "Karten Modus", devRadio: "Radio Modus", devRepair: "Werkstatt Route", devMarket: "Markt Route", voiceDevUnlocked: "Entwickleroptionen freigeschaltet.", voiceDevLocked: "Entwickleroptionen gesperrt.", voiceNav: "Route wird berechnet für", voiceCompass: "Kompass wird geöffnet.", voiceRadio: "Radio wird geöffnet.", voiceMap: "Karte wird geöffnet.", voiceHud: "Tacho wird geöffnet.", voiceReset: "Fahrdaten zurückgesetzt.", headingN: "N", headingNE: "NO", headingE: "O", headingSE: "SO", headingS: "S", headingSW: "SW", headingW: "W", headingNW: "NW"
   },
   zh: {
-    speed: "速度", maxSpeed: "最高速", avgSpeed: "均速", distance: "距离", time: "时间", pause: "暂停", resume: "继续", reset: "重置", altitude: "海拔", grade: "坡度", settings: "设置", language: "语言", theme: "主题", unit: "单位", sensitivity: "灵敏度", potholeDetection: "坑洼检测", emergencyNum: "紧急电话", history: "历史记录", clearHistory: "清除历史", close: "关闭", potholeWarning: "检测到坑洼!", lowBattery: "电量低!", kmh: "km/h", mph: "mph", km: "km", mi: "mi", m: "m", radio: "收音机", compass: "指南针", map: "地图", hud: "仪表盘", exportGpx: "GPX", devOptions: "开发者选项", voiceDevUnlocked: "开发者选项已解锁。", voiceDevLocked: "开发者选项已锁定。", voiceNav: "正在导航至", voiceCompass: "打开指南针。", voiceRadio: "打开收音机。", voiceMap: "打开地图。", voiceHud: "打开仪表盘。", voiceReset: "骑行数据已重置。", headingN: "北", headingNE: "东北", headingE: "东", headingSE: "东南", headingS: "南", headingSW: "西南", headingW: "西", headingNW: "西北"
+    speed: "速度", maxSpeed: "最高速", avgSpeed: "均速", distance: "距离", time: "时间", pause: "暂停", resume: "继续", reset: "重置", altitude: "海拔", grade: "坡度", settings: "设置", language: "语言", theme: "主题", unit: "单位", sensitivity: "灵敏度", potholeDetection: "坑洼检测", emergencyNum: "紧急电话", history: "历史记录", clearHistory: "清除历史", close: "关闭", potholeWarning: "检测到坑洼!", lowBattery: "电量低!", kmh: "km/h", mph: "mph", km: "km", mi: "mi", m: "m", radio: "收音机", compass: "指南针", map: "地图", hud: "仪表盘", exportGpx: "GPX", devOptions: "开发者选项", devHud: "仪表盘模式", devCompass: "指南针模式", devMap: "地图模式", devRadio: "收音机模式", devRepair: "修车店路线", devMarket: "超市路线", voiceDevUnlocked: "开发者选项已解锁。", voiceDevLocked: "开发者选项已锁定。", voiceNav: "正在导航至", voiceCompass: "打开指南针。", voiceRadio: "打开收音机。", voiceMap: "打开地图。", voiceHud: "打开仪表盘。", voiceReset: "骑行数据已重置。", headingN: "北", headingNE: "东北", headingE: "东", headingSE: "东南", headingS: "南", headingSW: "西南", headingW: "西", headingNW: "西北"
   },
   ko: {
-    speed: "속도", maxSpeed: "최고속도", avgSpeed: "평균속도", distance: "거리", time: "시간", pause: "일시정지", resume: "재개", reset: "초기화", altitude: "고도", grade: "경사도", settings: "설정", language: "언어", theme: "테마", unit: "단위", sensitivity: "감도", potholeDetection: "포트홀 감지", emergencyNum: "비상 연락처", history: "주행 기록", clearHistory: "기록 삭제", close: "닫기", potholeWarning: "충격 감지!", lowBattery: "배터리 부족!", kmh: "km/h", mph: "mph", km: "km", mi: "mi", m: "m", radio: "라디오", compass: "나침반", map: "지도", hud: "계기판", exportGpx: "GPX", devOptions: "개발자 옵션", voiceDevUnlocked: "개발자 옵션이 해제되었습니다.", voiceDevLocked: "개발자 옵션이 잠겼습니다.", voiceNav: "경로를 검색합니다:", voiceCompass: "나침반을 엽니다.", voiceRadio: "라디오를 켭니다.", voiceMap: "지도를 엽니다.", voiceHud: "계기판을 엽니다.", voiceReset: "주행 데이터가 초기화되었습니다.", headingN: "북", headingNE: "북동", headingE: "동", headingSE: "남동", headingS: "남", headingSW: "남서", headingW: "서", headingNW: "북서"
+    speed: "속도", maxSpeed: "최고속도", avgSpeed: "평균속도", distance: "거리", time: "시간", pause: "일시정지", resume: "재개", reset: "초기화", altitude: "고도", grade: "경사도", settings: "설정", language: "언어", theme: "테마", unit: "단위", sensitivity: "감도", potholeDetection: "포트홀 감지", emergencyNum: "비상 연락처", history: "주행 기록", clearHistory: "기록 삭제", close: "닫기", potholeWarning: "충격 감지!", lowBattery: "배터리 부족!", kmh: "km/h", mph: "mph", km: "km", mi: "mi", m: "m", radio: "라디오", compass: "나침반", map: "지도", hud: "계기판", exportGpx: "GPX", devOptions: "개발자 옵션", devHud: "계기판 모드", devCompass: "나침반 모드", devMap: "지도 모드", devRadio: "라디오 모드", devRepair: "정비소 경로", devMarket: "마트 경로", voiceDevUnlocked: "개발자 옵션이 해제되었습니다.", voiceDevLocked: "개발자 옵션이 잠겼습니다.", voiceNav: "경로를 검색합니다:", voiceCompass: "나침반을 엽니다.", voiceRadio: "라디오를 켭니다.", voiceMap: "지도를 엽니다.", voiceHud: "계기판을 엽니다.", voiceReset: "주행 데이터가 초기화되었습니다.", headingN: "북", headingNE: "북동", headingE: "동", headingSE: "남동", headingS: "남", headingSW: "남서", headingW: "서", headingNW: "북서"
   }
 };
 
@@ -205,12 +218,12 @@ export default function App() {
   const [destinationQuery, setDestinationQuery] = useState("");
   const [trackPoints, setTrackPoints] = useState([]);
 
-  // Sensörler, Güvenlik & Çukur Ayarı
+  // Sensörler, Güvenlik & Çukur Hassasiyeti
   const [heading, setHeading] = useState(0);
   const [batteryLevel, setBatteryLevel] = useState(100);
   const [potholeAlert, setPotholeAlert] = useState(false);
   const [isPotholeEnabled, setIsPotholeEnabled] = useState(true);
-  const [shakeSensitivity, setShakeSensitivity] = useState(18);
+  const [shakeSensitivity, setShakeSensitivity] = useState(18); // 10 hassas, 30 az hassas
   const [emergencyPhone, setEmergencyPhone] = useState(EMERGENCY_NUMBERS.tr);
 
   // Geliştirici Seçenekleri & Versiyona 5 Kere Tıklama
@@ -395,7 +408,7 @@ export default function App() {
     }
   };
 
-  // Parola Doğrulama (Açma ve Kapatma İki Yönlü)
+  // Parola Doğrulama
   const handlePasswordSubmit = () => {
     if (inputPassword === "130782") {
       if (isDevUnlocked) {
@@ -499,6 +512,9 @@ export default function App() {
     }
   };
 
+  // Kadran Açı Hesabı (0-180 km/h -> -120 deg ile +120 deg arası)
+  const needleAngle = Math.min(Math.max((speed / 180) * 240 - 120, -120), 120);
+
   if (isBooting) {
     return (
       <div style={{ backgroundColor: "#000", color: "#CCFF00", height: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", fontFamily: "sans-serif" }}>
@@ -543,15 +559,56 @@ export default function App() {
           </div>
         )}
 
-        {/* HUD Sekmesi */}
+        {/* HUD Sekmesi - GERÇEK ARABA TARZI ANALOG İBRELİ KADRAN */}
         {activeTab === "hud" && (
           <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "16px" }}>
             <div style={{ textAlign: "center", margin: "auto 0", display: "flex", flexDirection: "column", alignItems: "center" }}>
-              <div style={{ width: "220px", height: "220px", borderRadius: "50%", border: `6px solid ${theme.cardBg}`, borderTopColor: theme.primary, borderRightColor: theme.primary, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", position: "relative" }}>
-                <div style={{ textAlign: "center" }}>
-                  <div style={{ fontSize: "72px", fontWeight: "900", lineHeight: "1", color: theme.primary }}>{speed}</div>
-                  <div style={{ fontSize: "14px", fontWeight: "bold", letterSpacing: "2px", marginTop: "4px" }}>{unit === "kmh" ? t.kmh : t.mph}</div>
+              <div style={{ width: "240px", height: "240px", borderRadius: "50%", border: `8px solid ${theme.cardBg}`, backgroundColor: "rgba(0,0,0,0.3)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", position: "relative", boxShadow: `0 0 20px ${theme.primary}22` }}>
+                
+                {/* Kadran Çizgileri & Sayılar */}
+                {[0, 20, 40, 60, 80, 100, 120, 140, 160, 180].map((val) => {
+                  const angle = (val / 180) * 240 - 120;
+                  return (
+                    <div
+                      key={val}
+                      style={{
+                        position: "absolute",
+                        width: "100%",
+                        height: "100%",
+                        transform: `rotate(${angle}deg)`,
+                        padding: "8px",
+                        boxSizing: "border-box"
+                      }}
+                    >
+                      <div style={{ width: "2px", height: "8px", backgroundColor: theme.primary, margin: "0 auto", borderRadius: "2px" }} />
+                      <span style={{ display: "block", fontSize: "9px", fontWeight: "bold", transform: `rotate(${-angle}deg)`, textAlign: "center", marginTop: "2px", opacity: 0.8 }}>
+                        {val}
+                      </span>
+                    </div>
+                  );
+                })}
+
+                {/* Dönen Analog İbre (Car Needle) */}
+                <div
+                  style={{
+                    position: "absolute",
+                    width: "4px",
+                    height: "90px",
+                    bottom: "50%",
+                    transformOrigin: "bottom center",
+                    transform: `rotate(${needleAngle}deg)`,
+                    transition: "transform 0.2s cubic-bezier(0.1, 0.7, 0.1, 1)"
+                  }}
+                >
+                  <div style={{ width: "100%", height: "100%", backgroundColor: "#FF2A5F", borderRadius: "4px", boxShadow: "0 0 8px #FF2A5F" }} />
                 </div>
+
+                {/* Gösterge Göbeği & Dijital Hız Ekranı */}
+                <div style={{ width: "90px", height: "90px", borderRadius: "50%", backgroundColor: theme.bg, border: `3px solid ${theme.primary}`, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", zIndex: 5, boxShadow: "0 0 10px rgba(0,0,0,0.8)" }}>
+                  <div style={{ fontSize: "36px", fontWeight: "900", lineHeight: "1", color: theme.primary }}>{speed}</div>
+                  <div style={{ fontSize: "10px", fontWeight: "bold", letterSpacing: "1px", opacity: 0.8, marginTop: "2px" }}>{unit === "kmh" ? t.kmh : t.mph}</div>
+                </div>
+
               </div>
             </div>
 
@@ -670,7 +727,7 @@ export default function App() {
         </button>
       </div>
 
-      {/* 6 Haneli Parola Modalı */}
+      {/* Parola Modalı */}
       {showPasswordModal && (
         <div style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.9)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1100, padding: "20px" }}>
           <div style={{ backgroundColor: "#181A15", borderRadius: "16px", padding: "24px", width: "100%", maxWidth: "320px", border: `1px solid ${theme.primary}`, textAlign: "center" }}>
@@ -733,28 +790,48 @@ export default function App() {
               </div>
             </div>
 
-            {/* Çukur Algılama Aç/Kapat Şalteri */}
-            <div style={{ marginBottom: "14px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <label style={{ fontSize: "11px", opacity: 0.7 }}>{t.potholeDetection}</label>
-              <button
-                onClick={() => setIsPotholeEnabled(!isPotholeEnabled)}
-                style={{
-                  padding: "6px 12px",
-                  borderRadius: "20px",
-                  border: "none",
-                  backgroundColor: isPotholeEnabled ? theme.primary : "rgba(255,255,255,0.1)",
-                  color: isPotholeEnabled ? "#000" : theme.text,
-                  fontWeight: "bold",
-                  fontSize: "11px",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "4px"
-                }}
-              >
-                {isPotholeEnabled ? <ShieldCheck size={14} /> : <ShieldOff size={14} />}
-                {isPotholeEnabled ? "AÇIK" : "KAPALI"}
-              </button>
+            {/* Çukur Algılama Aç/Kapat & Hassasiyet Slider'ı */}
+            <div style={{ marginBottom: "14px", padding: "10px", background: "rgba(255,255,255,0.03)", borderRadius: "10px" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: isPotholeEnabled ? "10px" : "0" }}>
+                <label style={{ fontSize: "11px", opacity: 0.7 }}>{t.potholeDetection}</label>
+                <button
+                  onClick={() => setIsPotholeEnabled(!isPotholeEnabled)}
+                  style={{
+                    padding: "6px 12px",
+                    borderRadius: "20px",
+                    border: "none",
+                    backgroundColor: isPotholeEnabled ? theme.primary : "rgba(255,255,255,0.1)",
+                    color: isPotholeEnabled ? "#000" : theme.text,
+                    fontWeight: "bold",
+                    fontSize: "11px",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "4px"
+                  }}
+                >
+                  {isPotholeEnabled ? <ShieldCheck size={14} /> : <ShieldOff size={14} />}
+                  {isPotholeEnabled ? "AÇIK" : "KAPALI"}
+                </button>
+              </div>
+
+              {isPotholeEnabled && (
+                <div>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "10px", opacity: 0.7, marginBottom: "4px" }}>
+                    <span>{t.sensitivity}</span>
+                    <span>{shakeSensitivity} (10 = Hassas, 30 = Sert)</span>
+                  </div>
+                  <input
+                    type="range"
+                    min="10"
+                    max="30"
+                    step="1"
+                    value={shakeSensitivity}
+                    onChange={(e) => setShakeSensitivity(Number(e.target.value))}
+                    style={{ width: "100%", accentColor: theme.primary, cursor: "pointer" }}
+                  />
+                </div>
+              )}
             </div>
 
             {/* Acil Durum Numarası Girişi */}
@@ -787,23 +864,23 @@ export default function App() {
               </div>
             </div>
 
-            {/* Geliştirici Seçenekleri Panel Alanı */}
+            {/* Çok Dilli Geliştirici Seçenekleri Panel Alanı */}
             {isDevUnlocked && (
               <div style={{ marginBottom: "16px", padding: "12px", background: "rgba(255,255,255,0.05)", borderRadius: "10px", border: `1px solid ${theme.primary}` }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", fontWeight: "bold", color: theme.primary, marginBottom: "8px" }}>
                   <Terminal size={14} /> {t.devOptions}
                 </div>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px" }}>
-                  <button onClick={() => { setActiveTab("hud"); setShowSettings(false); }} style={{ padding: "6px", fontSize: "11px", borderRadius: "6px", border: "none", background: "rgba(255,255,255,0.1)", color: theme.text, cursor: "pointer" }}>Gösterge Panel</button>
-                  <button onClick={() => { setActiveTab("compass"); setShowSettings(false); }} style={{ padding: "6px", fontSize: "11px", borderRadius: "6px", border: "none", background: "rgba(255,255,255,0.1)", color: theme.text, cursor: "pointer" }}>Pusula Modu</button>
-                  <button onClick={() => { setActiveTab("map"); setShowSettings(false); }} style={{ padding: "6px", fontSize: "11px", borderRadius: "6px", border: "none", background: "rgba(255,255,255,0.1)", color: theme.text, cursor: "pointer" }}>Harita Modu</button>
-                  <button onClick={() => { setActiveTab("radio"); setShowSettings(false); }} style={{ padding: "6px", fontSize: "11px", borderRadius: "6px", border: "none", background: "rgba(255,255,255,0.1)", color: theme.text, cursor: "pointer" }}>Radyo Modu</button>
+                  <button onClick={() => { setActiveTab("hud"); setShowSettings(false); }} style={{ padding: "6px", fontSize: "11px", borderRadius: "6px", border: "none", background: "rgba(255,255,255,0.1)", color: theme.text, cursor: "pointer" }}>{t.devHud}</button>
+                  <button onClick={() => { setActiveTab("compass"); setShowSettings(false); }} style={{ padding: "6px", fontSize: "11px", borderRadius: "6px", border: "none", background: "rgba(255,255,255,0.1)", color: theme.text, cursor: "pointer" }}>{t.devCompass}</button>
+                  <button onClick={() => { setActiveTab("map"); setShowSettings(false); }} style={{ padding: "6px", fontSize: "11px", borderRadius: "6px", border: "none", background: "rgba(255,255,255,0.1)", color: theme.text, cursor: "pointer" }}>{t.devMap}</button>
+                  <button onClick={() => { setActiveTab("radio"); setShowSettings(false); }} style={{ padding: "6px", fontSize: "11px", borderRadius: "6px", border: "none", background: "rgba(255,255,255,0.1)", color: theme.text, cursor: "pointer" }}>{t.devRadio}</button>
 
                   <button onClick={() => { setDestinationQuery("bisiklet tamircisi"); setActiveTab("map"); setShowSettings(false); speakText(`${t.voiceNav} bisiklet tamircisi`); }} style={{ padding: "6px", fontSize: "11px", borderRadius: "6px", border: "none", background: "rgba(204,255,0,0.2)", color: theme.primary, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "4px" }}>
-                    <Wrench size={12} /> Tamirci Tarifi
+                    <Wrench size={12} /> {t.devRepair}
                   </button>
                   <button onClick={() => { setDestinationQuery("market"); setActiveTab("map"); setShowSettings(false); speakText(`${t.voiceNav} market`); }} style={{ padding: "6px", fontSize: "11px", borderRadius: "6px", border: "none", background: "rgba(204,255,0,0.2)", color: theme.primary, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "4px" }}>
-                    <ShoppingBag size={12} /> Market Tarifi
+                    <ShoppingBag size={12} /> {t.devMarket}
                   </button>
                 </div>
               </div>
@@ -813,7 +890,7 @@ export default function App() {
               {t.close}
             </button>
 
-            {/* Versiyon Bilgisi (5 Kere Tıklayınca Geliştirici Modunu Açar / Kapatır) */}
+            {/* Versiyon Bilgisi */}
             <div onClick={handleVersionClick} style={{ textAlign: "center", marginTop: "16px", opacity: 0.4, fontSize: "10px", letterSpacing: "1px", cursor: "pointer", userSelect: "none" }}>
               v0304.2 - VOLT System {isDevUnlocked && "(DEV ACTIVE)"}
             </div>
